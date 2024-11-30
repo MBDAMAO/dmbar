@@ -33,8 +33,7 @@ const get_kline = async () => {
 };
 const get_orders = async () => {
   const res: string = await invoke("get_orders", { symbol: "BTCUSDT" });
-  const parsedData = JSON.parse(res);
-  console.log(parsedData);
+  console.log(res);
 }
 // 创建图表
 function createChart() {

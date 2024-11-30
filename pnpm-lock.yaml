@@ -23,6 +23,9 @@ importers:
       chartjs-chart-financial:
         specifier: ^0.2.1
         version: 0.2.1(chart.js@4.4.6)
+      dmbar:
+        specifier: 'file:'
+        version: file:(date-fns@4.1.0)(typescript@5.7.2)
       vue:
         specifier: ^3.3.4
         version: 3.5.13(typescript@5.7.2)
@@ -498,6 +501,9 @@ packages:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
+  'dmbar@file:':
+    resolution: {directory: '', type: directory}
+
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
@@ -969,6 +975,18 @@ snapshots:
   de-indent@1.0.2: {}
 
   delayed-stream@1.0.0: {}
+
+  dmbar@file:(date-fns@4.1.0)(typescript@5.7.2):
+    dependencies:
+      '@tauri-apps/api': 2.1.1
+      '@tauri-apps/plugin-shell': 2.0.1
+      chart.js: 4.4.6
+      chartjs-adapter-date-fns: 3.0.0(chart.js@4.4.6)(date-fns@4.1.0)
+      chartjs-chart-financial: 0.2.1(chart.js@4.4.6)
+      vue: 3.5.13(typescript@5.7.2)
+    transitivePeerDependencies:
+      - date-fns
+      - typescript
 
   entities@4.5.0: {}
 
