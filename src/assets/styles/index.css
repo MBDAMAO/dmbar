@@ -1,0 +1,239 @@
+body {
+    border-radius: 10px;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+.audio {
+    height: 100%;
+    width: 100%;
+}
+
+.backg {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -10;
+    border-radius: 10px;
+}
+
+.container {
+    padding: 0 5px 3px 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    -webkit-app-region: drag;
+    opacity: 100%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.upbox {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.downbox {
+    position: relative;
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.info {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0 5px 0 0;
+    overflow: hidden;
+}
+.coverage {
+    z-index: 9;
+    height: 100%;
+    width: 80%;
+    background: black;
+    font-size: 20vh;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-app-region: no-drag;
+    user-select: none;
+}
+.choose{
+    z-index: -99;
+    height: 100%;
+    width: 80%;
+    background-color: black ;
+    font-size: 20vh;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+.noting {
+    width: 60vh;
+}
+.yes {
+    height: 30vh;
+    width: 70px;
+    background: #2d481f;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #85ce61;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.no {
+    height: 30vh;
+    width: 70px;
+    background: #582e2e;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f78989;
+}
+.tip:hover {
+    cursor: pointer;
+}
+.left_up {
+    height: 100%;
+    align-items: center;
+    display: flex;
+}
+
+.right_up {
+    height: 100%;
+    width: 20%;
+    display: flex;
+}
+
+.title {
+    height: 100%;
+    font-size: 35vh;
+    white-space: nowrap;
+    align-content: center;
+    -webkit-app-region: no-drag;
+    user-select: none;
+    cursor: pointer;
+}
+
+.voice {
+    padding-left: 10vh;
+    height: 100%;
+    font-size: 15vh;
+    align-content: center;
+    -webkit-app-region: no-drag;
+    user-select: none;
+    cursor: pointer;
+}
+
+.icon {
+    height: 40%;
+    -webkit-app-region: no-drag;
+    user-select: none;
+    cursor: pointer;
+    padding-left: 5vh;
+}
+
+.switch {
+    font-size: 20vh;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.left {
+    display: flex;
+    -webkit-app-region: no-drag;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 50%;
+    height: 100%;
+    user-select: none;
+}
+
+.right {
+    display: flex;
+    -webkit-app-region: no-drag;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 50%;
+    height: 100%;
+    user-select: none;
+}
+
+.translate {
+    align-content: center;
+    height: 50%;
+    font-size: 12.5vh;
+}
+
+.sentence {
+    align-items: center;
+    height: 50%;
+    font-size: 15vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+}
+
+#sentence {
+    position: absolute;
+    will-change: transform;
+    animation: slide 8s linear infinite;
+}
+
+@keyframes slide {
+
+    0%,
+    100% {
+        transform: translateX(100%);
+    }
+
+    50% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+.foot {
+    font-size: 13vh;
+    height: 100%;
+    -webkit-app-region: no-drag;
+    align-content: center;
+    cursor: pointer;
+    user-select: none;
+    width: 20%;
+}
+
+.settings {
+    font-size: 15vh;
+    height: 100%;
+    width: 20%;
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+    align-content: center;
+    user-select: none;
+}

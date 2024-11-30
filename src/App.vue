@@ -1,53 +1,99 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { invoke } from "@tauri-apps/api/core";
+import { Chart } from 'chart.js/auto' // Easy way of importing everything
+
+import { OhlcElement, OhlcController, CandlestickElement, CandlestickController } from 'chartjs-chart-financial' // 直接引入以注册图表插件
+import 'chartjs-adapter-date-fns';
+
+Chart.register(OhlcElement, OhlcController, CandlestickElement, CandlestickController)
 
 const greetMsg = ref("");
 const name = ref("");
+const klineData = ref<any[]>([]);  // 使用 ref 使 klineData 响应式
+let chartInstance: Chart | null = null;  // 用于保存图表实例
 
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsg.value = await invoke("greet", { name: name.value });
+// 获取 K 线数据并创建图表
+const get_kline = async () => {
+  const res: string = await invoke("get_kline", { symbol: "BTCUSDT" });
+  const parsedData = JSON.parse(res);
+  console.log(parsedData);
+  // 转换数据格式
+  const klineChartData = parsedData.map((kline: any) => ({
+    x: kline[0],  // 开盘时间（时间戳）
+    o: parseFloat(kline[1]),  // 开盘价
+    h: parseFloat(kline[2]),  // 最高价
+    l: parseFloat(kline[3]),  // 最低价
+    c: parseFloat(kline[4]),  // 收盘价
+  }));
+
+  // 更新响应式数据
+  klineData.value = klineChartData;
+  createChart();
+};
+const get_orders = async () => {
+  const res: string = await invoke("get_orders", { symbol: "BTCUSDT" });
+  const parsedData = JSON.parse(res);
+  console.log(parsedData);
 }
+// 创建图表
+function createChart() {
+  const ctx = (document.getElementById('myChart') as HTMLCanvasElement).getContext('2d');
+  if (chartInstance instanceof Chart) {
+    chartInstance.destroy();
+  }
+  console.log(klineData.value)
+  if (ctx) {
+    chartInstance = new Chart(ctx, {
+      type: 'candlestick',  // 使用 candlestick 类型来绘制 K 线图
+      data: {
+        datasets: [{
+          label: 'BTC/USDT',
+          data: klineData.value,  // 使用响应式数据
+        }],
+      },
+      // options: {
+      //   responsive: true,
+      //   scales: {
+      //     x: {
+      //       type: 'time',
+      //       time: {
+      //         unit: 'minute',  // 可以根据需要调整
+      //       },
+      //     },
+      //     y: {
+      //       beginAtZero: false,
+      //     },
+      //   },
+      // },
+    });
+  }
+}
+
+onMounted(() => {
+  get_kline();  // 在组件挂载后获取数据并绘制图表
+  get_orders();
+});
 </script>
 
 <template>
-  <main class="container">
-    <h1>Welcome to Tauri + Vue</h1>
+  <div style="height: 100%; width: 100%; background-color: antiquewhite;" data-tauri-drag-region>
+    123
+  </div>
 
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
-    </div>
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+  <div class="kline" style="height: 20px; width: 20px; background-color: antiquewhite;" @click="get_kline">
+    {{ greetMsg }}
+  </div>
 
-    <form class="row" @submit.prevent="greet">
-      <input id="greet-input" v-model="name" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p>{{ greetMsg }}</p>
-  </main>
+  <div style="height: 200px; background-color: azure;">
+    <canvas id="myChart"></canvas>
+  </div>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
+<style scoped src="@/assets/styles/index.css"></style>
 
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
-}
-
-</style>
 <style>
-:root {
+/* :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -123,6 +169,7 @@ button {
 button:hover {
   border-color: #396cd8;
 }
+
 button:active {
   border-color: #396cd8;
   background-color: #e8e8e8;
@@ -140,7 +187,7 @@ button {
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
-    background-color: #2f2f2f;
+    background-color: #000000;
   }
 
   a:hover {
@@ -152,9 +199,9 @@ button {
     color: #ffffff;
     background-color: #0f0f0f98;
   }
+
   button:active {
     background-color: #0f0f0f69;
   }
-}
-
+} */
 </style>

@@ -10,15 +10,22 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "vue": "^3.3.4",
     "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-shell": "^2"
+    "@tauri-apps/plugin-shell": "^2",
+    "chart.js": "^4.4.6",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-chart-financial": "^0.2.1",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/node": "^22.10.1",
     "@vitejs/plugin-vue": "^5.0.5",
+    "axios": "^1.7.7",
+    "types-pac": "^1.0.3",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
-    "vue-tsc": "^2.0.22",
-    "@tauri-apps/cli": "^2"
-  }
+    "vue-tsc": "^2.0.22"
+  },
+  "packageManager": "pnpm@9.14.4"
 }
