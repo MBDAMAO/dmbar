@@ -28,3 +28,6 @@ binance_spot_connector_rust = { git = "https://github.com/binance/binance-spot-c
     "enable-hyper",
 ] }
 anyhow = "1.0"
+binance_future_connector = { path = "./libs/binance_future_connector_rust", features = [
+    "enable-hyper",
+] }

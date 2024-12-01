@@ -1,5 +1,9 @@
 use anyhow::Result;
 type CmdResult<T = ()> = Result<T, String>;
+use binance_future_connector::{
+    http::Credentials as FCredentials, hyper::BinanceHttpClient as FBinanceHttpClient,
+    trade as ftrade,
+};
 use binance_spot_connector_rust::{http::Credentials, hyper::BinanceHttpClient, market, trade};
 
 #[tauri::command]
@@ -28,8 +32,8 @@ pub async fn get_kline(symbol: &str) -> CmdResult<String> {
 
 #[tauri::command]
 pub async fn get_orders(symbol: &str) -> CmdResult<String> {
-    let api_key = "12".to_string();
-    let api_secret = "12".to_string();
+    let api_key = "1".to_string();
+    let api_secret = "1".to_string();
     let client = BinanceHttpClient::default()
         .credentials(Credentials::from_hmac(api_key.clone(), api_secret.clone()));
 

@@ -142,6 +142,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
+name = "binance_future_connector"
+version = "0.0.1"
+dependencies = [
+ "base64 0.22.1",
+ "ed25519-dalek",
+ "futures-util",
+ "hmac",
+ "http 0.2.12",
+ "hyper 0.14.31",
+ "hyper-tls",
+ "log",
+ "rand 0.8.5",
+ "rust_decimal",
+ "serde",
+ "serde_json",
+ "sha2",
+ "signature",
+ "strum",
+ "tokio",
+ "tungstenite",
+ "ureq",
+ "url",
+]
+
+[[package]]
 name = "binance_spot_connector_rust"
 version = "1.3.0"
 source = "git+https://github.com/binance/binance-spot-connector-rust.git?branch=main#2194e9b2a60f30c655c93cd84fea58ea641cfda0"
@@ -818,6 +843,7 @@ name = "dmbar"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "binance_future_connector",
  "binance_spot_connector_rust",
  "serde",
  "serde_json",
