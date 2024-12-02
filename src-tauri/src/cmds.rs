@@ -8,6 +8,8 @@ use binance_future_connector::{
     trade as ftrade,
     tungstenite::BinanceWebSocketClient,
 };
+
+use crate::utils::db;
 use binance_spot_connector_rust::{http::Credentials, hyper::BinanceHttpClient, market, trade};
 use futures_util::sink::Sink;
 use futures_util::stream::Stream;
@@ -15,8 +17,7 @@ use futures_util::{SinkExt, StreamExt};
 use std::sync::Arc;
 use std::sync::Mutex;
 use tokio::{net::TcpListener, sync::mpsc};
-use tokio_tungstenite::{accept_async, tungstenite::protocol::Message as WsMessage}; // 从标准库导入 Arc;
-
+use tokio_tungstenite::{accept_async, tungstenite::protocol::Message as WsMessage};
 #[tauri::command]
 pub fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
