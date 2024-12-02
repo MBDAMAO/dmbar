@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 200px; background-color: azure;">
+    <div style="height: 100%; width: 100%;background-color: azure;">
         <canvas id="myChart"></canvas>
     </div>
 </template>
@@ -19,7 +19,7 @@ let chartInstance: Chart | null = null;  // 用于保存图表实例
 
 // 获取 K 线数据并创建图表
 const get_kline = async () => {
-    const res: string = await invoke("get_kline", { symbol: "BTCUSDT" });
+    const res: string = await invoke("get_kline", { symbol: "DOGEUSDT" });
     const parsedData = JSON.parse(res);
     console.log(parsedData);
     // 转换数据格式
@@ -51,7 +51,7 @@ function createChart() {
             type: 'candlestick',  // 使用 candlestick 类型来绘制 K 线图
             data: {
                 datasets: [{
-                    label: 'BTC/USDT',
+                    label: 'DOGE/USDT',
                     data: klineData.value,  // 使用响应式数据
                 }],
             },
