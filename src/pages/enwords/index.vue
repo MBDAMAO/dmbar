@@ -4,6 +4,7 @@
         <div class="upbox">
             <div class="left_up">
                 <div class="title" id="title" onclick="voice()">
+                    {{ word }}
                 </div>
                 <div class="voice" id="voice" onclick="voice()">
                 </div>
@@ -33,7 +34,7 @@
         </div>
         <div class="downbox">
             <div class="coverage" id="coverage">
-                <span class="tip" onclick="uncover()">Click to show detail</span>
+                <span class="tip" @click="uncover()">Click to show detail</span>
             </div>
             <div class="choose" id="choose">
                 <div class="yes">yes</div>
@@ -41,9 +42,11 @@
                 <div class="no">no</div>
             </div>
             <div class="info">
-                <div class="translate" id="translate"></div>
+                <div class="translate" id="translate">
+                    {{ translation }}
+                </div>
                 <div class="sentence">
-                    <span id="sentence"></span>
+                    <span id="sentence">{{ sentence }}</span>
                 </div>
             </div>
             <div class="foot" id="foot" onclick="openMenu()"></div>
@@ -52,5 +55,35 @@
     </div>
 </template>
 <script setup lang='ts'>
+import { onMounted, ref } from 'vue';
+import { AestheticFluidBg } from "../../assets/js/AestheticFluidBg.module.ts"
+import { invoke } from "@tauri-apps/api/core";
+import { LogicalSize, Window } from '@tauri-apps/api/window';
+
+const sentence = ref("")
+const translation = ref("")
+const word = ref("")
+const getConfig = async () => {
+    const res: string = await invoke("get_config");
+    const config = JSON.parse(res);
+}
+const getWord = async () => {
+    const res: string = await invoke("get_word");
+    const word = JSON.parse(res);
+}
+onMounted(() => {
+    //getConfig()
+    window.onload = function () {
+        let colorbg = new AestheticFluidBg({
+            dom: "backg",
+            colors: ["#59E2FD", "#6C58EE", "#F54595", "#FCE500", "#59E2FD", "#6C58EE"],
+            loop: true
+        })
+    }
+})
+const uncover = async () => {
+    const appWindow = Window.getCurrent();
+    appWindow.setSize(new LogicalSize(800, 600));
+}
 </script>
 <style scoped src="@/assets/styles/index.css"></style>

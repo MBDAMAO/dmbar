@@ -16,6 +16,8 @@
     "core:window:allow-set-maximizable",
     "core:window:allow-set-minimizable",
     "core:window:allow-create",
-    "core:window:allow-center"
+    "core:window:allow-center",
+    "core:window:allow-set-size",
+    "core:window:allow-close"
   ]
 }
