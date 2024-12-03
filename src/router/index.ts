@@ -6,14 +6,19 @@ const router = createRouter({
   history: createWebHashHistory("/"),
   routes: [
     {
-      path: "/",
-      name: "home",
+      path: "/words",
+      name: "words",
       component: HomeView,
     },
     {
-      path: "/about",
-      name: "about",
+      path: "/crypto_coin",
+      name: "crypto_coin",
       component: () => import("../pages/crypto_coin/index.vue"),
+    },
+    {
+      path: "/translation",
+      name: "translation",
+      component: () => import("../pages/translation/index.vue"),
     },
   ],
 });

@@ -26,6 +26,9 @@ importers:
       dmbar:
         specifier: 'file:'
         version: file:(date-fns@4.1.0)(typescript@5.7.2)
+      klinecharts:
+        specifier: 10.0.0-alpha1
+        version: 10.0.0-alpha1
       vue:
         specifier: ^3.3.4
         version: 3.5.13(typescript@5.7.2)
@@ -544,6 +547,10 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
+  klinecharts@10.0.0-alpha1:
+    resolution: {integrity: sha512-eE56BCuiZT5ookumWiYvoCrTooWbjnPd0FhGi0PyaIWjAR+sT6bDrC50XVoT7ztOZ80ZUeieEh3yW2kRSRgeGA==}
+    engines: {node: '>=0.10.0'}
+
   magic-string@0.30.14:
     resolution: {integrity: sha512-5c99P1WKTed11ZC0HMJOj6CDIue6F8ySu+bJL+85q1zBEIY8IklrJ1eiKC2NDRh3Ct3FcvmJPyQHb9erXMTJNw==}
 
@@ -1044,6 +1051,8 @@ snapshots:
     optional: true
 
   he@1.2.0: {}
+
+  klinecharts@10.0.0-alpha1: {}
 
   magic-string@0.30.14:
     dependencies:

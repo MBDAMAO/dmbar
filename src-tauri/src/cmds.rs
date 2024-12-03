@@ -9,7 +9,7 @@ use binance_future_connector::{
     tungstenite::BinanceWebSocketClient,
 };
 
-use crate::utils::db;
+// use crate::utils::db;
 use binance_spot_connector_rust::{http::Credentials, hyper::BinanceHttpClient, market, trade};
 use futures_util::sink::Sink;
 use futures_util::stream::Stream;

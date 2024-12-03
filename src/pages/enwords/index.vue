@@ -80,6 +80,13 @@ onMounted(() => {
             loop: true
         })
     }
+    window.onresize = function () {
+        let colorbg = new AestheticFluidBg({
+            dom: "backg",
+            colors: ["#59E2FD", "#6C58EE", "#F54595", "#FCE500", "#59E2FD", "#6C58EE"],
+            loop: true
+        })
+    }
 })
 const uncover = async () => {
     const appWindow = Window.getCurrent();

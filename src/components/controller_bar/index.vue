@@ -1,7 +1,27 @@
 <template>
-    <div id="controller-handler">
-        <div id="controller-container">
-            <div id="controller-pages"></div>
+    <div id="controller-handler" data-tauri-drag-region>
+        <div id="controller-container" data-tauri-drag-region>
+            <div id="controller-pages" data-tauri-drag-region>
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/crypto_coin">
+                        <div style="height: 100%; width: 100%;">crypto</div>
+                    </RouterLink>
+                </div>
+            </div>
+            <div id="controller-pages">
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/words">
+                        <div style="height: 100%; width: 100%;">words</div>
+                    </RouterLink>
+                </div>
+            </div>
+            <div id="controller-pages">
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/translation">
+                        <div style="height: 100%; width: 100%;">words</div>
+                    </RouterLink>
+                </div>
+            </div>
             <div id="controller-buttons">
                 <Pin @click="resize"></Pin>
                 <Min @click="minsize" />
@@ -57,6 +77,7 @@ const close = async () => {
 }
 
 #controller-pages {
+    display: flex;
     background-color: aquamarine;
     width: 60%;
 }

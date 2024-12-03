@@ -16,6 +16,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-financial": "^0.2.1",
     "dmbar": "file:",
+    "klinecharts": "10.0.0-alpha1",
     "vue": "^3.3.4",
     "vue-router": "^4.5.0"
   },
