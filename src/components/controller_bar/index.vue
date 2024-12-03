@@ -18,7 +18,7 @@
             <div id="controller-pages">
                 <div style="height: 100%; background-color: azure;">
                     <RouterLink to="/translation">
-                        <div style="height: 100%; width: 100%;">words</div>
+                        <div style="height: 100%; width: 100%;">translation</div>
                     </RouterLink>
                 </div>
             </div>

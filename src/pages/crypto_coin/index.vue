@@ -1,67 +1,153 @@
 <template>
-    <div style="height: 100%; width: 100%;background-color: azure;">
-        <canvas id="myChart"></canvas>
-    </div>
+    <div id="chart" style="width:100%; height:100%; background-color: black;" />
 </template>
 <script setup lang='ts'>
-import { ref, onMounted } from "vue";
-import { invoke } from "@tauri-apps/api/core";
-import { Chart } from 'chart.js/auto' // Easy way of importing everything
-import { OhlcElement, OhlcController, CandlestickElement, CandlestickController } from 'chartjs-chart-financial' // 直接引入以注册图表插件
-import 'chartjs-adapter-date-fns';
+import { onMounted, onUnmounted } from 'vue'
+import { USDMClient, WebsocketClient } from 'binance'
+import { init, dispose } from 'klinecharts'
+import { timeStamp } from 'console';
 
-Chart.register(OhlcElement, OhlcController, CandlestickElement, CandlestickController)
-
-const greetMsg = ref("");
-const name = ref("");
-const klineData = ref<any[]>([]);  // 使用 ref 使 klineData 响应式
-let chartInstance: Chart | null = null;  // 用于保存图表实例
-
-// 获取 K 线数据并创建图表
-const get_kline = async () => {
-    const res: string = await invoke("get_kline", { symbol: "DOGEUSDT" });
-    const parsedData = JSON.parse(res);
-    console.log(parsedData);
-    // 转换数据格式
-    const klineChartData = parsedData.map((kline: any) => ({
-        x: kline[0],  // 开盘时间（时间戳）
-        o: parseFloat(kline[1]),  // 开盘价
-        h: parseFloat(kline[2]),  // 最高价
-        l: parseFloat(kline[3]),  // 最低价
-        c: parseFloat(kline[4]),  // 收盘价
-    }));
-
-    // 更新响应式数据
-    klineData.value = klineChartData;
-    createChart();
-};
-const get_orders = async () => {
-    const res: string = await invoke("get_orders", { symbol: "DOGEUSDT" });
-    console.log(res);
+const loadData = async (chart: any) => {
+    const restClient = new USDMClient();
+    const initialCandleResult = await restClient.getKlines({
+        symbol: "BTCUSDT",
+        interval: "1m",
+        limit: 100,
+    });
+    console.log(initialCandleResult);
+    const mappedEngineCandles: any = initialCandleResult.map(
+        (candle) => {
+            return {
+                open: Number(candle[1]),
+                high: Number(candle[2]),
+                low: Number(candle[3]),
+                close: Number(candle[4]),
+                volume: Number(candle[5]),
+                openTime: candle[0],
+                openDt: new Date(candle[0]),
+                closeTime: candle[6],
+                closeDt: new Date(candle[6]),
+                timestamp: candle[0],
+            };
+        },
+    );
+    chart.loadMore((timestamp: any) => {
+        setTimeout(() => {
+            const firstData = chart.getDataList()[0];
+            chart.applyMoreData(
+                mappedEngineCandles,
+                true
+            );
+        }, 2000);
+    });
+    // chart.applyMoreData(mappedEngineCandles, true)
 }
-// 创建图表
-function createChart() {
-    const ctx = (document.getElementById('myChart') as HTMLCanvasElement).getContext('2d');
-    if (chartInstance instanceof Chart) {
-        chartInstance.destroy();
-    }
-    console.log(klineData.value)
-    if (ctx) {
-        chartInstance = new Chart(ctx, {
-            type: 'candlestick',  // 使用 candlestick 类型来绘制 K 线图
-            data: {
-                datasets: [{
-                    label: 'DOGE/USDT',
-                    data: klineData.value,  // 使用响应式数据
-                }],
-            },
-        });
-    }
-}
+let client: WebsocketClient | null = null;
+onMounted(async () => {
+    const chart: any = init('chart')
+    const restClient = new USDMClient();
+    client = new WebsocketClient({
+        beautify: true,
+    });
+    const market = 'BTCUSDT';
+    client.on('message', async (data: any) => {
+        chart.updateData(
+            { close: data.k.c, high: data.k.h, low: data.k.l, open: data.k.o, timestamp: data.k.t, volume: data.k.v }
+        )
+    });
+    chart.setLoadMoreDataCallback(async ({ type, data, callback }: any) => {
+        console.log(type)
+        if (type === 'forward') {
+            const initialCandleResult = await restClient.getKlines({
+                symbol: "BTCUSDT",
+                interval: "1m",
+                endTime: data.timestamp,
+                limit: 100,
+            });
+            const mappedEngineCandles: any = initialCandleResult.map(
+                (candle) => {
+                    return {
+                        open: Number(candle[1]),
+                        high: Number(candle[2]),
+                        low: Number(candle[3]),
+                        close: Number(candle[4]),
+                        volume: Number(candle[5]),
+                        openTime: candle[0],
+                        openDt: new Date(candle[0]),
+                        closeTime: candle[6],
+                        closeDt: new Date(candle[6]),
+                        timestamp: candle[0],
+                    };
+                },
+            );
+            fetch('https://klinecharts.com/datas/kline.json')
+                .then(res => res.json())
+                .then(dataList => {
+                    callback(mappedEngineCandles, true);
+                });
+        } else {
+            const initialCandleResult = await restClient.getKlines({
+                symbol: "BTCUSDT",
+                interval: "1m",
+                startTime: data.timestamp,
+                limit: 100,
+            });
+            const mappedEngineCandles: any = initialCandleResult.map(
+                (candle) => {
+                    return {
+                        open: Number(candle[1]),
+                        high: Number(candle[2]),
+                        low: Number(candle[3]),
+                        close: Number(candle[4]),
+                        volume: Number(candle[5]),
+                        openTime: candle[0],
+                        openDt: new Date(candle[0]),
+                        closeTime: candle[6],
+                        closeDt: new Date(candle[6]),
+                        timestamp: candle[0],
+                    };
+                },
+            );
+            callback(mappedEngineCandles);
+        }
+    });
+    //subscribeContinuousContractKlines(market, 'perpetual', '1m', 'usdm');
+    client.subscribeKlines(market, '1m', 'usdm')
+    const initialCandleResult = await restClient.getKlines({
+        symbol: "BTCUSDT",
+        interval: "1m",
+        limit: 100,
+    });
+    const mappedEngineCandles: any = initialCandleResult.map(
+        (candle) => {
+            return {
+                open: Number(candle[1]),
+                high: Number(candle[2]),
+                low: Number(candle[3]),
+                close: Number(candle[4]),
+                volume: Number(candle[5]),
+                openTime: candle[0],
+                openDt: new Date(candle[0]),
+                closeTime: candle[6],
+                closeDt: new Date(candle[6]),
+                timestamp: candle[0],
+            };
+        },
+    );
+    // const closedCandles = mappedEngineCandles.filter(
+    //     (c: any) => c.closeTime <= Date.now(),
+    // );
+    chart.applyNewData(mappedEngineCandles, true);
 
-onMounted(() => {
-    get_kline();  // 在组件挂载后获取数据并绘制图表
-    get_orders();
-});
+    window.onresize = function () {
+        chart.resize();
+    }
+})
+onUnmounted(() => {
+    if (client != null) {
+        client.close;
+    }
+    dispose('chart')
+})
 </script>
 <style scoped></style>
