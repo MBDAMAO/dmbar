@@ -33,12 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import { LogicalSize, PhysicalSize, Window } from "@tauri-apps/api/window";
+import { Window } from "@tauri-apps/api/window";
 import Pin from "@/icons/Pin.vue";
 import Min from "@/icons/Min.vue";
 import Max from "@/icons/Max.vue";
 import Close from "@/icons/Close.vue";
 import Unpin from "../../icons/Unpin.vue";
+import { getCurrentWindow, PhysicalSize } from '@tauri-apps/api/window';
+import { getCurrentWebview, LogicalSize } from '@tauri-apps/api/webview';
 
 const minsize = async () => {
     const appWindow = Window.getCurrent();
@@ -46,8 +48,11 @@ const minsize = async () => {
 };
 
 const resize = async () => {
-    const appWindow = Window.getCurrent();
-    await appWindow.setSize(new PhysicalSize(800, 600))
+    let window = getCurrentWebview();
+    let res = await window.setSize(new LogicalSize(1024, 800));
+    // console.log(await window.innerSize())
+    // console.log(await window.outerSize())
+    console.log(res)
 }
 
 const toggleMaximize = async () => {
