@@ -6,7 +6,9 @@ import ControllerBar from './components/controller_bar/index.vue'
 <template>
   <div id="main-container">
     <ControllerBar></ControllerBar>
-    <RouterView />
+    <div style="width: 100%; height: 100%;">
+      <RouterView />
+    </div>
   </div>
 </template>
 
@@ -14,5 +16,7 @@ import ControllerBar from './components/controller_bar/index.vue'
 #main-container {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 </style>

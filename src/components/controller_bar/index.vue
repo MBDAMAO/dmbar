@@ -4,21 +4,32 @@
             <div id="controller-pages" data-tauri-drag-region>
                 <div style="height: 100%; background-color: azure;">
                     <RouterLink to="/crypto_coin">
-                        <div style="height: 100%; width: 100%;">crypto</div>
+                        <div style="height: 100%; width: 100%;">c</div>
                     </RouterLink>
                 </div>
-            </div>
-            <div id="controller-pages">
                 <div style="height: 100%; background-color: azure;">
                     <RouterLink to="/words">
-                        <div style="height: 100%; width: 100%;">words</div>
+                        <div style="height: 100%; width: 100%;">w</div>
                     </RouterLink>
                 </div>
-            </div>
-            <div id="controller-pages">
                 <div style="height: 100%; background-color: azure;">
                     <RouterLink to="/translation">
-                        <div style="height: 100%; width: 100%;">translation</div>
+                        <div style="height: 100%; width: 100%;">t</div>
+                    </RouterLink>
+                </div>
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/fast_gpt">
+                        <div style="height: 100%; width: 100%;">g</div>
+                    </RouterLink>
+                </div>
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/vpn">
+                        <div style="height: 100%; width: 100%;">v</div>
+                    </RouterLink>
+                </div>
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/ssh_monitor">
+                        <div style="height: 100%; width: 100%;">s</div>
                     </RouterLink>
                 </div>
             </div>
@@ -39,8 +50,7 @@ import Min from "@/icons/Min.vue";
 import Max from "@/icons/Max.vue";
 import Close from "@/icons/Close.vue";
 import Unpin from "../../icons/Unpin.vue";
-import { getCurrentWindow, PhysicalSize } from '@tauri-apps/api/window';
-import { getCurrentWebview, LogicalSize } from '@tauri-apps/api/webview';
+import { getCurrentWindow, LogicalSize } from '@tauri-apps/api/window';
 
 const minsize = async () => {
     const appWindow = Window.getCurrent();
@@ -48,7 +58,7 @@ const minsize = async () => {
 };
 
 const resize = async () => {
-    let window = getCurrentWebview();
+    let window = getCurrentWindow();
     let res = await window.setSize(new LogicalSize(1024, 800));
     // console.log(await window.innerSize())
     // console.log(await window.outerSize())
@@ -71,19 +81,16 @@ const close = async () => {
 };
 </script>
 <style scoped>
-#controller-handler {
-    display: absolute;
-}
+#controller-handler {}
 
 #controller-container {
     width: 100%;
-    height: 20px;
+    height: 15px;
     display: flex;
 }
 
 #controller-pages {
     display: flex;
-    background-color: aquamarine;
     width: 60%;
 }
 

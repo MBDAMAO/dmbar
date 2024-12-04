@@ -6,6 +6,11 @@ const router = createRouter({
   history: createWebHashHistory("/"),
   routes: [
     {
+      path: "/",
+      name: "crypto_coin",
+      redirect: "/crypto_coin"
+    },
+    {
       path: "/words",
       name: "words",
       component: HomeView,
