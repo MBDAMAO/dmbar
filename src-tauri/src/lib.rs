@@ -1,4 +1,5 @@
 mod cmds;
+mod tray;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -16,6 +17,14 @@ pub fn run() {
     // }
 
     tauri::Builder::default()
+        .setup(|app| {
+            #[cfg(all(desktop))]
+            {
+                let handle = app.handle();
+                tray::create_tray(handle)?;
+            }
+            Ok(())
+        })
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             cmds::greet,

@@ -64,22 +64,22 @@ const sentence = ref("")
 const translation = ref("")
 const word = ref("")
 const getConfig = async () => {
-    const res: string = await invoke("get_config");
-    const config = JSON.parse(res);
+    // const res: string = await invoke("get_config");
+    // const config = JSON.parse(res);
+    return "test"
 }
 const getWord = async () => {
-    const res: string = await invoke("get_word");
-    const word = JSON.parse(res);
+    // const res: string = await invoke("get_word");
+    // const word = JSON.parse(res);
+    return "test"
 }
-onMounted(() => {
+onMounted(async () => {
     //getConfig()
-    window.onload = function () {
-        let colorbg = new AestheticFluidBg({
-            dom: "backg",
-            colors: ["#59E2FD", "#6C58EE", "#F54595", "#FCE500", "#59E2FD", "#6C58EE"],
-            loop: true
-        })
-    }
+    let colorbg = new AestheticFluidBg({
+        dom: "backg",
+        colors: ["#59E2FD", "#6C58EE", "#F54595", "#FCE500", "#59E2FD", "#6C58EE"],
+        loop: true
+    })
     window.onresize = function () {
         let colorbg = new AestheticFluidBg({
             dom: "backg",
@@ -87,6 +87,7 @@ onMounted(() => {
             loop: true
         })
     }
+    word.value = await getWord();
 })
 const uncover = async () => {
     const appWindow = Window.getCurrent();

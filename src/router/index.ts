@@ -7,8 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "crypto_coin",
-      redirect: "/crypto_coin"
+      redirect: "/crypto_coin",
     },
     {
       path: "/words",

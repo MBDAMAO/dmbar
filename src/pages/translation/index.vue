@@ -1,31 +1,68 @@
 <template>
-    <div>
-        <video ref="video" controls autoplay></video>
+    <div class="translator">
+        <h1>Text Translator</h1>
+        <textarea v-model="inputText" placeholder="Enter text to translate" rows="4" cols="50"></textarea>
+        <button @click="translateText">Translate</button>
+
+        <div v-if="translatedText">
+            <h3>Translated Text:</h3>
+            <p>{{ translatedText }}</p>
+        </div>
+
+        <div v-if="errorMessage" class="error">
+            <p>{{ errorMessage }}</p>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import flvjs from 'flv.js';
+import { ref } from "vue";
+import { translate } from "google-translate-api-browser";
 
-const video = ref<HTMLVideoElement | null>(null);
+// Reactive variables
+const inputText = ref<string>("");
+const translatedText = ref<string | null>(null);
+const errorMessage = ref<string | null>(null);
 
-onMounted(() => {
-    if (video.value && flvjs.isSupported()) {
-        const player = flvjs.createPlayer({
-            type: 'flv',
-            url: 'http://tx.flv.huya.com/src/1182498550-1182498550-5078792599817420800-2365120556-10057-A-0-1-imgplus.flv?sv=2110211124&ver=1&uid=1468441917181&uuid=2828704052&seqid=3201665971356&t=102&ctype=tars_mp&wsSecret=bf88a794b078fbdb2a3052bb44ac0576&wsTime=675037f5&fs=bgct'
-        });
-        player.attachMediaElement(video.value);
-        player.load();
-        player.play();
+// Translate function
+const translateText = async () => {
+    try {
+        const response = await translate(inputText.value, { to: "en", corsUrl: "http://cors-anywhere.herokuapp.com/" });
+        translatedText.value = response.text; // Set the translated text
+        errorMessage.value = null; // Clear any previous errors
+    } catch (error) {
+        errorMessage.value = "Translation failed. Please try again later."; // Display error message
+        translatedText.value = null; // Clear previous translations
     }
-});
+};
 </script>
 
 <style scoped>
-video {
-    width: 100%;
-    height: auto;
+.translator {
+    text-align: center;
+    margin: 20px;
+}
+
+textarea {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.error {
+    color: red;
+    margin-top: 20px;
 }
 </style>
