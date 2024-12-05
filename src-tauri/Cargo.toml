@@ -36,3 +36,4 @@ anyhow = "1.0"
 binance_future_connector = { path = "./libs/binance_future_connector_rust", features = [
     "enable-hyper",
 ] }
+window-vibrancy = "0.5.2"

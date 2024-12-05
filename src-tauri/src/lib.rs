@@ -1,5 +1,6 @@
 mod api;
 mod cmds;
+mod init;
 mod tray;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -26,6 +27,7 @@ pub fn run() {
             }
             Ok(())
         })
+        .setup(init::init)
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             cmds::greet,
