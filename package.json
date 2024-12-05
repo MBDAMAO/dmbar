@@ -10,29 +10,26 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-shell": "^2",
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-shell": "^2.0.1",
     "binance": "^2.13.18",
-    "chart.js": "^4.4.6",
-    "chartjs-adapter-date-fns": "^3.0.0",
-    "chartjs-chart-financial": "^0.2.1",
     "dmbar": "file:",
     "flv.js": "^1.6.2",
     "google-translate-api-browser": "^5.0.0",
     "klinecharts": "10.0.0-alpha1",
     "stock-api": "^2.0.7",
-    "vue": "^3.3.4",
+    "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2",
+    "@tauri-apps/cli": "^2.1.0",
     "@types/node": "^22.10.1",
-    "@vitejs/plugin-vue": "^5.0.5",
-    "axios": "^1.7.7",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "axios": "^1.7.9",
     "types-pac": "^1.0.3",
-    "typescript": "^5.6.2",
-    "vite": "^5.3.1",
-    "vue-tsc": "^2.0.29"
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "vue-tsc": "^2.1.10"
   },
   "packageManager": "pnpm@9.14.4"
 }

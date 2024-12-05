@@ -1,3 +1,4 @@
+mod api;
 mod cmds;
 mod tray;
 
@@ -29,7 +30,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             cmds::greet,
             cmds::get_kline,
-            cmds::get_orders
+            cmds::get_orders,
+            api::get_request
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

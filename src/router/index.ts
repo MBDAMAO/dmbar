@@ -24,6 +24,11 @@ const router = createRouter({
       name: "translation",
       component: () => import("../pages/translation/index.vue"),
     },
+    {
+      path: "/rss",
+      name: "rss",
+      component: () => import("../pages/rss/index.vue"),
+    },
   ],
 });
 

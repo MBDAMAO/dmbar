@@ -32,6 +32,11 @@
                         <div style="height: 100%; width: 100%;">s</div>
                     </RouterLink>
                 </div>
+                <div style="height: 100%; background-color: azure;">
+                    <RouterLink to="/rss">
+                        <div style="height: 100%; width: 100%;">rss</div>
+                    </RouterLink>
+                </div>
             </div>
             <div id="controller-buttons">
                 <Pin @click="resize"></Pin>

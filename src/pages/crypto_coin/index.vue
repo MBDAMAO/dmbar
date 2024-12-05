@@ -4,9 +4,8 @@
 <script setup lang='ts'>
 import { onMounted, onUnmounted } from 'vue'
 import { USDMClient, WebsocketClient } from 'binance'
-import { init, dispose, registerIndicator, TooltipShowRule, Chart, Nullable } from 'klinecharts'
-import { assert } from 'console';
-let symbol = 'DOGEUSDT'
+import { init, dispose, TooltipShowRule, Chart, Nullable } from 'klinecharts'
+const symbol = 'DOGEUSDT'
 const mapCandles = (candles: any[]) => {
     return candles.map((candle) => ({
         open: Number(candle[1]),
@@ -21,7 +20,7 @@ const mapCandles = (candles: any[]) => {
         timestamp: candle[0],
     }));
 };
-let client: WebsocketClient | null = null;
+let wsClient: WebsocketClient | null = null;
 const getKline = async (params: any) => {
     const restClient = new USDMClient();
     const initialCandleResult = await restClient.getKlines(params);
@@ -45,15 +44,6 @@ onMounted(async () => {
         price: 5,
         volume: 5
     });
-    client = new WebsocketClient({});
-    client.on('message', async (data: any) => {
-        chart.updateData(
-            {
-                close: Number(data.k.c), high: Number(data.k.h), low: Number(data.k.l),
-                open: Number(data.k.o), timestamp: data.k.t, volume: Number(data.k.v)
-            }
-        )
-    });
     chart.setLoadMoreDataCallback(async ({ type, data, callback }: any) => {
         console.log(type)
         if (type === 'forward') {
@@ -64,25 +54,38 @@ onMounted(async () => {
                 limit: 100,
             }), true);
         } else {
-            // we dont need backward
             callback([]);
         }
     });
+    wsClient = new WebsocketClient({});
+    wsClient.on('message', async (data: any) => {
+        switch (data.e) {
+            case 'kline': {
+                chart.updateData(
+                    {
+                        close: Number(data.k.c), high: Number(data.k.h), low: Number(data.k.l),
+                        open: Number(data.k.o), timestamp: data.k.t, volume: Number(data.k.v)
+                    }
+                )
+            }
+        }
+    });
     //subscribeContinuousContractKlines(market, 'perpetual', '1m', 'usdm');
-    client.subscribeKlines(symbol, '1m', 'usdm')
     chart.applyNewData(await getKline({
         symbol: symbol,
         interval: "1m",
         limit: 100,
     }), true);
+    wsClient.subscribeKlines(symbol, '1m', 'usdm')
+    // wsClient.subscribeSpotUserDataStream()
 
     window.onresize = function () {
         chart.resize();
     }
 })
 onUnmounted(() => {
-    if (client != null) {
-        client.closeAll();
+    if (wsClient != null) {
+        wsClient.closeAll();
     }
     dispose('chart')
 })
