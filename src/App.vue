@@ -6,7 +6,7 @@ import ControllerBar from './components/controller_bar/index.vue'
 <template>
   <div id="main-container">
     <ControllerBar></ControllerBar>
-    <div style="width: 100%; height: 100%;">
+    <div style="width: 100%; height: calc(100% - 15px);">
       <RouterView />
     </div>
   </div>

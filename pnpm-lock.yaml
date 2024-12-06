@@ -19,7 +19,7 @@ importers:
         version: 2.13.18(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
       dmbar:
         specifier: 'file:'
-        version: file:(bufferutil@4.0.8)(date-fns@4.1.0)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        version: file:(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
       flv.js:
         specifier: ^1.6.2
         version: 1.6.2
@@ -241,9 +241,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
-
-  '@kurkle/color@0.3.4':
-    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
   '@rollup/rollup-android-arm-eabi@4.28.0':
     resolution: {integrity: sha512-wLJuPLT6grGZsy34g4N1yRfYeouklTgPhH1gWXCYspenKYD0s3cR99ZevOGw5BexMNywkbV3UkjADisozBmpPQ==}
@@ -620,21 +617,6 @@ packages:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
 
-  chart.js@4.4.7:
-    resolution: {integrity: sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==}
-    engines: {pnpm: '>=8'}
-
-  chartjs-adapter-date-fns@3.0.0:
-    resolution: {integrity: sha512-Rs3iEB3Q5pJ973J93OBTpnP7qoGwvq3nUnoMdtxO+9aoJof7UFcRbWcIDteXuYd1fgAvct/32T9qaLyLuZVwCg==}
-    peerDependencies:
-      chart.js: '>=2.8.0'
-      date-fns: '>=2.0.0'
-
-  chartjs-chart-financial@0.2.1:
-    resolution: {integrity: sha512-RI3zrszyf2YdW7ME8I5XDsicy6YaU+uA1XZmGddR3rdcQlGf4pSgGFK8O0PWPO5Szdc8wZ8qpns++yib6pWBaw==}
-    peerDependencies:
-      chart.js: ^4.0.0
-
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
@@ -664,9 +646,6 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
-
-  date-fns@4.1.0:
-    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
@@ -1341,8 +1320,6 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.0
     optional: true
 
-  '@kurkle/color@0.3.4': {}
-
   '@rollup/rollup-android-arm-eabi@4.28.0':
     optional: true
 
@@ -1769,19 +1746,6 @@ snapshots:
       supports-color: 7.2.0
     optional: true
 
-  chart.js@4.4.7:
-    dependencies:
-      '@kurkle/color': 0.3.4
-
-  chartjs-adapter-date-fns@3.0.0(chart.js@4.4.7)(date-fns@4.1.0):
-    dependencies:
-      chart.js: 4.4.7
-      date-fns: 4.1.0
-
-  chartjs-chart-financial@0.2.1(chart.js@4.4.7):
-    dependencies:
-      chart.js: 4.4.7
-
   chrome-trace-event@1.0.4:
     optional: true
 
@@ -1809,8 +1773,6 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  date-fns@4.1.0: {}
-
   de-indent@1.0.2: {}
 
   debug@4.3.7:
@@ -1830,14 +1792,11 @@ snapshots:
       asap: 2.0.6
       wrappy: 1.0.2
 
-  dmbar@file:(bufferutil@4.0.8)(date-fns@4.1.0)(typescript@5.7.2)(utf-8-validate@5.0.10):
+  dmbar@file:(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10):
     dependencies:
       '@tauri-apps/api': 2.1.1
       '@tauri-apps/plugin-shell': 2.0.1
       binance: 2.13.18(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
-      chart.js: 4.4.7
-      chartjs-adapter-date-fns: 3.0.0(chart.js@4.4.7)(date-fns@4.1.0)
-      chartjs-chart-financial: 0.2.1(chart.js@4.4.7)
       flv.js: 1.6.2
       google-translate-api-browser: 5.0.0
       klinecharts: 10.0.0-alpha1
@@ -1847,7 +1806,6 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/core'
       - bufferutil
-      - date-fns
       - debug
       - esbuild
       - supports-color
