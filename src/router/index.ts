@@ -29,6 +29,11 @@ const router = createRouter({
       name: "rss",
       component: () => import("../pages/rss/index.vue"),
     },
+    {
+      path: "/vpn",
+      name: "vpn",
+      component: () => import("../pages/vpn/index.vue"),
+    },
   ],
 });
 

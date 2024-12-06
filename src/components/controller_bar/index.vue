@@ -39,10 +39,18 @@
                 </div>
             </div>
             <div id="controller-buttons">
-                <Pin @click="resize"></Pin>
-                <Min @click="minsize" />
-                <Max @click="toggleMaximize" />
-                <Close @click="close" />
+                <div class="control-button fixed">
+                    <Pin @click="resize"></Pin>
+                </div>
+                <div class="control-button minimize">
+                    <Min @click="minsize" />
+                </div>
+                <div class="control-button maximize">
+                    <Max @click="toggleMaximize" />
+                </div>
+                <div class="control-button close">
+                    <Close @click="close" />
+                </div>
             </div>
         </div>
     </div>
@@ -92,6 +100,7 @@ const close = async () => {
     width: 100%;
     height: 15px;
     display: flex;
+    cursor: move;
 }
 
 #controller-pages {
@@ -101,6 +110,38 @@ const close = async () => {
 
 #controller-buttons {
     display: flex;
+    justify-content: flex-end;
     width: 40%;
+}
+
+.control-button {
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+    background-color: transparent;
+    /* Default background color */
+    transition: background-color 0.3s ease;
+    /* Smooth transition for background color */
+}
+
+/* Specific hover colors for each button */
+.control-button.close:hover {
+    background-color: rgba(255, 0, 0, 0.4);
+    /* Red for close button */
+}
+
+.control-button.minimize:hover {
+    background-color: rgba(255, 255, 0, 0.4);
+    /* Yellow for minimize button */
+}
+
+.control-button.maximize:hover {
+    background-color: rgba(0, 255, 0, 0.4);
+    /* Green for maximize button */
+}
+
+.control-button.fixed:hover {
+    background-color: rgba(255, 165, 0, 0.4);
+    /* Orange for fixed button */
 }
 </style>

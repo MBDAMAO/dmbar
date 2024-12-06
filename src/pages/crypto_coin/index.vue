@@ -1,10 +1,19 @@
 <template>
-    <div id="chart" style="width:100%; height:100%;" />
+    <div style="display: flex; flex-direction: column; height: 100%;">
+        <!-- Chart container -->
+        <div id="chart" style="flex: 1; width: 100%; height: 80%;" />
+
+        <!-- Buttons container -->
+        <div style="display: flex; justify-content: space-between; padding: 10px; height: 20%;">
+            <button @click="buy">Buy</button>
+            <button @click="sell">Sell</button>
+        </div>
+    </div>
 </template>
 <script setup lang='ts'>
 import { onMounted, onUnmounted } from 'vue'
 import { USDMClient, WebsocketClient } from 'binance'
-import { init, dispose, TooltipShowRule, Chart, Nullable } from 'klinecharts'
+import { init, dispose, TooltipShowRule, Chart, Nullable, LineType } from 'klinecharts'
 const symbol = 'DOGEUSDT'
 const mapCandles = (candles: any[]) => {
     return candles.map((candle) => ({
@@ -38,12 +47,29 @@ onMounted(async () => {
         }
     })
     if (chart == null) return;
-    // chart.createOverlay("segment");
+    chart.createOverlay({
+        name: 'simpleTag',
+        paneId: 'candle_pane',
+        lock: true,
+        styles: {
+            line: {
+                color: '#FF0000',
+                style: LineType.Dashed
+            },
+            text: {
+                backgroundColor: '#FF0000'
+            }
+        },
+        points: [
+            { timestamp: 0, value: 0.4352 },
+        ]
+    });
     chart.createIndicator('MA', false, { id: "candle_pane" });
     chart.setPrecision({
         price: 5,
         volume: 5
     });
+    // chart.createOverlay('horizontalRayLine')
     chart.setLoadMoreDataCallback(async ({ type, data, callback }: any) => {
         console.log(type)
         if (type === 'forward') {
@@ -90,4 +116,12 @@ onUnmounted(() => {
     dispose('chart')
 })
 </script>
-<style scoped></style>
+<style scoped>
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f0f0f0;
+}
+</style>

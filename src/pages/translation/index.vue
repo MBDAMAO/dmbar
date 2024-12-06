@@ -41,6 +41,7 @@ const translateText = async () => {
 .translator {
     text-align: center;
     margin: 20px;
+    height: 100%;
 }
 
 textarea {
