@@ -28,6 +28,9 @@
                             <div class="playButton" @click="refresh()">
                                 <Refresh></Refresh>
                             </div>
+                            <div class="playButton" @click="draw()">
+                                <Link />
+                            </div>
                             <!-- <div class="timeDetails">{{ timeNow }} {{ liveStatus }}</div> -->
                         </div>
                         <div class="right"></div>
@@ -45,7 +48,7 @@ import Pause from '@/icons/Pause.vue';
 import Pause2 from '@/icons/Pause2.vue';
 import Refresh from '../../icons/Refresh.vue';
 import flvjs from 'flv.js';
-
+import Link from '../../icons/Link.vue';
 // 播放状态和时间显示
 const playing = ref(true);
 const timeNow = ref("00:00");
@@ -111,7 +114,7 @@ onMounted(() => {
     if (rv.value && flvjs.isSupported()) {
         const player = flvjs.createPlayer({
             type: 'flv',
-            url: 'http://al.flv.huya.com/src/1182498550-1182498550-5078792599817420800-2365120556-10057-A-0-1-imgplus.flv?wsSecret=75cdd64452a7693d7bf01a2688911451&fs=bgct&sv=2110211124&seqid=3202033991832&uid=1468464013813&ver=1&uuid=860197084&t=102&wsTime=67557f39&ctype=tars_mp'
+            url: 'https://d1--cn-gotcha07.bilivideo.com/live-bvc/508268/live_544266238_1919984.flv?expires=1733590899&len=0&oi=3525928160&pt=web&qn=10000&trid=10002ece1a6c4ca9bfdc2487962fb3675471&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha07&sign=dd90961379462d9613e0d6d637879b44&site=3685e88fc5104bd69ae0aa09a47359e9&free_type=0&mid=330838998&sche=ban&trace=4&isp=fx&rg=SouthWest&pv=Sichuan&info_source=origin&score=37&suffix=origin&hot_cdn=0&sl=1&pp=rtmp&source=puv3_onetier&sk=49c77a3c00ecc4726f7e0e5a13f39f63&origin_bitrate=420596&deploy_env=prod&p2p_type=1&vd=bc&src=puv3&order=2'
         });
         player.attachMediaElement(rv.value);
         player.load();
