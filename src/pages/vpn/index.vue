@@ -2,100 +2,118 @@
     <div class="videoContainer">
         <div class="pre-back"></div>
         <div class="shadow"></div>
-        <div class="test"></div>
         <div class="background">
             <canvas id="canvas" class="canvas" ref="canvas"></canvas>
         </div>
         <div class="vbox">
-            <div class="expand" @click="showSide()" v-show="!showside">
-                <Expand />
-            </div>
             <div class="topPlay" @click="change()" v-show="!playing">
                 <Pause />
             </div>
-            <div class="details">
-
-            </div>
-            <div class="sideBar">
-                <div class="headimg">
-                    <img class="himg" />
-                    <AddFollow></AddFollow>
-                </div>
-                <div class="like" v-on:click="like()">
-                    <LikeIcon ref="likeButton" class="icon1"></LikeIcon>
-                    <div class="numinfo">{{ }}</div>
-                </div>
-                <div class="comment" v-on:click="openComment()">
-                    <Comment />
-                    <div class="numinfo"></div>
-                </div>
-                <div class="save" v-on:click="save()">
-                    <SaveStar></SaveStar>
-                    <div class="numinfo"></div>
-                </div>
-                <div class="share">
-                    <svg-share />
-                    <div class="numinfo">{</div>
-                </div>
-                <div class="more" v-on:click="openMoreSide()">
-                    <SvgVideoWindow />
-                    <div class="numinfo">看相关</div>
-                </div>
-                <div class="other">
-                    <Dotx3 />
-                </div>
-            </div>
-
+            <div class="details" data-tauri-drag-region></div>
             <div class="videoBlock">
-                <video class="videoEntity" ref="video" @click="change()" @timeupdate="update()">
+                <video class="videoEntity" ref="rv" @click="change()" data-tauri-drag-region>
                 </video>
                 <div class="controller">
-                    <div class="progressBar" @click="tapProgressBar" ref="progressBar">
+                    <div class="progressBar" ref="progressBar">
                         <div class="progressBackground">
                             <div class="progressNow" ref="progressNow"></div>
                         </div>
                     </div>
                     <div class="controlItems">
                         <div class="left">
-                            <div class="playButton" v-on:click="change()">
+                            <div class="playButton" @click="change()">
                                 <Pause2 v-show="!playing" />
-                                <Play v-show="playing"></Play>
+                                <Play v-show="playing" />
                             </div>
-                            <div class="timeDetails">{{ timeNow }} / {{ duration }}</div>
+                            <div class="playButton" @click="refresh()">
+                                <Refresh></Refresh>
+                            </div>
+                            <!-- <div class="timeDetails">{{ timeNow }} {{ liveStatus }}</div> -->
                         </div>
                         <div class="right"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="sideInfo" v-if="showside">
-            <VideoSide @close-event="showSide()" @changeStatus="(p: number) => changeStatus(p)" :status="sideStatus"
-                :vid="props.modal?.feed_item_id"></VideoSide>
-        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import Play from '@/icons/Play.vue';
+import Pause from '@/icons/Pause.vue';
+import Pause2 from '@/icons/Pause2.vue';
+import Refresh from '../../icons/Refresh.vue';
 import flvjs from 'flv.js';
-const canvas = ref();
-const video = ref<HTMLVideoElement | null>(null);
-function draw() {
-    const context = canvas.value.getContext("2d");
-    canvas.value.width = video.value.videoWidth;
-    canvas.value.height = video.value.videoHeight;
-    console.log(video.value.videoWidth)
-    context.drawImage(video.value, 0, 0, canvas.value.width, canvas.value.height);
-    canvas.value.style.scale = 1.6;
-    canvas.value.style.filter = "blur(30px)";
+
+// 播放状态和时间显示
+const playing = ref(true);
+const timeNow = ref("00:00");
+const liveStatus = ref("");
+
+// 视频和画布引用
+const canvas = ref<HTMLCanvasElement | null>(null);
+const rv = ref<HTMLVideoElement | null>(null);
+const progressNow = ref<HTMLDivElement | null>(null);
+
+// 播放/暂停切换
+function change() {
+    draw();
+    playing.value = !playing.value;
+    if (playing.value) {
+        play();
+    } else {
+        pause();
+    }
 }
+
+// 播放与暂停控制
+function play() {
+    playing.value = true;
+    rv.value?.play();
+}
+function pause() {
+    playing.value = false;
+    rv.value?.pause();
+}
+function refresh() {
+    if (rv.value) {
+        const videoElement = rv.value;
+        pause();
+        let end = videoElement.buffered.end(0) - 1;
+        videoElement.currentTime = end;
+        play();
+    }
+}
+
+// 更新时间
+function update() {
+    const now = new Date();
+    timeNow.value = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    liveStatus.value = "Live";
+}
+
+// 画布更新背景
+function draw() {
+    if (!rv.value || !canvas.value) return;
+    const context = canvas.value.getContext("2d");
+    canvas.value.width = rv.value.videoWidth;
+    canvas.value.height = rv.value.videoHeight;
+    if (context) {
+        context.drawImage(rv.value, 0, 0, canvas.value.width, canvas.value.height);
+        canvas.value.style.transform = "scale(1.2)";
+        canvas.value.style.filter = "blur(30px)";
+    }
+}
+
+// 初始化直播流
 onMounted(() => {
-    if (video.value && flvjs.isSupported()) {
+    if (rv.value && flvjs.isSupported()) {
         const player = flvjs.createPlayer({
             type: 'flv',
-            url: 'https://d1--cn-gotcha04.bilivideo.com/live-bvc/557317/live_3493137471244811_86205246.flv?expires=1733502774&len=0&oi=3525928160&pt=web&qn=10000&trid=10006a6145691f7d889d69b6e962b3675319&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha04&sign=4e2b258be40089e039a9cdae8c38f389&site=b7d0867617b2f855795507351c029d5d&free_type=0&mid=330838998&sche=ban&trace=4&isp=fx&rg=SouthWest&pv=Sichuan&deploy_env=prod&pp=srt&source=puv3_onetier&suffix=origin&hot_cdn=0&origin_bitrate=832001&p2p_type=1&sk=8968c61f7ee47eea970c1885863753c1&score=1&sl=1&info_source=cache&vd=bc&src=puv3&order=1'
+            url: 'http://al.flv.huya.com/src/1182498550-1182498550-5078792599817420800-2365120556-10057-A-0-1-imgplus.flv?wsSecret=75cdd64452a7693d7bf01a2688911451&fs=bgct&sv=2110211124&seqid=3202033991832&uid=1468464013813&ver=1&uuid=860197084&t=102&wsTime=67557f39&ctype=tars_mp'
         });
-        player.attachMediaElement(video.value);
+        player.attachMediaElement(rv.value);
         player.load();
         player.play();
     }
@@ -103,216 +121,137 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.numinfo {
-    font-size: 13px;
-    color: white;
+:root {
+    --primary-color: white;
+    --secondary-color: rgba(255, 255, 255, 0.75);
+    --highlight-color: rgb(250, 206, 21);
+    --bg-blur: 30px;
+    --transition-duration: 300ms;
 }
 
-.test {
-    position: absolute;
-    height: 20px;
-    width: 20px;
-    z-index: 50;
-    background-color: aqua;
-    cursor: pointer;
-}
-
-.shadow {
-    z-index: -0.5;
+.pre-back {
+    top: 0;
+    left: 0;
     position: absolute;
     height: 100%;
     width: 100%;
-    box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.5) inset;
-}
-
-.sideBar {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    height: 500px;
-    width: 50px;
-    padding-right: 38px;
-    right: 0;
-    bottom: 50px;
-    z-index: 99;
-}
-
-.sideBar>div {
-    display: flex;
-    flex-direction: column;
-    justify-self: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-}
-
-.sideInfo {
-    height: 100%;
-    width: 40%;
-    min-width: 350px;
-}
-
-.canvas {
-    position: relative;
-}
-
-.details {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    z-index: 99;
-    padding: 16px 0 16px 0;
-    box-sizing: content-box;
-    height: 70px;
-    /* background-color: aqua; */
-    bottom: 50px;
-    width: 100%;
-
-    .account {
-        width: 100%;
-        height: 50%;
-        /* background-color: wheat; */
-        align-items: center;
-        display: flex;
-
-        .uploader {
-            font-family: "PingFang SC", serif;
-            font-size: 19px;
-            color: white;
-            padding-left: 16px;
-            padding-right: 5px;
-            /* background-color: aquamarine; */
-        }
-
-        .pubTime {
-            font-size: 14px;
-            color: white;
-        }
-    }
-
-    .title {
-        width: 100%;
-        height: 50%;
-        /* background-color: black; */
-        align-items: center;
-        display: flex;
-
-        .content {
-            padding-left: 16px;
-            font-size: 15px;
-            color: white;
-        }
-
-        .tags {
-            padding-left: 5px;
-            font-size: 15px;
-            color: rgb(250, 206, 21);
-        }
-    }
-}
-
-.expand {
-    overflow: hidden;
-    position: absolute;
-    right: -15px;
-    top: 45%;
-    width: 50px;
-    /* background-color: antiquewhite; */
-    height: 50px;
-    bottom: 45%;
-    z-index: 114514;
-}
-
-.expand:hover {
-    fill: rgba(255, 255, 255, 1);
-    margin-right: 10px;
-    transition: 300ms;
-}
-
-.topPlay {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99;
-    top: 40%;
-    left: 40%;
-    right: 40%;
-    bottom: 40%;
-    height: 20%;
-    width: 20%;
-}
-
-.icon {
-    opacity: 0.75;
-}
-
-.icon:hover {
-    opacity: 0.9;
-}
-
-.controlItems {
-    height: 100%;
-    width: 100%;
-    display: flex;
-
-    .left {
-        height: 100%;
-        width: 70%;
-        /* background-color: antiquewhite; */
-        display: flex;
-        align-items: center;
-
-        .playButton {
-            margin-left: 20px;
-            height: 20px;
-            width: 20px;
-            /* background-color: aquamarine; */
-        }
-
-        .timeDetails {
-            margin-left: 5px;
-            height: 20px;
-            color: white;
-            /* background-color: blue; */
-        }
-    }
-
-    .right {
-        height: 100%;
-        width: 30%;
-        /* background-color: aqua; */
-    }
+    z-index: -3;
+    background: black;
+    /* opacity: 0.5; */
+    transition: opacity var(--transition-duration);
+    ;
 }
 
 .videoContainer {
-    position: relative;
+    /* position: relative; */
     height: 100%;
     width: 100%;
     display: flex;
+    flex-direction: column;
     overflow-x: hidden;
 }
 
 .vbox {
-    overflow: hidden;
     position: relative;
     height: 100%;
     width: 100%;
-    min-width: 440px;
+    overflow: hidden;
 }
 
 .vbox:hover {
     cursor: pointer;
 }
 
-
 .background {
+    top: 0;
+    left: 0;
     position: absolute;
-    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: -2;
+    overflow: hidden;
+}
+
+.canvas {
+    /* position: relative; */
+    height: 100%;
+    width: 100%;
+    /* transform: scale(1.6);
+    filter: blur(var(--bg-blur)); */
+}
+
+.shadow {
+    top: 0;
+    left: 0;
+    position: absolute;
     height: 100%;
     width: 100%;
     z-index: -1;
-    overflow: hidden;
+    box-shadow: 0 0 50px 20px rgba(0, 0, 0, 0.5) inset;
+}
+
+.topPlay {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    height: 20%;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+}
+
+.icon {
+    opacity: 0.75;
+    transition: opacity var(--transition-duration);
+}
+
+.icon:hover {
+    opacity: 0.9;
+}
+
+.details {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    height: 70px;
+    padding: 16px 0;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    box-sizing: content-box;
+}
+
+.details .account,
+.details .title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.details .account .uploader {
+    font-family: "PingFang SC", serif;
+    font-size: 19px;
+    color: var(--primary-color);
+    padding: 0 16px 0 16px;
+}
+
+.details .account .pubTime {
+    font-size: 14px;
+    color: var(--primary-color);
+}
+
+.details .title .content {
+    padding-left: 16px;
+    font-size: 15px;
+    color: var(--primary-color);
+}
+
+.details .title .tags {
+    padding-left: 5px;
+    font-size: 15px;
+    color: var(--highlight-color);
 }
 
 .videoBlock {
@@ -320,24 +259,14 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     z-index: 0;
 }
 
-.icon1 {
-    width: 40px;
-    height: 40px;
-}
-
-.icon1:hover {
-    scale: 1.2;
-    transition: 300ms;
-}
-
 .videoEntity {
-    height: 100%;
+    height: calc(100% - 46px);
     width: 100%;
 }
 
@@ -346,53 +275,70 @@ onMounted(() => {
     width: 100%;
     display: flex;
     flex-direction: column;
-
-    /* background-color: rgb(176, 102, 102); */
-
-    .progressBar {
-        padding-bottom: 2px;
-        width: 100%;
-        opacity: 0.5;
-
-        .progressBackground {
-            width: 100%;
-            height: 2.55px;
-            background-color: rgb(104, 104, 104);
-
-            .progressNow {
-                height: 100%;
-                background-color: rgb(255, 255, 255);
-            }
-        }
-    }
-
-    .progressBar:hover {
-        background-color: rgb(104, 104, 104);
-        opacity: 0.9;
-    }
 }
 
-.himg {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.progressBar {
+    width: 100%;
+    padding-bottom: 2px;
+    opacity: 0.5;
+    transition: opacity var(--transition-duration);
 }
 
-.headimg {
+.progressBar:hover {
+    opacity: 0.9;
+}
+
+.progressBar .progressBackground {
+    width: 100%;
+    height: 2.55px;
+    background-color: rgb(104, 104, 104);
+}
+
+.progressBar .progressBackground .progressNow {
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+.controlItems {
     display: flex;
-    justify-content: center;
-    position: relative;
-    margin-bottom: 10px;
+    width: 100%;
+    height: 100%;
 }
 
-.follow {
-    position: absolute;
-    z-index: 100;
-    bottom: 0;
+.controlItems .left {
+    width: 70%;
+    display: flex;
+    align-items: center;
 }
 
-.follow:hover {
-    scale: 1.2;
-    transition: 200ms;
+.controlItems .left .playButton {
+    margin-left: 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.controlItems .left .timeDetails {
+    margin-left: 5px;
+    height: 20px;
+    color: var(--primary-color);
+}
+
+.controlItems .right {
+    width: 30%;
+}
+
+.icon1 {
+    width: 40px;
+    height: 40px;
+    transition: transform var(--transition-duration);
+}
+
+.icon1:hover {
+    transform: scale(1.2);
+}
+
+.numinfo {
+    font-size: 13px;
+    color: var(--primary-color);
 }
 </style>
