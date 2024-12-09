@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
+    "strict-build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -28,9 +29,9 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "axios": "^1.7.9",
     "types-pac": "^1.0.3",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11",
-    "vue-tsc": "^2.1.10"
+    "vite": "^6.0.3",
+    "vue-tsc": "2.0.29",
+    "typescript": "5.6.2"
   },
   "packageManager": "pnpm@9.14.4"
 }

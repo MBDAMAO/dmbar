@@ -57,6 +57,7 @@ const routes = [
     { name: "vpn", path: "/vpn", label: "VPN" },
     { name: "ssh", path: "/ssh_monitor", label: "SSH Monitor" },
     { name: "rss", path: "/rss", label: "RSS" },
+    { name: "live", path: "/live", label: "Live" },
 ];
 
 const minsize = async () => {

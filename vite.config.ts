@@ -15,7 +15,7 @@ export default defineConfig(async () => ({
   clearScreen: false,
   // 2. tauri expects a fixed port, fail if that port is not available
   server: {
-    port: 1420,
+    port: 3000,
     strictPort: true,
     host: host || false,
     hmr: host
@@ -35,5 +35,8 @@ export default defineConfig(async () => ({
       "@": path.resolve("./src"),
       "@root": path.resolve("."),
     },
+  },
+  build: {
+    outDir: '../dist', // 确保没有修改为其他目录
   },
 }));

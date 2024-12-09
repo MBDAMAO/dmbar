@@ -34,6 +34,16 @@ const router = createRouter({
       name: "vpn",
       component: () => import("../pages/vpn/index.vue"),
     },
+    {
+      path: "/live",
+      name: "live",
+      component: () => import("../pages/live/index.vue"),
+    },
+    {
+      path: "/player",
+      name: "player",
+      component: () => import("../pages/player/index.vue"),
+    },
   ],
 });
 
