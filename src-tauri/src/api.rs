@@ -1,7 +1,5 @@
 use reqwest::Client;
-use reqwest::Error;
 use serde::{Deserialize, Serialize};
-use tauri::Manager;
 
 // 定义一个结构体用于接收 API 响应
 #[derive(Serialize, Deserialize, Debug)]

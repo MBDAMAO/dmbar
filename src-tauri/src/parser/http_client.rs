@@ -1,10 +1,10 @@
 use bytes::Bytes;
 use reqwest::{
-    header::{CONTENT_TYPE, USER_AGENT},
+    header::{HeaderMap, HeaderName, HeaderValue, CONTENT_TYPE, USER_AGENT},
     Client, Response,
 };
 use serde::{de::DeserializeOwned, Serialize};
-use tauri::http::{HeaderMap, HeaderName, HeaderValue};
+// use tauri::http::{HeaderMap, HeaderName, HeaderValue};
 
 use crate::error::{LsarError, LsarResult};
 

@@ -8,8 +8,8 @@ pub(super) type LsarResult<T> = std::result::Result<T, LsarError>;
 
 #[derive(Debug, thiserror::Error)]
 pub(super) enum LsarError {
-    #[error(transparent)]
-    Sqlite(#[from] sqlx::Error),
+    // #[error(transparent)]
+    // Sqlite(#[from] sqlx::Error),
     #[error("http error: {0}")]
     Http(#[from] HTTPError),
     #[error(transparent)]

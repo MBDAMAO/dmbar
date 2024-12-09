@@ -49,6 +49,7 @@ import Pause2 from '@/icons/Pause2.vue';
 import Refresh from '../../icons/Refresh.vue';
 import flvjs from 'flv.js';
 import Link from '../../icons/Link.vue';
+import bilibili from "../../apis/live.ts";
 // 播放状态和时间显示
 const playing = ref(true);
 const timeNow = ref("00:00");
@@ -116,16 +117,37 @@ function draw() {
 }
 
 // 初始化直播流
-onMounted(() => {
+onMounted(async () => {
     videoUrl.value = route.query.videoUrl as string;
+    let cookie = "buvid3=747199C6-9AFE-3C5C-E7F8-BD1BA1803B2F78269infoc; b_nut=1713274178; _uuid=9F6C5155-5324-4696-4124-F6C674C72C1379322infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=04379D04-9068-3648-6CFC-FCD34487B91A80226-024041613-kDgdYyUTBZrR66zgrFNbnQ%3D%3D; header_theme_version=CLOSE; rpdid=0zbfVFCCTo|19yhf8t75|15|3w1RWJ6h; hit-dyn-v2=1; buvid_fp_plain=undefined; LIVE_BUVID=AUTO4817220804833788; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; CURRENT_QUALITY=0; fingerprint=4cc4c24ddfff09886c09c01cebc7bb26; buvid_fp=4cc4c24ddfff09886c09c01cebc7bb26; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MDQ5ODksImlhdCI6MTczMzU0NTcyOSwicGx0IjotMX0.RPrHG74aYfT2mKwDbaYZxd-OVctu7_yaKseBBpswDjQ; bili_ticket_expires=1733804929; home_feed_column=5; browser_resolution=1440-731; SESSDATA=f49d1afd%2C1749099895%2Cb7e55%2Ac2CjCLWUBYPID7EXg2f1mA8uCfvo_IhpNLoiPAewkfDB9G_uwO9Tdq6EZh0ojcEWajPU4SVl9FNDNwMWpTT1VycE40c1I4elk1ZlpLMVR0SVFBVElteGdNQy1BZG5mcERld1B1Z1QxNTRVeHhNdzhiLTd5eWFmQzdKMndhc1JpbFpkNGVOSl9fN2hnIIEC; bili_jct=df3cd94c1ce3100658dfe576ef66fb34; bp_t_offset_330838998=1008442073239519232; PVID=2; CURRENT_FNVAL=4048; b_lsid=11EEF974_193A9CD1A48; sid=7g1zu0ac"
+    let parser = bilibili("https://live.bilibili.com/" + videoUrl.value, cookie);
+    let result: ParsedResult | Error | null;
+    try {
+        result = await parser.parse();
+    } catch (e) {
+        result = Error("Error")
+        // result = handleParsingError(platform, e);
+    }
+    console.log(result);
+    let url
+    if (result instanceof Error) {
+        // setToast({ type: "error", message: result.message });
+    } else if (result) {
+        console.log(result);
+        url = result.links[0];
+    }
+
     if (rv.value && flvjs.isSupported()) {
         const player = flvjs.createPlayer({
             type: 'flv',
-            url: videoUrl.value
+            url
         });
         player.attachMediaElement(rv.value);
         player.load();
         player.play();
+        setTimeout(() => {
+            draw();
+        }, 1000);
     }
 });
 </script>

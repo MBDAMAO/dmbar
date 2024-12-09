@@ -26,7 +26,8 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/assets/js/AestheticFluidBg.module.js"
+    "src/assets/js/AestheticFluidBg.module.js",
+    "types/**/*.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

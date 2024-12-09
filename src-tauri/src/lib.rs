@@ -2,10 +2,13 @@ mod api;
 mod cmds;
 mod error;
 mod eval;
+mod global;
+mod http;
 mod init;
 mod parser;
 mod platform;
 mod tray;
+mod utils;
 use crate::parser::{parse_bilibili, parse_douyin, parse_douyu, parse_huya};
 #[macro_use]
 extern crate tracing;

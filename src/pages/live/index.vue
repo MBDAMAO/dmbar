@@ -21,7 +21,7 @@ import { useRouter } from 'vue-router';
 // 模拟数据
 const liveBlocks = ref([
     {
-        name: '音乐播放', tags: ['Gamer', 'Streamer'], videoUrl: "https://d1--cn-gotcha04.bilivideo.com/live-bvc/612218/live_544266238_1919984.flv?expires=1733658838&len=0&oi=1899426053&pt=web&qn=10000&trid=100070be7e8ceb0dc27e42f620030267557a&sigparams=cdn,expires,len,oi,pt,qn,trid&cdn=cn-gotcha04&sign=3f2db4cc96a65a9b5e7de51acb099814&site=b57e3fafedf41ae57ba88a4cd3cd85dd&free_type=0&mid=330838998&sche=ban&trace=4&isp=fx&rg=SouthWest&pv=Sichuan&score=1&origin_bitrate=418435&suffix=origin&hot_cdn=0&sk=49c77a3c00ecc4726f7e0e5a13f39f63&deploy_env=prod&info_source=origin&pp=rtmp&sl=1&p2p_type=1&source=puv3_onetier&vd=bc&src=puv3&order=2"
+        name: '音乐播放', tags: ['Gamer', 'Streamer'], videoUrl: "1773507853"
     },
     { name: 'Jane Smith', tags: ['Vlogger', 'Content Creator'], videoUrl: 'https://example.com/video2' },
     { name: 'Alex Brown', tags: ['Tech Enthusiast', 'Developer'], videoUrl: 'https://example.com/video3' },

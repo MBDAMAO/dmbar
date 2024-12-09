@@ -1,5 +1,8 @@
-use reqwest::{header::USER_AGENT, Client};
-use tauri::http::{HeaderMap, HeaderValue};
+use reqwest::{
+    header::{HeaderMap, HeaderValue, USER_AGENT},
+    Client,
+};
+// use tauri::http::{HeaderMap, HeaderValue};
 
 use crate::error::LsarResult;
 

@@ -5,12 +5,7 @@ description = "A useful window app"
 authors = ["damao"]
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
-# The `_lib` suffix may seem redundant but it is necessary
-# to make the lib name unique and wouldn't conflict with the bin name.
-# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
 name = "dmbar_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
@@ -18,17 +13,28 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tokio = { version = "1.41", features = ["full"] }
-tokio-tungstenite = "0.24"
-sqlite = "0.36"
-futures-util = { version = "0.3" }
 tauri = { version = "2", features = ["tray-icon"] }
-tauri-plugin-shell = "2"
-tauri-plugin-window-state = "2.0.2"
-
-reqwest = { version = "0.11.22", features = ["json", "multipart"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+
+tokio = { version = "1.41", features = ["full"] }
+tokio-tungstenite = "0.24"
+
+sqlite = "0.36"
+futures-util = { version = "0.3" }
+
+tracing = { version = "0", features = ["log", "release_max_level_info"] }
+tracing-subscriber = { version = "0", features = [
+    'time',
+    'env-filter',
+    'json',
+] }
+dirs = "5"
+
+tauri-plugin-shell = "2"
+tauri-plugin-window-state = "2.0.2"
+reqwest = { version = "0", features = ["json", "gzip", "multipart"] }
+
 # open apis
 binance_spot_connector_rust = { git = "https://github.com/binance/binance-spot-connector-rust.git", branch = "main", features = [
     "enable-hyper",
@@ -43,12 +49,18 @@ rand = { version = "0.8.5", default-features = false, features = [
     "std",
     "std_rng",
 ] }
-tracing = { version = "0", features = ["log", "release_max_level_info"] }
-tracing-subscriber = { version = "0", features = [
-    'time',
-    'env-filter',
-    'json',
-] }
+
+regex = { version = "1", default-features = false }
+toml = "0"
+
+
 thiserror = "1"
 base64 = "0"
 md-5 = "0"
+bytes = "1"
+url = "2"
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-single-instance = "2"
+tauri-plugin-updater = "2"
+[profile.release]
+lto = true
