@@ -22,7 +22,7 @@
                     </el-dropdown>
                 </el-col>
             </div>
-            <div id="controller-buttons">
+            <div id="controller-buttons" data-tauri-drag-region>
                 <div class="control-button fixed">
                     <Pin @click="resize"></Pin>
                 </div>

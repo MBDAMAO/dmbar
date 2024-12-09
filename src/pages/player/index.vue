@@ -28,12 +28,18 @@
                             <div class="playButton" @click="refresh()">
                                 <Refresh></Refresh>
                             </div>
-                            <div class="playButton" @click="draw()">
+                            <div class="playButton" @click="reload()">
                                 <Link />
                             </div>
                             <!-- <div class="timeDetails">{{ timeNow }} {{ liveStatus }}</div> -->
                         </div>
-                        <div class="right"></div>
+                        <div class="right">
+                            <el-select popper-append-to-body v-model="value" placeholder="Select" size="large"
+                                style="width: 240px">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                    :value="item.value" />
+                            </el-select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,6 +72,12 @@ const videoUrl = ref('');
 // 获取路由传递的 videoUrl
 const route = useRoute();
 
+const value = ref('')
+const options = ref<{ value: string; label: string }[]>([
+    { value: 'Option1', label: 'Option1' },
+    { value: 'Option2', label: 'Option2' },
+]);
+
 // 播放/暂停切换
 function change() {
     draw();
@@ -95,14 +107,60 @@ function refresh() {
         play();
     }
 }
-
+let cookie = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; fingerprint=b2a78f67292046fb59d465d8c30ddc3b; buvid_fp=b2a78f67292046fb59d465d8c30ddc3b; home_feed_column=5; browser_resolution=1707-898; PVID=9; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQwMTQ0NDYsImlhdCI6MTczMzc1NTE4NiwicGx0IjotMX0.8vIhDwYAU7xG5SslXlLZwpr0v3ufp6iHn_G_NKgaayw; bili_ticket_expires=1734014386; SESSDATA=db06f869%2C1749307247%2Cb4e76%2Ac2CjA7l4Os2BSfuZZa6Cu4-QTJjvTXMjk8afA9RJLPaWNsqz9PExnUr1hs6idDmALAWdESVkg4b3ZJYnBBSjRscEJLR2c3OFYwN3J2dE1qZUpTcDFZOWVMUzQ3RTdIa0tzNm1Pb3d6dVlBUlo3XzhXSFAwRVNrTGU5MThwRnZqV29uMExhWkdUelBBIIEC; bili_jct=399350212997568b6f80dc21ba4f2634; sid=85e8z0h9; b_lsid=F810F99DF_193ABE2398E; CURRENT_FNVAL=4048; bp_t_offset_330838998=1008972776578482176"
+let player: any;
 // 更新时间
 function update() {
     const now = new Date();
     timeNow.value = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
     liveStatus.value = "Live";
 }
+async function reload() {
+    try {
+        // 获取当前房间ID
+        const currentRoomID = route.query.videoUrl as string;
+        // 解析新的视频流地址
+        let parser = bilibili("https://live.bilibili.com/" + videoUrl.value, cookie);
+        let result: ParsedResult | Error | null;
+        try {
+            result = await parser.parse();
+        } catch (e) {
+            result = Error("Error")
+            // result = handleParsingError(platform, e);
+        }
+        console.log(result);
+        let newVideoUrl
+        if (result instanceof Error) {
+            // setToast({ type: "error", message: result.message });
+        } else if (result) {
+            console.log(result);
+            newVideoUrl = result.links[1];
+        }
+        // 更新 options 列表
+        options.value.push({ value: newVideoUrl, label: `Link ${options.value.length + 1}` });
 
+        // 重新加载视频流
+        if (rv.value) {
+            if (player) {
+                player.pause();
+                player.unload();
+                player.detachMediaElement();
+                player.destroy();
+                player = null; // 确保旧的播放器实例被清理
+            }
+            player = flvjs.createPlayer({
+                type: 'flv',
+                url: newVideoUrl
+            });
+            player.attachMediaElement(rv.value);
+            player.load();
+            player.play();
+        }
+    } catch (error) {
+        console.error('Error fetching new video URL:', error);
+        // 处理错误，比如显示错误消息
+    }
+}
 // 画布更新背景
 function draw() {
     if (!rv.value || !canvas.value) return;
@@ -119,7 +177,6 @@ function draw() {
 // 初始化直播流
 onMounted(async () => {
     videoUrl.value = route.query.videoUrl as string;
-    let cookie = "buvid3=747199C6-9AFE-3C5C-E7F8-BD1BA1803B2F78269infoc; b_nut=1713274178; _uuid=9F6C5155-5324-4696-4124-F6C674C72C1379322infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=04379D04-9068-3648-6CFC-FCD34487B91A80226-024041613-kDgdYyUTBZrR66zgrFNbnQ%3D%3D; header_theme_version=CLOSE; rpdid=0zbfVFCCTo|19yhf8t75|15|3w1RWJ6h; hit-dyn-v2=1; buvid_fp_plain=undefined; LIVE_BUVID=AUTO4817220804833788; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; CURRENT_QUALITY=0; fingerprint=4cc4c24ddfff09886c09c01cebc7bb26; buvid_fp=4cc4c24ddfff09886c09c01cebc7bb26; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM4MDQ5ODksImlhdCI6MTczMzU0NTcyOSwicGx0IjotMX0.RPrHG74aYfT2mKwDbaYZxd-OVctu7_yaKseBBpswDjQ; bili_ticket_expires=1733804929; home_feed_column=5; browser_resolution=1440-731; SESSDATA=f49d1afd%2C1749099895%2Cb7e55%2Ac2CjCLWUBYPID7EXg2f1mA8uCfvo_IhpNLoiPAewkfDB9G_uwO9Tdq6EZh0ojcEWajPU4SVl9FNDNwMWpTT1VycE40c1I4elk1ZlpLMVR0SVFBVElteGdNQy1BZG5mcERld1B1Z1QxNTRVeHhNdzhiLTd5eWFmQzdKMndhc1JpbFpkNGVOSl9fN2hnIIEC; bili_jct=df3cd94c1ce3100658dfe576ef66fb34; bp_t_offset_330838998=1008442073239519232; PVID=2; CURRENT_FNVAL=4048; b_lsid=11EEF974_193A9CD1A48; sid=7g1zu0ac"
     let parser = bilibili("https://live.bilibili.com/" + videoUrl.value, cookie);
     let result: ParsedResult | Error | null;
     try {
@@ -134,11 +191,12 @@ onMounted(async () => {
         // setToast({ type: "error", message: result.message });
     } else if (result) {
         console.log(result);
-        url = result.links[0];
+        url = result.links[2];
     }
-
+    // 更新 options 列表
+    options.value.push({ value: url, label: `Link ${options.value.length + 1}` });
     if (rv.value && flvjs.isSupported()) {
-        const player = flvjs.createPlayer({
+        player = flvjs.createPlayer({
             type: 'flv',
             url
         });
