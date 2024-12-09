@@ -1,8 +1,14 @@
 mod api;
 mod cmds;
+mod error;
+mod eval;
 mod init;
+mod parser;
+mod platform;
 mod tray;
-
+use crate::parser::{parse_bilibili, parse_douyin, parse_douyu, parse_huya};
+#[macro_use]
+extern crate tracing;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // check singleton
@@ -40,7 +46,8 @@ pub fn run() {
             cmds::greet,
             cmds::get_kline,
             cmds::get_orders,
-            api::get_request
+            api::get_request,
+            parse_bilibili
         ]);
     #[cfg(debug_assertions)]
     {
