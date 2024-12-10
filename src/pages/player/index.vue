@@ -6,6 +6,17 @@
             <canvas id="canvas" class="canvas" ref="canvas"></canvas>
         </div>
         <div class="vbox">
+            <Listbox v-model="selectedPerson">
+                <ListboxButton class="bottom-full" style="background-color: antiquewhite;">{{
+                    selectedPerson.name }}
+                </ListboxButton>
+                <ListboxOptions style="background-color: aqua;" class="bottom-full">
+                    <ListboxOption @click="reload(url.name)" v-for="url in urls" :key="url.id" :value="url"
+                        :disabled="url.unavailable" style="background-color: azure;" class="bottom-full">
+                        {{ url.name }}
+                    </ListboxOption>
+                </ListboxOptions>
+            </Listbox>
             <div class="topPlay" @click="change()" v-show="!playing">
                 <Pause />
             </div>
@@ -34,11 +45,7 @@
                             <!-- <div class="timeDetails">{{ timeNow }} {{ liveStatus }}</div> -->
                         </div>
                         <div class="right">
-                            <el-select popper-append-to-body v-model="value" placeholder="Select" size="large"
-                                style="width: 240px">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                    :value="item.value" />
-                            </el-select>
+
                         </div>
                     </div>
                 </div>
@@ -48,37 +55,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import Play from '@/icons/Play.vue';
 import Pause from '@/icons/Pause.vue';
 import Pause2 from '@/icons/Pause2.vue';
 import Refresh from '../../icons/Refresh.vue';
 import flvjs from 'flv.js';
 import Link from '../../icons/Link.vue';
+import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+} from '@headlessui/vue'
+const urls = reactive([
+    { id: 1, name: 'Durward Reynolds', unavailable: false },
+])
+const selectedPerson = ref(urls[0])
 import bilibili from "../../apis/live.ts";
-// 播放状态和时间显示
 const playing = ref(true);
-const timeNow = ref("00:00");
-const liveStatus = ref("");
-
-// 视频和画布引用
 const canvas = ref<HTMLCanvasElement | null>(null);
 const rv = ref<HTMLVideoElement | null>(null);
 const progressNow = ref<HTMLDivElement | null>(null);
 import { useRoute } from 'vue-router';
 
-const videoUrl = ref('');
-
-// 获取路由传递的 videoUrl
 const route = useRoute();
-
-const value = ref('')
-const options = ref<{ value: string; label: string }[]>([
-    { value: 'Option1', label: 'Option1' },
-    { value: 'Option2', label: 'Option2' },
-]);
-
-// 播放/暂停切换
 function change() {
     draw();
     playing.value = !playing.value;
@@ -88,7 +89,28 @@ function change() {
         pause();
     }
 }
-function parse_url() { }
+async function parseUrl(roomId: string, platform: string, params: string): Promise<string[] | Error> {
+    if (platform != "bilibili") {
+        return Error("Error")
+    }
+    let parser = bilibili("https://live.bilibili.com/" + roomId, cookie);
+    let result: ParsedResult | Error | null;
+    try {
+        result = await parser.parse();
+    } catch (e) {
+        result = Error("Error")
+    }
+    console.log(result);
+    if (result instanceof Error) {
+        return Error("Error")
+    } else if (result) {
+        console.log(result.links);
+    }
+    urls.splice(0, urls.length) // 清空数组
+    urls.push(...result.links.map((url, index) => { return { id: index + 1, name: url, unavailable: false } }))
+    console.log(urls)
+    return result.links
+}
 // 播放与暂停控制
 function play() {
     playing.value = true;
@@ -109,35 +131,15 @@ function refresh() {
 }
 let cookie = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; fingerprint=b2a78f67292046fb59d465d8c30ddc3b; buvid_fp=b2a78f67292046fb59d465d8c30ddc3b; home_feed_column=5; browser_resolution=1707-898; PVID=9; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQwMTQ0NDYsImlhdCI6MTczMzc1NTE4NiwicGx0IjotMX0.8vIhDwYAU7xG5SslXlLZwpr0v3ufp6iHn_G_NKgaayw; bili_ticket_expires=1734014386; SESSDATA=db06f869%2C1749307247%2Cb4e76%2Ac2CjA7l4Os2BSfuZZa6Cu4-QTJjvTXMjk8afA9RJLPaWNsqz9PExnUr1hs6idDmALAWdESVkg4b3ZJYnBBSjRscEJLR2c3OFYwN3J2dE1qZUpTcDFZOWVMUzQ3RTdIa0tzNm1Pb3d6dVlBUlo3XzhXSFAwRVNrTGU5MThwRnZqV29uMExhWkdUelBBIIEC; bili_jct=399350212997568b6f80dc21ba4f2634; sid=85e8z0h9; b_lsid=F810F99DF_193ABE2398E; CURRENT_FNVAL=4048; bp_t_offset_330838998=1008972776578482176"
 let player: any;
-// 更新时间
-function update() {
-    const now = new Date();
-    timeNow.value = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-    liveStatus.value = "Live";
-}
-async function reload() {
+async function reload(newUrl?: string) {
     try {
-        // 获取当前房间ID
-        const currentRoomID = route.query.videoUrl as string;
-        // 解析新的视频流地址
-        let parser = bilibili("https://live.bilibili.com/" + videoUrl.value, cookie);
-        let result: ParsedResult | Error | null;
-        try {
-            result = await parser.parse();
-        } catch (e) {
-            result = Error("Error")
-            // result = handleParsingError(platform, e);
+        if (!newUrl) {
+            let urlList = await parseUrl(route.query.videoUrl as string, "bilibili", cookie);
+            if (urlList instanceof Error) {
+                return;
+            }
+            newUrl = urlList[0]
         }
-        console.log(result);
-        let newVideoUrl
-        if (result instanceof Error) {
-            // setToast({ type: "error", message: result.message });
-        } else if (result) {
-            console.log(result);
-            newVideoUrl = result.links[1];
-        }
-        // 更新 options 列表
-        options.value.push({ value: newVideoUrl, label: `Link ${options.value.length + 1}` });
 
         // 重新加载视频流
         if (rv.value) {
@@ -150,7 +152,7 @@ async function reload() {
             }
             player = flvjs.createPlayer({
                 type: 'flv',
-                url: newVideoUrl
+                url: newUrl
             });
             player.attachMediaElement(rv.value);
             player.load();
@@ -176,25 +178,11 @@ function draw() {
 
 // 初始化直播流
 onMounted(async () => {
-    videoUrl.value = route.query.videoUrl as string;
-    let parser = bilibili("https://live.bilibili.com/" + videoUrl.value, cookie);
-    let result: ParsedResult | Error | null;
-    try {
-        result = await parser.parse();
-    } catch (e) {
-        result = Error("Error")
-        // result = handleParsingError(platform, e);
+    let urlList = await parseUrl(route.query.videoUrl as string, "bilibili", cookie);
+    if (urlList instanceof Error) {
+        return;
     }
-    console.log(result);
-    let url
-    if (result instanceof Error) {
-        // setToast({ type: "error", message: result.message });
-    } else if (result) {
-        console.log(result);
-        url = result.links[2];
-    }
-    // 更新 options 列表
-    options.value.push({ value: url, label: `Link ${options.value.length + 1}` });
+    let url = urlList[0]
     if (rv.value && flvjs.isSupported()) {
         player = flvjs.createPlayer({
             type: 'flv',

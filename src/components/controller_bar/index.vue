@@ -2,6 +2,45 @@
     <div id="controller-handler" data-tauri-drag-region>
         <div id="controller-container" data-tauri-drag-region>
             <div id="controller-pages" data-tauri-drag-region>
+                <Popover class="relative">
+                    <PopoverButton>Solutions</PopoverButton>
+                    <transition enter-active-class="transition duration-200 ease-out"
+                        enter-from-class="translate-y-1 opacity-0" enter-to-class="translate-y-0 opacity-100"
+                        leave-active-class="transition duration-150 ease-in"
+                        leave-from-class="translate-y-0 opacity-100" leave-to-class="translate-y-1 opacity-0">
+                        <PopoverPanel class="absolute z-10">
+                            <div class="grid grid-cols-2">
+                                <a href="/analytics">Analytics</a>
+                                <a href="/engagement">Engagement</a>
+                                <a href="/security">Security</a>
+                                <a href="/integrations">Integrations</a>
+                            </div>
+
+                            <!-- <img src="/solutions.jpg" alt="" /> -->
+                        </PopoverPanel>
+                    </transition>
+                </Popover>
+                <!-- Dropdown for Headless UI -->
+                <Popover class="relative ml-4">
+                    <PopoverButton class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
+                        Select Page
+                        <span class="ml-2">▼</span>
+                    </PopoverButton>
+                    <transition enter-active-class="transition duration-200 ease-out"
+                        enter-from-class="transform opacity-0" enter-to-class="transform opacity-100"
+                        leave-active-class="transition duration-150 ease-in" leave-from-class="transform opacity-100"
+                        leave-to-class="transform opacity-0">
+                        <PopoverPanel class="absolute z-10 bg-white shadow-lg p-4 rounded w-48">
+                            <ul>
+                                <li v-for="item in routes" :key="item.name" class="hover:bg-gray-100 p-2 rounded">
+                                    <RouterLink :to="item.path" class="block text-gray-700">
+                                        {{ item.label }}
+                                    </RouterLink>
+                                </li>
+                            </ul>
+                        </PopoverPanel>
+                    </transition>
+                </Popover>
                 <el-col :span="8">
                     <el-dropdown>
                         <span class="el-dropdown-link">
@@ -46,6 +85,7 @@ import Pin from "@/icons/Pin.vue";
 import Min from "@/icons/Min.vue";
 import Max from "@/icons/Max.vue";
 import Close from "@/icons/Close.vue";
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 

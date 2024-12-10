@@ -12,7 +12,7 @@ pub fn init(app: &mut App) -> std::result::Result<(), Box<dyn std::error::Error>
 
     // 仅在 windows 下执行
     #[cfg(target_os = "windows")]
-    window_vibrancy::apply_acrylic(&win, None)
+    window_vibrancy::apply_acrylic(&win, Some((255, 255, 255, 128)))
         .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
 
     Ok(())
