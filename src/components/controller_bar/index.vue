@@ -2,27 +2,9 @@
     <div id="controller-handler" data-tauri-drag-region>
         <div id="controller-container" data-tauri-drag-region>
             <div id="controller-pages" data-tauri-drag-region>
-                <Popover class="relative">
-                    <PopoverButton>Solutions</PopoverButton>
-                    <transition enter-active-class="transition duration-200 ease-out"
-                        enter-from-class="translate-y-1 opacity-0" enter-to-class="translate-y-0 opacity-100"
-                        leave-active-class="transition duration-150 ease-in"
-                        leave-from-class="translate-y-0 opacity-100" leave-to-class="translate-y-1 opacity-0">
-                        <PopoverPanel class="absolute z-10">
-                            <div class="grid grid-cols-2">
-                                <a href="/analytics">Analytics</a>
-                                <a href="/engagement">Engagement</a>
-                                <a href="/security">Security</a>
-                                <a href="/integrations">Integrations</a>
-                            </div>
-
-                            <!-- <img src="/solutions.jpg" alt="" /> -->
-                        </PopoverPanel>
-                    </transition>
-                </Popover>
                 <!-- Dropdown for Headless UI -->
                 <Popover class="relative ml-4">
-                    <PopoverButton class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
+                    <PopoverButton class="bg-gray-200 hover:bg-gray-300 h-[80%] rounded">
                         Select Page
                         <span class="ml-2">▼</span>
                     </PopoverButton>
@@ -41,28 +23,9 @@
                         </PopoverPanel>
                     </transition>
                 </Popover>
-                <el-col :span="8">
-                    <el-dropdown>
-                        <span class="el-dropdown-link">
-                            Select Page
-                            <el-icon class="el-icon--right">
-                                <arrow-down />
-                            </el-icon>
-                        </span>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-for="item in routes" :key="item.name">
-                                    <RouterLink :to="item.path" style="width: 100%; display: block; height: 10px;">
-                                        {{ item.label }}
-                                    </RouterLink>
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
-                </el-col>
             </div>
             <div id="controller-buttons" data-tauri-drag-region>
-                <div class="control-button fixed">
+                <div class="control-button fix-window">
                     <Pin @click="resize"></Pin>
                 </div>
                 <div class="control-button minimize">
@@ -172,7 +135,7 @@ const close = async () => {
     background-color: rgba(0, 255, 0, 0.4);
 }
 
-.control-button.fixed:hover {
+.control-button.fix-window:hover {
     background-color: rgba(255, 165, 0, 0.4);
 }
 </style>

@@ -277,7 +277,7 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99;
+    z-index: 6;
 }
 
 .icon {
@@ -295,7 +295,7 @@ onMounted(async () => {
     width: 100%;
     height: 70px;
     padding: 16px 0;
-    z-index: 99;
+    z-index: 7;
     display: flex;
     flex-direction: column;
     box-sizing: content-box;

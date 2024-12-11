@@ -2403,6 +2403,7 @@ snapshots:
 
   dmbar@file:(bufferutil@4.0.8)(typescript@5.6.2)(utf-8-validate@5.0.10):
     dependencies:
+      '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.6.2))
       '@tauri-apps/api': 2.1.1
       '@tauri-apps/plugin-shell': 2.0.1
       autoprefixer: 10.4.20(postcss@8.4.49)

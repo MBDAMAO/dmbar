@@ -1,42 +1,31 @@
 <template>
-    <div style="display: flex; flex-direction: column; height: 100%;">
+    <div class="flex flex-col h-full">
         <!-- Chart container -->
-        <div id="chart" style="flex: 1; width: 100%; height: 80%;" />
+        <div class="chart-reigon w-full" :class="hideFunctionReigon ? 'h-[100%]' : 'h-[90%]'">
+            <div id="chart" class="h-full w-full" />
+        </div>
 
-        <!-- Buttons container -->
-        <div style="display: flex; justify-content: space-between; padding: 10px; height: 20%;">
-            <button @click="buy">Buy</button>
-            <button @click="sell">Sell</button>
+        <div class="funtion-reigon flex justify-between p-2 h-[10%]" :class="{ hidden: hideFunctionReigon }">
+            <button class="cursor-pointer hover:bg-gray-200" @click="buy">Buy</button>
+            <button class="cursor-pointer hover:bg-gray-200" @click="sell">Sell</button>
         </div>
     </div>
 </template>
 <script setup lang='ts'>
-import { onMounted, onUnmounted } from 'vue'
-import { USDMClient, WebsocketClient } from 'binance'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { WebsocketClient } from 'binance'
 import { init, dispose, TooltipShowRule, Chart, Nullable, LineType } from 'klinecharts'
 const symbol = 'DOGEUSDT'
-const mapCandles = (candles: any[]) => {
-    return candles.map((candle) => ({
-        open: Number(candle[1]),
-        high: Number(candle[2]),
-        low: Number(candle[3]),
-        close: Number(candle[4]),
-        volume: Number(candle[5]),
-        openTime: candle[0],
-        openDt: new Date(candle[0]),
-        closeTime: candle[6],
-        closeDt: new Date(candle[6]),
-        timestamp: candle[0],
-    }));
-};
+import { getKline } from '../../apis/crypto';
 let wsClient: WebsocketClient | null = null;
-const getKline = async (params: any) => {
-    const restClient = new USDMClient();
-    const initialCandleResult = await restClient.getKlines(params);
-    const mappedEngineCandles: any = mapCandles(initialCandleResult)
-    return mappedEngineCandles;
-}
+const hideFunctionReigon = ref(true);
+// Update visibility based on window height
+const updateVisibility = () => {
+    hideFunctionReigon.value = window.innerHeight < 400; // Example threshold
+};
 onMounted(async () => {
+    updateVisibility();
+    window.addEventListener('resize', updateVisibility);
     const chart: Nullable<Chart> = init('chart', {
         styles: {
             candle: {
@@ -77,7 +66,7 @@ onMounted(async () => {
                 symbol: symbol,
                 interval: "1m",
                 endTime: data.timestamp,
-                limit: 100,
+                limit: 200,
             }), true);
         } else {
             callback([]);
@@ -100,7 +89,7 @@ onMounted(async () => {
     chart.applyNewData(await getKline({
         symbol: symbol,
         interval: "1m",
-        limit: 100,
+        limit: 200,
     }), true);
     wsClient.subscribeKlines(symbol, '1m', 'usdm')
     // wsClient.subscribeSpotUserDataStream()
@@ -116,12 +105,4 @@ onUnmounted(() => {
     dispose('chart')
 })
 </script>
-<style scoped>
-button {
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #f0f0f0;
-}
-</style>
+<style scoped></style>
