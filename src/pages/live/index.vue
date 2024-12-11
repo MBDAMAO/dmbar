@@ -23,11 +23,7 @@ const liveBlocks = ref([
     {
         name: '音乐播放', tags: ['Gamer', 'Streamer'], videoUrl: "1773507853"
     },
-    { name: 'Jane Smith', tags: ['Vlogger', 'Content Creator'], videoUrl: 'https://example.com/video2' },
-    { name: 'Alex Brown', tags: ['Tech Enthusiast', 'Developer'], videoUrl: 'https://example.com/video3' },
-    { name: 'Alice Lee', tags: ['Designer', 'Artist'], videoUrl: 'https://example.com/video4' },
-    { name: 'Bob White', tags: ['Music Producer', 'DJ'], videoUrl: 'https://example.com/video5' },
-    { name: 'Tom Green', tags: ['Fitness Expert', 'Trainer'], videoUrl: 'https://example.com/video6' },
+
 ]);
 
 // 使用 Vue Router

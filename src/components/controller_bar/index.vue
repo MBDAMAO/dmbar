@@ -90,14 +90,14 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 
 const routes = [
-    { name: "crypto", path: "/crypto_coin", label: "Crypto Coin" },
-    { name: "words", path: "/words", label: "Words" },
-    { name: "translation", path: "/translation", label: "Translation" },
-    { name: "fast_gpt", path: "/fast_gpt", label: "Fast GPT" },
-    { name: "vpn", path: "/vpn", label: "VPN" },
-    { name: "ssh", path: "/ssh_monitor", label: "SSH Monitor" },
-    { name: "rss", path: "/rss", label: "RSS" },
-    { name: "live", path: "/live", label: "Live" },
+    { name: "crypto", path: "/root/crypto_coin", label: "Crypto Coin" },
+    { name: "words", path: "/root/words", label: "Words" },
+    { name: "translation", path: "/root/translation", label: "Translation" },
+    { name: "fast_gpt", path: "/root/fast_gpt", label: "Fast GPT" },
+    { name: "vpn", path: "/root/vpn", label: "VPN" },
+    { name: "ssh", path: "/root/ssh_monitor", label: "SSH Monitor" },
+    { name: "rss", path: "/root/rss", label: "RSS" },
+    { name: "live", path: "/root/live", label: "Live" },
 ];
 
 const minsize = async () => {
