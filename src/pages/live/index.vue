@@ -23,7 +23,9 @@ const liveBlocks = ref([
     {
         name: '音乐播放', tags: ['Gamer', 'Streamer'], videoUrl: "1773507853"
     },
-
+    {
+        name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "13563"
+    },
 ]);
 
 // 使用 Vue Router
