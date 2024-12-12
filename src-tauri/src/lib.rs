@@ -50,6 +50,7 @@ pub fn run() {
             cmds::get_kline,
             cmds::get_orders,
             api::get_request,
+            cmds::fetch_videos,
             parse_bilibili
         ]);
     #[cfg(debug_assertions)]
