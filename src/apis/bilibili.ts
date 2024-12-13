@@ -1,10 +1,11 @@
 import { fetch } from "@tauri-apps/plugin-http";
 
-// 添加 Cookie 作为查询参数
-function appendCookieToURL(url: string, cookie: string) {
-  const newUrl = new URL(url);
-  newUrl.searchParams.append("SESSDATA", cookie); // 将 SESSDATA 添加为查询参数
-  return newUrl.toString();
+// 添加 Cookie 作为请求头
+function appendCookieToHeaders(cookie: string) {
+  return {
+    "Content-Type": "application/json",
+    Cookie: `SESSDATA=${cookie}`, // 将 SESSDATA 放入请求头
+  };
 }
 
 export async function fetchRelatedVideos(
@@ -20,16 +21,11 @@ export async function fetchRelatedVideos(
   if (aid) url.searchParams.append("aid", aid.toString());
   if (bvid) url.searchParams.append("bvid", bvid);
 
-  // 将 Cookie (SESSDATA) 作为查询参数添加到 URL
-  const finalUrl = appendCookieToURL(url.toString(), sessdata);
-
   try {
-    // Send GET request with query parameters included in the URL
-    const response = await fetch(finalUrl, {
+    // Send GET request with query parameters and Cookie in the headers
+    const response = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
     });
 
     // Parse JSON response
@@ -59,15 +55,10 @@ export async function fetchHomepageRecommendations(sessdata: string) {
     url.searchParams.append(key, params[key])
   );
 
-  // 将 Cookie (SESSDATA) 作为查询参数添加到 URL
-  const finalUrl = appendCookieToURL(url.toString(), sessdata);
-
   try {
-    const response = await fetch(finalUrl, {
+    const response = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
     });
     const data = await response.json();
     console.log("Homepage Recommendations:", data);
@@ -95,15 +86,10 @@ export async function fetchShortVideoModeList(sessdata: string) {
     url.searchParams.append(key, params[key])
   );
 
-  // 将 Cookie (SESSDATA) 作为查询参数添加到 URL
-  const finalUrl = appendCookieToURL(url.toString(), sessdata);
-
   try {
-    const response = await fetch(finalUrl, {
+    const response = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
     });
 
     const data = await response.json();
@@ -130,15 +116,10 @@ export async function getVideoDetails(
     throw new Error("必须提供 bvid 或 aid");
   }
 
-  // 将 Cookie (SESSDATA) 作为查询参数添加到 URL
-  const finalUrl = appendCookieToURL(`${url}?${params.toString()}`, sessdata);
-
   try {
-    const response = await fetch(finalUrl, {
+    const response = await fetch(`${url}?${params.toString()}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
     });
 
     if (!response.ok) {
