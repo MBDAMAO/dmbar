@@ -62,6 +62,7 @@ import Pause2 from '@/icons/Pause2.vue';
 import Refresh from '../../icons/Refresh.vue';
 import flvjs from 'flv.js';
 import Link from '../../icons/Link.vue';
+import { getVideoDetails } from '../../apis/bilibili.ts';
 import {
     Listbox,
     ListboxButton,
@@ -129,7 +130,7 @@ function refresh() {
         play();
     }
 }
-let cookie = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; fingerprint=b2a78f67292046fb59d465d8c30ddc3b; buvid_fp=b2a78f67292046fb59d465d8c30ddc3b; home_feed_column=5; browser_resolution=1707-898; PVID=9; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQwMTQ0NDYsImlhdCI6MTczMzc1NTE4NiwicGx0IjotMX0.8vIhDwYAU7xG5SslXlLZwpr0v3ufp6iHn_G_NKgaayw; bili_ticket_expires=1734014386; SESSDATA=db06f869%2C1749307247%2Cb4e76%2Ac2CjA7l4Os2BSfuZZa6Cu4-QTJjvTXMjk8afA9RJLPaWNsqz9PExnUr1hs6idDmALAWdESVkg4b3ZJYnBBSjRscEJLR2c3OFYwN3J2dE1qZUpTcDFZOWVMUzQ3RTdIa0tzNm1Pb3d6dVlBUlo3XzhXSFAwRVNrTGU5MThwRnZqV29uMExhWkdUelBBIIEC; bili_jct=399350212997568b6f80dc21ba4f2634; sid=85e8z0h9; b_lsid=F810F99DF_193ABE2398E; CURRENT_FNVAL=4048; bp_t_offset_330838998=1008972776578482176"
+let cookie = "3fd35e39%2C1749567752%2C22002%2Ac2CjBYs8YsItSGB5NqefLAAWhBIRF9Kh46_lnQ3kiyTpXJkXXBMoWRn-702YgfRudfXQUSVmR2SVQ5NGNXdi0yUnc0QXE1Rkt1bTZzNGdldTctRDUzaEw0RjJ5M1BzamxjOUZCMGtTcXBTMW5HTkJLU3BmeXl6bzQ1WnZ1ZVBWVXNDWURCSkR4Smx3IIEC";
 let player: any;
 async function reload(newUrl?: string) {
     try {
@@ -183,7 +184,8 @@ onMounted(async () => {
     let platform = route.query.platform;
     let type = route.query.type;
     if (type == "video" && platform == "bilibili") {
-        console.log(uri)
+        let details = await getVideoDetails(uri.split('/').pop(), cookie);
+        console.log(details)
     }
     if (urlList instanceof Error) {
         return;
