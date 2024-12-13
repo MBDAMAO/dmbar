@@ -13,6 +13,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+# openssl-sys = { version = "0.9", features = ["vendored"] }
 tauri = { version = "2", features = ["tray-icon"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -33,8 +34,15 @@ dirs = "5"
 
 tauri-plugin-shell = "2"
 tauri-plugin-window-state = "2.0.2"
-reqwest = { version = "0", features = ["json", "gzip", "multipart"] }
-
+reqwest = { version = "0", default-features = false, features = [
+    "rustls-tls",
+    "json",
+    "gzip",
+    "multipart",
+    # "http2",
+    # "charset",
+    # "macos-system-configuration",
+] }
 # open apis
 binance_spot_connector_rust = { git = "https://github.com/binance/binance-spot-connector-rust.git", branch = "main", features = [
     "enable-hyper",

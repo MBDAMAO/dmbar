@@ -10,6 +10,7 @@
         </ul>
         <p v-else>暂无RSS内容</p>
     </div>
+    <img src="http://i0.hdslb.com/bfs/archive/49f62c70f17d0afe00e5e620dd366c68149c780e.jpg" alt="Centered Image">
 </template>
 
 <script setup lang="ts">

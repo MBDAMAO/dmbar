@@ -1,13 +1,96 @@
 use anyhow::Result;
 type CmdResult<T = ()> = Result<T, String>;
-use serde::Serialize;
 use serde_json::Value;
 // use crate::utils::db;
+use base64::encode;
 use binance_spot_connector_rust::{http::Credentials, hyper::BinanceHttpClient, market, trade};
+use reqwest;
+use reqwest::Client;
+use serde::{Deserialize, Serialize};
+use std::error::Error;
+#[derive(Deserialize, Debug)]
+struct PlayurlResponse {
+    code: i32,
+    data: Option<PlayurlData>,
+}
+
+#[derive(Deserialize, Debug)]
+struct PlayurlData {
+    dash: Option<Dash>,
+}
+
+#[derive(Deserialize, Debug)]
+struct Dash {
+    video: Option<Vec<VideoStream>>,
+}
+
+#[derive(Deserialize, Debug)]
+struct VideoStream {
+    baseUrl: Option<String>,
+    backupUrl: Option<Vec<String>>,
+    // 你可以添加其他字段，根据实际需求
+}
+
+#[tauri::command]
+pub async fn fetch_video_url(bvid: &str, cid: u32, qn: u32) -> Result<String, String> {
+    let url = format!(
+        "https://api.bilibili.com/x/player/playurl?bvid={}&cid={}&qn={}&fnval=80&fnver=0&fourk=1",
+        bvid, cid, qn
+    );
+
+    let sessdata = "3fd35e39%2C1749567752%2C22002%2Ac2CjBYs8YsItSGB5NqefLAAWhBIRF9Kh46_lnQ3kiyTpXJkXXBMoWRn-702YgfRudfXQUSVmR2SVQ5NGNXdi0yUnc0QXE1Rkt1bTZzNGdldTctRDUzaEw0RjJ5M1BzamxjOUZCMGtTcXBTMW5HTkJLU3BmeXl6bzQ1WnZ1ZVBWVXNDWURCSkR4Smx3IIEC"; // 替换为实际的 SESSDATA
+
+    // 使用 reqwest 客户端发送请求
+    let client = Client::new();
+    let res = client
+        .get(&url)
+        .header("User-Agent", "Mozilla/5.0")
+        .header("Cookie", format!("SESSDATA={}", sessdata))
+        .send()
+        .await
+        .map_err(|e| format!("请求失败: {}", e))?;
+
+    // 解析 JSON 响应
+    let playurl_response: PlayurlResponse = res
+        .json()
+        .await
+        .map_err(|e| format!("解析 JSON 失败: {}", e))?;
+
+    if let Some(data) = playurl_response.data {
+        if let Some(dash) = data.dash {
+            // 从视频流信息中选择第一个视频流
+            if let Some(video_streams) = dash.video {
+                for stream in video_streams {
+                    // 检查是否有 baseUrl
+                    if let Some(base_url) = stream.baseUrl {
+                        return Ok(base_url); // 返回视频流的 URL
+                    }
+                }
+            }
+        }
+    }
+
+    Err("未找到合适的视频流 URL".into())
+}
 
 #[tauri::command]
 pub fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
+}
+#[tauri::command]
+pub async fn get_image_base64(url: String) -> Result<String, String> {
+    match reqwest::get(&url).await {
+        Ok(response) => {
+            if response.status().is_success() {
+                let bytes = response.bytes().await.map_err(|e| e.to_string())?;
+                let base64_image = encode(bytes);
+                Ok(format!("data:image/jpeg;base64,{}", base64_image)) // 假设是 JPEG 图片
+            } else {
+                Err(format!("Failed to fetch image: {}", response.status()))
+            }
+        }
+        Err(err) => Err(format!("Error fetching image: {}", err)),
+    }
 }
 
 #[tauri::command]

@@ -178,7 +178,13 @@ function draw() {
 
 // 初始化直播流
 onMounted(async () => {
-    let urlList = await parseUrl(route.query.videoUrl as string, "bilibili", cookie);
+    let uri = route.query.videoUrl;
+    let urlList = await parseUrl(uri as string, "bilibili", cookie);
+    let platform = route.query.platform;
+    let type = route.query.type;
+    if (type == "video" && platform == "bilibili") {
+        console.log(uri)
+    }
     if (urlList instanceof Error) {
         return;
     }

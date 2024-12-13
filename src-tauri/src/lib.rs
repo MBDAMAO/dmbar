@@ -51,6 +51,8 @@ pub fn run() {
             cmds::get_orders,
             api::get_request,
             cmds::fetch_videos,
+            cmds::get_image_base64,
+            cmds::fetch_video_url,
             parse_bilibili
         ]);
     #[cfg(debug_assertions)]
