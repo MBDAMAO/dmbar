@@ -1,10 +1,11 @@
-import { fetch } from "@tauri-apps/plugin-http";
+// import { fetch } from "@tauri-apps/plugin-http";
 
+// 添加 Cookie 作为请求头
 // 添加 Cookie 作为请求头
 function appendCookieToHeaders(cookie: string) {
   return {
     "Content-Type": "application/json",
-    Cookie: `SESSDATA=${cookie}`, // 将 SESSDATA 放入请求头
+    "Cookie": `SESSDATA=${cookie}`,
   };
 }
 
@@ -107,7 +108,7 @@ export async function getVideoDetails(
 ) {
   const url = "https://api.bilibili.com/x/web-interface/view";
   const params = new URLSearchParams();
-
+  console.log("wtf")
   if (bvid) {
     params.append("bvid", bvid);
   } else if (aid) {

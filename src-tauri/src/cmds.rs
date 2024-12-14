@@ -30,6 +30,71 @@ struct VideoStream {
     backupUrl: Option<Vec<String>>,
     // 你可以添加其他字段，根据实际需求
 }
+#[derive(Default)]
+struct MyState {
+    s: std::sync::Mutex<String>,
+    t: std::sync::Mutex<std::collections::HashMap<String, String>>,
+}
+// bvid: string,
+// sessdata: string,
+// aid?: string
+// ) {
+// const url = "https://api.bilibili.com/x/web-interface/view";
+// const params = new URLSearchParams();
+// console.log("wtf")
+// if (bvid) {
+//   params.append("bvid", bvid);
+// } else if (aid) {
+//   params.append("aid", aid);
+// } else {
+//   throw new Error("必须提供 bvid 或 aid");
+// }
+
+// try {
+//   const response = await fetch(`${url}?${params.toString()}`, {
+//     method: "GET",
+//     headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
+//   });
+
+//   if (!response.ok) {
+//     throw new Error(`HTTP 错误：${response.status}`);
+//   }
+
+//   // 解析 JSON 响应
+//   const data = await response.json();
+
+//   if (data.code !== 0) {
+//     throw new Error(`API 错误：${data.message}`);
+//   }
+
+//   return data.data; // 返回视频详细信息
+// } catch (error) {
+//   console.error("获取视频详细信息失败：", error);
+// }
+// }
+
+#[tauri::command]
+pub async fn video_detail(bvid: &str, sessdata: &str) -> Result<(), String> {
+    let url = format!(
+        "https://api.bilibili.com/x/web-interface/view?bvid={}",
+        bvid
+    );
+    let client = Client::new();
+    let res = client
+        .get(&url)
+        .header("User-Agent", "Mozilla/5.0")
+        .header("Cookie", format!("SESSDATA={}", sessdata))
+        .send()
+        .await
+        .map_err(|e| format!("请求失败: {}", e))?;
+    let data: Value = res
+        .json()
+        .await
+        .map_err(|e| format!("解析 JSON 失败: {}", e))?;
+    println!("data: {:?}", data);
+
+    Ok(())
+}
 
 #[tauri::command]
 pub async fn fetch_video_url(bvid: &str, cid: u32, qn: u32) -> Result<String, String> {

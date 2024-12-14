@@ -79,6 +79,7 @@ const canvas = ref<HTMLCanvasElement | null>(null);
 const rv = ref<HTMLVideoElement | null>(null);
 const progressNow = ref<HTMLDivElement | null>(null);
 import { useRoute } from 'vue-router';
+import { invoke } from '@tauri-apps/api/core';
 
 const route = useRoute();
 function change() {
@@ -130,8 +131,7 @@ function refresh() {
         play();
     }
 }
-let cookie = "3fd35e39%2C1749567752%2C22002%2Ac2CjBYs8YsItSGB5NqefLAAWhBIRF9Kh46_lnQ3kiyTpXJkXXBMoWRn-702YgfRudfXQUSVmR2SVQ5NGNXdi0yUnc0QXE1Rkt1bTZzNGdldTctRDUzaEw0RjJ5M1BzamxjOUZCMGtTcXBTMW5HTkJLU3BmeXl6bzQ1WnZ1ZVBWVXNDWURCSkR4Smx3IIEC";
-let player: any;
+let cookie = "SESSDATA=3fd35e39%2C1749567752%2C22002%2Ac2CjBYs8YsItSGB5NqefLAAWhBIRF9Kh46_lnQ3kiyTpXJkXXBMoWRn-702YgfRudfXQUSVmR2SVQ5NGNXdi0yUnc0QXE1Rkt1bTZzNGdldTctRDUzaEw0RjJ5M1BzamxjOUZCMGtTcXBTMW5HTkJLU3BmeXl6bzQ1WnZ1ZVBWVXNDWURCSkR4Smx3IIEC"; // 替换为实际的 SESSDATA
 async function reload(newUrl?: string) {
     try {
         if (!newUrl) {
@@ -184,7 +184,7 @@ onMounted(async () => {
     let platform = route.query.platform;
     let type = route.query.type;
     if (type == "video" && platform == "bilibili") {
-        let details = await getVideoDetails(uri.split('/').pop(), cookie);
+        let details = await invoke("video_detail", { bvid: uri.split('/').pop(), sessdata: cookie }) //getVideoDetails(uri.split('/').pop(), cookie);
         console.log(details)
     }
     if (urlList instanceof Error) {

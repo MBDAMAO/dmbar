@@ -54,6 +54,7 @@ pub fn run() {
             cmds::fetch_videos,
             cmds::get_image_base64,
             cmds::fetch_video_url,
+            cmds::video_detail,
             parse_bilibili
         ]);
     #[cfg(debug_assertions)]
