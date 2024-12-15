@@ -81,6 +81,7 @@ const progressNow = ref<HTMLDivElement | null>(null);
 import { useRoute } from 'vue-router';
 import { invoke } from '@tauri-apps/api/core';
 
+let player = null;
 const route = useRoute();
 function change() {
     draw();
@@ -182,20 +183,33 @@ onMounted(async () => {
     let uri = route.query.videoUrl;
     let urlList = await parseUrl(uri as string, "bilibili", cookie);
     let platform = route.query.platform;
+    let urll = null;
     let type = route.query.type;
     if (type == "video" && platform == "bilibili") {
-        let details = await invoke("video_detail", { bvid: uri.split('/').pop(), sessdata: cookie }) //getVideoDetails(uri.split('/').pop(), cookie);
-        console.log(details)
+        let details = await invoke("video_detail", { bvid: uri.split('/').pop(), sessdata: cookie })
+        let addr = await invoke("fetch_video_url", { bvid: uri.split('/').pop(), cid: details.data.cid, qn: 112 })
+        console.log(addr)
+        urll = addr
     }
-    if (urlList instanceof Error) {
-        return;
+    // if (urlList instanceof Error) {
+    //     return;
+    // }
+    if (type == "video" && platform == "bilibili") {
+
+    } else {
+        urll = urlList[0]
     }
-    let url = urlList[0]
+
     if (rv.value && flvjs.isSupported()) {
+        if (type == "video" && platform == "bilibili") {
+            rv.value.src = urll;
+            return;
+        }
         player = flvjs.createPlayer({
             type: 'flv',
-            url
+            url: urll
         });
+        console.log(1)
         player.attachMediaElement(rv.value);
         player.load();
         player.play();

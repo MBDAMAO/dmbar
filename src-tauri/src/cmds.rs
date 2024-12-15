@@ -74,7 +74,7 @@ struct MyState {
 // }
 
 #[tauri::command]
-pub async fn video_detail(bvid: &str, sessdata: &str) -> Result<(), String> {
+pub async fn video_detail(bvid: &str, sessdata: &str) -> Result<Value, String> {
     let url = format!(
         "https://api.bilibili.com/x/web-interface/view?bvid={}",
         bvid
@@ -87,17 +87,23 @@ pub async fn video_detail(bvid: &str, sessdata: &str) -> Result<(), String> {
         .send()
         .await
         .map_err(|e| format!("请求失败: {}", e))?;
+
+    if !res.status().is_success() {
+        return Err(format!("请求失败，状态码: {}", res.status()));
+    }
+
     let data: Value = res
         .json()
         .await
         .map_err(|e| format!("解析 JSON 失败: {}", e))?;
-    println!("data: {:?}", data);
 
-    Ok(())
+    // println!("data: {:?}", data);
+
+    Ok(data)
 }
 
 #[tauri::command]
-pub async fn fetch_video_url(bvid: &str, cid: u32, qn: u32) -> Result<String, String> {
+pub async fn fetch_video_url(bvid: &str, cid: u64, qn: u32) -> Result<String, String> {
     let url = format!(
         "https://api.bilibili.com/x/player/playurl?bvid={}&cid={}&qn={}&fnval=80&fnver=0&fourk=1",
         bvid, cid, qn
