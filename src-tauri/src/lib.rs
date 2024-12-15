@@ -44,7 +44,7 @@ pub fn run() {
             Ok(())
         })
         .setup(init::init)
-        .plugin(tauri_plugin_window_state::Builder::new().build())
+        // .plugin(tauri_plugin_window_state::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             cmds::greet,
@@ -60,6 +60,10 @@ pub fn run() {
     #[cfg(debug_assertions)]
     {
         builder = builder.plugin(devtools);
+    }
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_window_state::Builder::new().build());
     }
     let app = builder
         .build(tauri::generate_context!())

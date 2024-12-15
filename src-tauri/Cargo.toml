@@ -8,9 +8,9 @@ edition = "2021"
 [lib]
 name = "dmbar_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
-[target.aarch64-linux-android.dependencies.openssl-sys]
-version = "0.9.104"
-features = ["vendored"]
+# [target.aarch64-linux-android.dependencies.openssl-sys]
+# version = "0.9.104"
+# features = ["vendored"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
@@ -47,7 +47,7 @@ reqwest = { version = "0", default-features = false, features = [
     # "macos-system-configuration",
 ] }
 # open apis
-binance_spot_connector_rust = { git = "https://github.com/binance/binance-spot-connector-rust.git", branch = "main", features = [
+binance_spot_connector_rust = { path = "./libs/binance-spot-connector-rust", features = [
     "enable-hyper",
 ] }
 anyhow = "1.0"
