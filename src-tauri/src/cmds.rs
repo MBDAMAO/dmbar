@@ -224,12 +224,12 @@ pub struct Owner {
 pub async fn fetch_videos() -> Result<Vec<VideoItem>, String> {
     let url = "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd";
     let client = reqwest::Client::new();
-    let sessdata = "3fd35e39%2C1749567752%2C22002%2Ac2CjBYs8YsItSGB5NqefLAAWhBIRF9Kh46_lnQ3kiyTpXJkXXBMoWRn-702YgfRudfXQUSVmR2SVQ5NGNXdi0yUnc0QXE1Rkt1bTZzNGdldTctRDUzaEw0RjJ5M1BzamxjOUZCMGtTcXBTMW5HTkJLU3BmeXl6bzQ1WnZ1ZVBWVXNDWURCSkR4Smx3IIEC"; // 替换为实际的 SESSDATA
+    let sessdata = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; PVID=9; fingerprint=4e109b97323e7386f22aedddcb16f57f; buvid_fp=4e109b97323e7386f22aedddcb16f57f; home_feed_column=5; browser_resolution=1707-898; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1MzI5NjcsImlhdCI6MTczNDI3MzcwNywicGx0IjotMX0.COHHDjRvCRDWnzxGaGTU7Z3eyRD_SzdROrFrnjOfL9U; bili_ticket_expires=1734532907; SESSDATA=d4971bd8%2C1749830058%2C2f12d%2Ac2CjCbwRhqyUCMSKdWUs4oXkueydqizRRChjzONU97G5CSP2nz8kDKabMOyGeBmv1_OjISVlRNMUlMQmw5WlUzVUUzX3ZRQ19tWVlQOG5mVWROQlNlMy05OHpGaU9DRFBUZjBva3NGdGx5SmxqMUt6dFRyMlpOUVJaRDNOdEtrR1pxTDQwVWpGWHBRIIEC; bili_jct=d7658c11272074a1fd17066922f75c1a; b_lsid=C2BC7599_193CD6A9AE1; CURRENT_FNVAL=4048; sid=5a53swol; bp_t_offset_330838998=1011378130062934016";
 
     let response = client
         .get(url)
         .query(&[("fresh_type", "4"), ("ps", "12"), ("fresh_idx", "1")])
-        .header("Cookie", format!("SESSDATA={}", sessdata))
+        .header("Cookie", format!("{}", sessdata))
         .send()
         .await
         .map_err(|err| err.to_string())?;

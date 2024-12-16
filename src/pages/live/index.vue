@@ -24,9 +24,9 @@ const liveBlocks = ref([
         name: '音乐播放', tags: ['Gamer', 'Streamer'], videoUrl: "1773507853"
     },
     {
-        name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "13563"
+        name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "4775711"
     }, {
-        name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "21674333"
+        name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "27841685"
     }
 ]);
 
@@ -35,7 +35,7 @@ const router = useRouter();
 
 // 跳转到 /player 页面，并附带视频 URL
 function goToPlayer(item: any) {
-    router.push({ name: 'player', query: { videoUrl: item.videoUrl } });
+    router.push({ name: 'player', query: { videoUrl: item.videoUrl, type: "live" } });
 }
 </script>
 
