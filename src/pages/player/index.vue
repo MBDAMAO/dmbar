@@ -203,6 +203,7 @@ onMounted(async () => {
     if (rv.value && flvjs.isSupported()) {
         if (type == "video" && platform == "bilibili") {
             rv.value.src = urll;
+            rv.value.play()
             return;
         }
         player = flvjs.createPlayer({
