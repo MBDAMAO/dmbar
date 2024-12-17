@@ -54,10 +54,17 @@ async function fetchVideos() {
     isFetching.value = true;
     try {
         const response = await invoke<VideoItem[]>('fetch_videos', { page: page.value });
+
         if (response.length === 0) {
             hasMore.value = false;
         } else {
-            videos.value.push(...response);
+            // 将返回的所有 pic 字段中的 http 替换为 https
+            const updatedResponse = response.map(video => ({
+                ...video,
+                pic: video.pic.replace(/^http:/, 'https:')
+            }));
+
+            videos.value.push(...updatedResponse);
             page.value++;
         }
     } catch (err) {

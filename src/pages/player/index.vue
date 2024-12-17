@@ -40,6 +40,7 @@
             <!-- Video Section -->
             <div class="relative flex flex-col h-full w-full items-center justify-center z-0">
                 <video class="h-[calc(100%-46px)] w-full" ref="rv" @click="change(); resetHideTimeout()"
+                    poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                     @mousemove="resetHideTimeout" data-tauri-drag-region>
                 </video>
 
@@ -240,10 +241,11 @@ onMounted(async () => {
     type.value = route.query.type;
     let platform = route.query.platform;
     let urll = null;
+    let first_frame = null;
     if (type.value == "video" && platform == "bilibili") {
         let details = await invoke("video_detail", { bvid: uri.split('/').pop(), sessdata: cookie })
         console.log(details)
-        let first_frame = details.data.pages[0].first_frame;
+        first_frame = details.data.pages[0].first_frame.replace(/^http:/, 'https:');
         drawFirstFrame(first_frame);
         // draw
         let addr = await invoke("fetch_video_url", { bvid: uri.split('/').pop(), cid: details.data.cid, qn: 112 })
@@ -257,9 +259,11 @@ onMounted(async () => {
     if (rv.value && flvjs.isSupported()) {
         if (type.value == "video" && platform == "bilibili") {
             rv.value.src = urll;
+            rv.value.poster = first_frame;
             rv.value.play()
             return;
         } else if (type.value == "live") {
+            console.log(urll)
             player = flvjs.createPlayer({
                 type: 'flv',
                 url: urll

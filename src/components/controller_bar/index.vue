@@ -54,12 +54,12 @@ import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 
 const routes = [
     { name: "crypto", path: "/root/crypto_coin", label: "Crypto Coin" },
-    { name: "words", path: "/root/words", label: "Words" },
-    { name: "translation", path: "/root/translation", label: "Translation" },
-    { name: "fast_gpt", path: "/root/fast_gpt", label: "Fast GPT" },
-    { name: "vpn", path: "/root/vpn", label: "VPN" },
-    { name: "ssh", path: "/root/ssh_monitor", label: "SSH Monitor" },
-    { name: "rss", path: "/root/rss", label: "RSS" },
+    // { name: "words", path: "/root/words", label: "Words" },
+    // { name: "translation", path: "/root/translation", label: "Translation" },
+    { name: "videos", path: "/root/fast_gpt", label: "videos" },
+    // { name: "vpn", path: "/root/vpn", label: "VPN" },
+    // { name: "ssh", path: "/root/ssh_monitor", label: "SSH Monitor" },
+    // { name: "rss", path: "/root/rss", label: "RSS" },
     { name: "live", path: "/root/live", label: "Live" },
 ];
 
