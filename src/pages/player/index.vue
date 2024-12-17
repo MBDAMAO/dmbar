@@ -28,12 +28,12 @@
             <div class="absolute bottom-12 w-full h-16 px-4 flex flex-col z-10" data-tauri-drag-region>
                 <!-- Account and Title Details -->
                 <div class="flex items-center w-full">
-                    <div class="text-white text-lg px-4">Uploader</div>
-                    <div class="text-white text-sm">Publication Date</div>
+                    <div class="text-white text-lg px-4">{{ owner }}</div>
+                    <div class="text-white text-sm">{{ date }}</div>
                 </div>
                 <div class="flex items-center w-full">
-                    <div class="text-white text-base pl-4">Title Content</div>
-                    <div class="text-yellow-400 text-base pl-1">Tags</div>
+                    <div class="text-white text-base pl-4">{{ title }}</div>
+                    <div class="text-yellow-400 text-base pl-1">{{ tags }}</div>
                 </div>
             </div>
 
@@ -111,6 +111,10 @@ const urls = reactive([
 const selectedPerson = ref(urls[0])
 import bilibili from "../../apis/live.ts";
 const playing = ref(true);
+const title = ref()
+const owner = ref()
+const date = ref()
+const tags = ref()
 const canvas = ref<HTMLCanvasElement | null>(null);
 const rv = ref<HTMLVideoElement | null>(null);
 const progressNow = ref<HTMLDivElement | null>(null);
@@ -245,6 +249,10 @@ onMounted(async () => {
     if (type.value == "video" && platform == "bilibili") {
         let details = await invoke("video_detail", { bvid: uri.split('/').pop(), sessdata: cookie })
         console.log(details)
+        title.value = details.data.title;
+        tags.value = details.data.tname;
+        date.value = (new Date(details.data.pubdate * 1000)).toLocaleDateString();
+        owner.value = '@' + details.data.owner.name;
         first_frame = details.data.pages[0].first_frame.replace(/^http:/, 'https:');
         drawFirstFrame(first_frame);
         // draw
@@ -304,5 +312,6 @@ onUnmounted(() => {
 
 .icon:hover {
     opacity: 0.9;
+    cursor: pointer;
 }
 </style>
