@@ -1,10 +1,12 @@
 <template>
     <!-- HeaderLayout.vue -->
     <div class="header-layout">
-        <ControllerBar></ControllerBar>
-        <div style="width: 100%; height: calc(100% - 15px);">
+        <header>
+            <ControllerBar></ControllerBar>
+        </header>
+        <main style="width: 100%; height: calc(100%); margin-top: 15px; overflow-y: auto;">
             <RouterView />
-        </div>
+        </main>
     </div>
 </template>
 

@@ -243,7 +243,7 @@ pub async fn fetch_videos() -> Result<Vec<VideoItem>, String> {
             .map(|item| VideoItem {
                 bvid: item["bvid"].as_str().unwrap_or("").to_string(),
                 title: item["title"].as_str().unwrap_or("").to_string(),
-                pic: item["pic"].as_str().unwrap_or("").to_string(),
+                pic: item["pic_4_3"].as_str().unwrap_or("").to_string(),
                 uri: item["uri"].as_str().unwrap_or("").to_string(),
                 owner: Owner {
                     name: item["owner"]["name"].as_str().unwrap_or("").to_string(),

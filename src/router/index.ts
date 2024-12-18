@@ -15,7 +15,7 @@ const router = createRouter({
       children: [
         {
           path: "",
-          redirect: "/root/crypto_coin",
+          redirect: "/root/fast_gpt",
         },
         {
           path: "words",

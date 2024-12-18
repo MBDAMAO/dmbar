@@ -1,9 +1,24 @@
 <template>
-    <div id="controller-handler" data-tauri-drag-region>
+    <header id="controller-handler" class="fixed w-full" data-tauri-drag-region>
         <div id="controller-container" data-tauri-drag-region>
             <div id="controller-pages" data-tauri-drag-region>
+                <el-drawer :z-index="999" v-model="drawer" title="I am the title" :with-header="false" size="60%"
+                    direction="ltr">
+                    <div class=" bg-white shadow-lg p-4 rounded w-48">
+                        <ul>
+                            <li v-for="item in routes" :key="item.name" class="hover:bg-gray-100 p-2 rounded">
+                                <RouterLink :to="item.path" class="block text-gray-700">
+                                    {{ item.label }}
+                                </RouterLink>
+                            </li>
+                        </ul>
+                    </div>
+                </el-drawer>
+                <div class="control-button">
+                    <Drawer class="h-full icon" style="margin-left: 16px;" @click="drawer = true"></Drawer>
+                </div>
                 <!-- Dropdown for Headless UI -->
-                <Popover class="relative ml-4">
+                <Popover class="relative ml-4" v-if="false">
                     <PopoverButton class="bg-gray-200 hover:bg-gray-300 h-[80%] rounded">
                         Select Page
                         <span class="ml-2">▼</span>
@@ -39,7 +54,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </header>
 </template>
 
 <script setup lang="ts">
@@ -47,11 +62,13 @@ import { Window } from "@tauri-apps/api/window";
 import Pin from "@/icons/Pin.vue";
 import Min from "@/icons/Min.vue";
 import Max from "@/icons/Max.vue";
+import Drawer from "../../icons/Drawer.vue";
 import Close from "@/icons/Close.vue";
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
 
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
-
+import { ref } from "vue";
+const drawer = ref(false)
 const routes = [
     { name: "crypto", path: "/root/crypto_coin", label: "Crypto Coin" },
     // { name: "words", path: "/root/words", label: "Words" },
@@ -121,6 +138,7 @@ const close = async () => {
     cursor: pointer;
     background-color: transparent;
     transition: background-color 0.3s ease;
+    margin-right: 5px;
 }
 
 .control-button.close:hover {

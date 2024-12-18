@@ -13,7 +13,7 @@
                     @click="onVideoClick(item)">
                     <img :src="item.pic" :alt="item.title" class="w-full object-contain" />
                     <h3 class="text-base font-semibold text-white mt-2 line-clamp-2">{{ item.title }}</h3>
-                    <p class="text-sm text-gray-600">UP主: {{ item.owner.name }}</p>
+                    <p class="text-sm text-gray-600">@{{ item.owner.name }}</p>
                 </li>
             </ul>
         </main>
@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { invoke } from '@tauri-apps/api/core';
+import { invokeWrapper } from '../../utils/tauri_api';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -53,8 +53,10 @@ async function fetchVideos() {
 
     isFetching.value = true;
     try {
-        const response = await invoke<VideoItem[]>('fetch_videos', { page: page.value });
-
+        const response = await invokeWrapper<VideoItem[]>({ command: 'fetch_videos', payload: { page: page.value } });
+        if (response == null) {
+            return;
+        }
         if (response.length === 0) {
             hasMore.value = false;
         } else {
@@ -96,6 +98,7 @@ onMounted(fetchVideos);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     text-overflow: ellipsis;
 }

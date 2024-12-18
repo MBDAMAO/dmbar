@@ -27,19 +27,20 @@
             <!-- Details Section -->
             <div class="absolute bottom-12 w-full h-16 px-4 flex flex-col z-10" data-tauri-drag-region>
                 <!-- Account and Title Details -->
-                <div class="flex items-center w-full">
-                    <div class="text-white text-lg px-4">{{ owner }}</div>
-                    <div class="text-white text-sm">{{ date }}</div>
+                <div class="flex items-center w-full ">
+                    <div class="text-white text-lg px-4 one-line">{{ owner }}</div>
+                    <div class="text-white text-sm one-line">{{ date }}</div>
                 </div>
                 <div class="flex items-center w-full">
-                    <div class="text-white text-base pl-4">{{ title }}</div>
-                    <div class="text-yellow-400 text-base pl-1">{{ tags }}</div>
+                    <div class="text-white text-base pl-4 one-line">{{ title }}</div>
+                    <div class="text-yellow-400 text-base pl-1 one-line">{{ tags }}</div>
                 </div>
             </div>
 
             <!-- Video Section -->
             <div class="relative flex flex-col h-full w-full items-center justify-center z-0">
                 <video class="h-[calc(100%-46px)] w-full" ref="rv" @click="change(); resetHideTimeout()"
+                    v-loading="loading"
                     poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                     @mousemove="resetHideTimeout" data-tauri-drag-region>
                 </video>
@@ -112,6 +113,7 @@ const selectedPerson = ref(urls[0])
 import bilibili from "../../apis/live.ts";
 const playing = ref(true);
 const title = ref()
+const loading = ref(true)
 const owner = ref()
 const date = ref()
 const tags = ref()
@@ -119,7 +121,7 @@ const canvas = ref<HTMLCanvasElement | null>(null);
 const rv = ref<HTMLVideoElement | null>(null);
 const progressNow = ref<HTMLDivElement | null>(null);
 import { useRoute, useRouter } from 'vue-router';
-import { invoke } from '@tauri-apps/api/core';
+import { invokeWrapper } from '../../utils/tauri_api.ts';
 
 let player: any = null;
 const type = ref()
@@ -148,7 +150,6 @@ async function parseUrl(roomId: string, platform: string, params: string): Promi
     } catch (e) {
         result = Error("Error")
     }
-    console.log(result);
     if (result instanceof Error) {
         return Error("Error")
     } else if (result) {
@@ -180,6 +181,7 @@ function refresh() {
 let cookie = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; PVID=9; fingerprint=4e109b97323e7386f22aedddcb16f57f; buvid_fp=4e109b97323e7386f22aedddcb16f57f; home_feed_column=5; browser_resolution=1707-898; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1MzI5NjcsImlhdCI6MTczNDI3MzcwNywicGx0IjotMX0.COHHDjRvCRDWnzxGaGTU7Z3eyRD_SzdROrFrnjOfL9U; bili_ticket_expires=1734532907; SESSDATA=d4971bd8%2C1749830058%2C2f12d%2Ac2CjCbwRhqyUCMSKdWUs4oXkueydqizRRChjzONU97G5CSP2nz8kDKabMOyGeBmv1_OjISVlRNMUlMQmw5WlUzVUUzX3ZRQ19tWVlQOG5mVWROQlNlMy05OHpGaU9DRFBUZjBva3NGdGx5SmxqMUt6dFRyMlpOUVJaRDNOdEtrR1pxTDQwVWpGWHBRIIEC; bili_jct=d7658c11272074a1fd17066922f75c1a; b_lsid=C2BC7599_193CD6A9AE1; CURRENT_FNVAL=4048; sid=5a53swol; bp_t_offset_330838998=1011378130062934016";
 async function reload(newUrl?: string) {
     try {
+        loading.value = true;
         if (!newUrl) {
             let urlList = await parseUrl(route.query.videoUrl as string, "bilibili", cookie);
             if (urlList instanceof Error) {
@@ -203,6 +205,7 @@ async function reload(newUrl?: string) {
             });
             player.attachMediaElement(rv.value);
             player.load();
+            loading.value = false;
             player.play();
         }
     } catch (error) {
@@ -247,8 +250,7 @@ onMounted(async () => {
     let urll = null;
     let first_frame = null;
     if (type.value == "video" && platform == "bilibili") {
-        let details = await invoke("video_detail", { bvid: uri.split('/').pop(), sessdata: cookie })
-        console.log(details)
+        let details = await invokeWrapper({ command: "video_detail", payload: { bvid: uri.split('/').pop(), sessdata: cookie } })
         title.value = details.data.title;
         tags.value = details.data.tname;
         date.value = (new Date(details.data.pubdate * 1000)).toLocaleDateString();
@@ -256,7 +258,7 @@ onMounted(async () => {
         first_frame = details.data.pages[0].first_frame.replace(/^http:/, 'https:');
         drawFirstFrame(first_frame);
         // draw
-        let addr = await invoke("fetch_video_url", { bvid: uri.split('/').pop(), cid: details.data.cid, qn: 112 })
+        let addr = await invokeWrapper({ command: "fetch_video_url", payload: { bvid: uri.split('/').pop(), cid: details.data.cid, qn: 112 } })
         // console.log(addr)
         urll = addr
     } else if (type.value == "live") {
@@ -268,6 +270,7 @@ onMounted(async () => {
         if (type.value == "video" && platform == "bilibili") {
             rv.value.src = urll;
             rv.value.poster = first_frame;
+            loading.value = false;
             rv.value.play()
             return;
         } else if (type.value == "live") {
@@ -313,5 +316,14 @@ onUnmounted(() => {
 .icon:hover {
     opacity: 0.9;
     cursor: pointer;
+}
+
+.one-line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    text-overflow: ellipsis;
 }
 </style>
