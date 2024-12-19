@@ -7,7 +7,7 @@
                     <div class=" bg-white shadow-lg p-4 rounded w-48">
                         <ul>
                             <li v-for="item in routes" :key="item.name" class="hover:bg-gray-100 p-2 rounded">
-                                <RouterLink :to="item.path" class="block text-gray-700">
+                                <RouterLink :to="item.path" class="block text-gray-700" @click="drawer = false">
                                     {{ item.label }}
                                 </RouterLink>
                             </li>
@@ -78,6 +78,7 @@ const routes = [
     // { name: "ssh", path: "/root/ssh_monitor", label: "SSH Monitor" },
     // { name: "rss", path: "/root/rss", label: "RSS" },
     { name: "live", path: "/root/live", label: "Live" },
+    { name: "settings", path: "/root/settings", label: "settings" },
 ];
 
 const minsize = async () => {

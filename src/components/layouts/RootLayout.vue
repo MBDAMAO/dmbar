@@ -1,11 +1,23 @@
 <template>
-    <!-- ParentPage.vue -->
+    <!-- RootLayout.vue -->
     <div class="parent-page">
-        <router-view />
+        <RouterView v-slot="{ Component }">
+            <keep-alive>
+                <component :is="Component" />
+            </keep-alive>
+        </RouterView>
+        <!-- <RouterView></RouterView> -->
     </div>
 </template>
 
-<script setup lang='ts'>
+<script setup>
+const onBack = () => {
+    console.log('back');
+};
+
+const onForward = () => {
+    console.log('forward');
+};
 </script>
 
 <style scoped>

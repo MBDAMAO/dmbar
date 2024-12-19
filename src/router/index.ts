@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import HomeView from "../pages/enwords/index.vue";
 
 const router = createRouter({
   // import.meta.env.BASE_URL
@@ -18,9 +17,14 @@ const router = createRouter({
           redirect: "/root/fast_gpt",
         },
         {
+          path: "settings",
+          name: "settings",
+          component: import("../pages/settings/index.vue"),
+        },
+        {
           path: "words",
           name: "words",
-          component: HomeView,
+          component: () => import("../pages/enwords/index.vue"),
         },
         {
           path: "crypto_coin",

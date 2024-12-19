@@ -5,7 +5,12 @@
             <ControllerBar></ControllerBar>
         </header>
         <main style="width: 100%; height: calc(100%); margin-top: 15px; overflow-y: auto;">
-            <RouterView />
+            <!-- <RouterView v-slot="{ Component }">
+                <keep-alive>
+                    <component :is="Component" />
+                </keep-alive>
+            </RouterView> -->
+            <RouterView></RouterView>
         </main>
     </div>
 </template>
