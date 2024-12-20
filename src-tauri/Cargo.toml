@@ -71,6 +71,7 @@ md-5 = "0"
 bytes = "1"
 url = "2"
 tauri-plugin-http = { version = "2", features = ["unsafe-headers"] }
+tauri-plugin-os = "2"
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"

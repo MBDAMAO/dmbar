@@ -5,10 +5,12 @@ import ElementPlus from "element-plus";
 import { createPinia } from 'pinia'
 import './assets/styles/main.css';
 import "element-plus/dist/index.css";
+// tslint:disable-next-line: no-unused-expression
 import { VuePageStackPlugin } from 'vue-page-stack';
 
 const app = createApp(App);
 const pinia = createPinia()
+
 app.use(router);
 app.use(VuePageStackPlugin, { router });
 app.use(pinia)

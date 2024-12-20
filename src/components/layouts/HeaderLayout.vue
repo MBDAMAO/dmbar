@@ -4,7 +4,7 @@
         <header>
             <ControllerBar></ControllerBar>
         </header>
-        <main style="width: 100%; height: calc(100%); margin-top: 15px; overflow-y: auto;">
+        <main style="width: 100%; height: calc(100%); margin-top: 15px; overflow-y: hidden;">
             <!-- <RouterView v-slot="{ Component }">
                 <keep-alive>
                     <component :is="Component" />

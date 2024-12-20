@@ -1,7 +1,7 @@
 <template>
     <div class="p-4 font-sans">
         <header class="text-center mb-4">
-            <h1 class="text-2xl font-bold">视频推荐</h1>
+            <input type="text" class="w-full max-w-xl p-2 border border-gray-300 rounded-lg" placeholder="搜索视频..." />
         </header>
 
         <main class="flex flex-col items-center h-screen overflow-y-auto" @scroll="handleScroll">
@@ -11,7 +11,8 @@
                 <li v-for="item in videos" :key="item.bvid"
                     class="border border-gray-300 rounded-lg shadow-md overflow-hidden text-center hover:cursor-pointer"
                     @click="onVideoClick(item)">
-                    <img :src="item.pic" :alt="item.title" class="w-full object-contain" />
+                    <img :src="item.pic" :alt="item.title" class="w-full object-contain"
+                        @error="handleImageError(item)" />
                     <h3 class="text-base font-semibold text-white mt-2 line-clamp-2">{{ item.title }}</h3>
                     <p class="text-sm text-gray-600">@{{ item.owner.name }}</p>
                 </li>
@@ -45,6 +46,22 @@ interface VideoItem {
     pic: string;  // 图片的Base64编码
     uri: string;
     owner: Owner;
+}
+const retryLimit = 3; // 设置图片重试的最大次数
+const retryCounts = ref<Record<string, number>>({}); // 记录每张图片的重试次数
+
+function handleImageError(item: VideoItem) {
+    const currentCount = retryCounts.value[item.bvid] || 0;
+
+    if (currentCount < retryLimit) {
+        // 如果当前重试次数小于限制次数，增加重试计数并重新加载图片
+        retryCounts.value[item.bvid] = currentCount + 1;
+        setTimeout(() => {
+            item.pic += `?retry=${currentCount + 1}`; // 防止浏览器缓存问题
+        }, 500); // 加个小延迟避免短时间多次请求
+    } else {
+        console.error(`Image for ${item.bvid} failed to load after ${retryLimit} retries.`);
+    }
 }
 
 // 获取视频列表

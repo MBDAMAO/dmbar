@@ -2,18 +2,37 @@
     <header id="controller-handler" class="fixed w-full" data-tauri-drag-region>
         <div id="controller-container" data-tauri-drag-region>
             <div id="controller-pages" data-tauri-drag-region>
-                <el-drawer :z-index="999" v-model="drawer" title="I am the title" :with-header="false" size="60%"
-                    direction="ltr">
-                    <div class=" bg-white shadow-lg p-4 rounded w-48">
-                        <ul>
-                            <li v-for="item in routes" :key="item.name" class="hover:bg-gray-100 p-2 rounded">
-                                <RouterLink :to="item.path" class="block text-gray-700" @click="drawer = false">
-                                    {{ item.label }}
-                                </RouterLink>
-                            </li>
-                        </ul>
+                <el-drawer :z-index="999" v-model="drawer" :with-header="false" size="80%" direction="ltr"
+                    custom-class="tailwind-drawer">
+                    <div class="h-full flex flex-col justify-between bg-gray-50 shadow-lg rounded-r-lg">
+                        <!-- 顶部区域 -->
+                        <div class="p-4">
+                            <h2 class="text-lg font-bold text-gray-700 border-b border-gray-200 pb-2 mb-4">
+                                菜单
+                            </h2>
+                            <ul class="space-y-2">
+                                <li v-for="item in routes" :key="item.name">
+                                    <RouterLink :to="item.path"
+                                        class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition-colors"
+                                        @click="drawer = false">
+                                        {{ item.label }}
+                                    </RouterLink>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 底部区域 -->
+                        <div class="p-4 border-t border-gray-200">
+                            <button
+                                class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+                                @click="drawer = false">
+                                关闭菜单
+                            </button>
+                        </div>
                     </div>
                 </el-drawer>
+
+
                 <div class="control-button">
                     <Drawer class="h-full icon" style="margin-left: 16px;" @click="drawer = true"></Drawer>
                 </div>
@@ -39,7 +58,7 @@
                     </transition>
                 </Popover>
             </div>
-            <div id="controller-buttons" data-tauri-drag-region>
+            <div id="controller-buttons" data-tauri-drag-region v-if="currentDeviceType == 'desktop'">
                 <div class="control-button fix-window">
                     <Pin @click="resize"></Pin>
                 </div>
@@ -65,7 +84,10 @@ import Max from "@/icons/Max.vue";
 import Drawer from "../../icons/Drawer.vue";
 import Close from "@/icons/Close.vue";
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/vue'
+import { useDeviceStore } from '@/stores/device.ts';
 
+// 从 store 中获取设备类型
+const { currentDeviceType } = useDeviceStore();
 import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 import { ref } from "vue";
 const drawer = ref(false)
