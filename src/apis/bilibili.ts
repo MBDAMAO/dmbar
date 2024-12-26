@@ -1,141 +1,71 @@
-// import { fetch } from "@tauri-apps/plugin-http";
+import { useHttp } from "../utils/http";
 
-// 添加 Cookie 作为请求头
-// 添加 Cookie 作为请求头
-function appendCookieToHeaders(cookie: string) {
-  return {
-    "Content-Type": "application/json",
-    "Cookie": `SESSDATA=${cookie}`,
-  };
+let cookie =
+  "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; fingerprint=4e109b97323e7386f22aedddcb16f57f; buvid_fp=4e109b97323e7386f22aedddcb16f57f; bp_t_offset_330838998=1014818102514286592; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUzNzk4MzUsImlhdCI6MTczNTEyMDU3NSwicGx0IjotMX0.ExD191eGUcSse6XDeX5vI853YUqmBAIV0SImtvLj5-w; bili_ticket_expires=1735379775; PVID=1; home_feed_column=5; browser_resolution=1707-898; b_lsid=5F382E4F_1940161E95F; SESSDATA=f1a61326%2C1750741980%2C7807e%2Ac2CjC51_hfA0HeqD5_kmGqKt6jXNt9uSpDvA6DsH6cypm7wSaFA7tWXIS8-c02AqER7pESVlcyb01Nam1sQV9zNEJVSXRKajVkQlEwZkZBN2JZYmtaamhFZVN1WUtXT1Q0MFdZRUVreHU4cngya0czUUtxLXBGbWNEd0dLSndySVhtRTM3eW9NUUlRIIEC; bili_jct=4c2068228e7db67317c67c99e5f3579a; sid=6it9c9iu; CURRENT_FNVAL=4048";
+export async function fetchRelatedVideos() {}
+
+export async function fetchHomepageRecommendations() {
+  return await useHttp({
+    url: "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd?ps=12&fresh_idx=1&fresh_type=4",
+    method: "GET",
+    headers: {
+      Cookie: cookie,
+    },
+  });
 }
 
-export async function fetchRelatedVideos(
-  aid: number | null,
-  bvid: string | null,
-  sessdata: string
+export async function fetchShortVideoModeList() {}
+
+export async function getVideoDetails(bvid: string) {
+  let url = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`;
+  return await useHttp({
+    url,
+    method: "GET",
+    headers: {
+      Cookie: cookie,
+    },
+  });
+}
+
+export async function getVideoUrl(bvid: string, cid: number, qn: number) {
+  let url = `https://api.bilibili.com/x/player/playurl?bvid=${bvid}&cid=${cid}&qn=${qn}&fnval=1&fnver=0&fourk=1&platform=html5&high_quality=1`;
+  return await useHttp({
+    url,
+    method: "GET",
+    headers: {
+      Cookie: cookie,
+    },
+  });
+}
+
+export async function getLiveRoomInfo(room: string) {
+  let url = `https://api.live.bilibili.com/room/v1/Room/get_info?room_id=${room}`;
+  return await useHttp({
+    url,
+    method: "GET",
+    headers: {
+      Cookie: cookie,
+    },
+  });
+}
+
+export async function search(
+  search_type: string,
+  keyword: string,
+  order: string,
+  duration: string,
+  tids: string,
+  page: string
 ) {
-  const url = new URL(
-    "https://api.bilibili.com/x/web-interface/archive/related"
-  );
-
-  // Prepare query parameters
-  if (aid) url.searchParams.append("aid", aid.toString());
-  if (bvid) url.searchParams.append("bvid", bvid);
-
-  try {
-    // Send GET request with query parameters and Cookie in the headers
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
-    });
-
-    // Parse JSON response
-    const data = await response.json();
-    console.log("Related Videos:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching related videos:", error);
-  }
-}
-
-export async function fetchHomepageRecommendations(sessdata: string) {
-  const url = new URL(
-    "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd"
-  );
-
-  const params = {
-    fresh_type: "4", // Relatedness (default)
-    ps: "12", // Max 12 videos per page
-    fresh_idx: "5", // Current page
-    fresh_idx_1h: "5", // Similar to fresh_idx
-    fetch_row: "16", // Rows to fetch
-  };
-
-  // Append query parameters to the URL
-  Object.keys(params).forEach((key: any) =>
-    url.searchParams.append(key, params[key])
-  );
-
-  try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
-    });
-    const data = await response.json();
-    console.log("Homepage Recommendations:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching homepage recommendations:", error);
-  }
-}
-
-export async function fetchShortVideoModeList(sessdata: string) {
-  const url = new URL("https://app.bilibili.com/x/v2/feed/index");
-
-  const params = {
-    fnval: "272", // Video stream format
-    fnver: "1", // Video stream version
-    fourk: "0", // Max quality 1080p
-    inline_danmu: "2", // Display Danmu
-    inline_sound: "1", // Enable sound
-    qn: "32", // Quality level (32: 1080p)
-    s_locale: "zh_CN", // Language
-  };
-
-  // Append query parameters to the URL
-  Object.keys(params).forEach((key: any) =>
-    url.searchParams.append(key, params[key])
-  );
-
-  try {
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
-    });
-
-    const data = await response.json();
-    console.log("Short Video Mode List:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching short video mode list:", error);
-  }
-}
-
-export async function getVideoDetails(
-  bvid: string,
-  sessdata: string,
-  aid?: string
-) {
-  const url = "https://api.bilibili.com/x/web-interface/view";
-  const params = new URLSearchParams();
-  console.log("wtf")
-  if (bvid) {
-    params.append("bvid", bvid);
-  } else if (aid) {
-    params.append("aid", aid);
-  } else {
-    throw new Error("必须提供 bvid 或 aid");
-  }
-
-  try {
-    const response = await fetch(`${url}?${params.toString()}`, {
-      method: "GET",
-      headers: appendCookieToHeaders(sessdata), // 将 Cookie 添加到请求头
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP 错误：${response.status}`);
-    }
-
-    // 解析 JSON 响应
-    const data = await response.json();
-
-    if (data.code !== 0) {
-      throw new Error(`API 错误：${data.message}`);
-    }
-
-    return data.data; // 返回视频详细信息
-  } catch (error) {
-    console.error("获取视频详细信息失败：", error);
-  }
+  let url = `https://api.bilibili.com/x/web-interface/wbi/search/type?`;
+  url += `search_type=${search_type}&keyword=${keyword}&order=${order}&duration=${duration}&tids=${tids}&page=${page}`;
+  return await useHttp({
+    url,
+    method: "GET",
+    headers: {
+      Cookie: cookie,
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    },
+  });
 }

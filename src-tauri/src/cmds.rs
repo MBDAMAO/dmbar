@@ -1,12 +1,11 @@
 use anyhow::Result;
 type CmdResult<T = ()> = Result<T, String>;
-use serde_json::Value;
-// use crate::utils::db;
 use base64::encode;
 use binance_spot_connector_rust::{http::Credentials, hyper::BinanceHttpClient, market, trade};
 use reqwest;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
 use std::error::Error;
 #[derive(Deserialize, Debug)]
 struct PlayurlResponse {
@@ -224,8 +223,7 @@ pub struct Owner {
 pub async fn fetch_videos() -> Result<Vec<VideoItem>, String> {
     let url = "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd";
     let client = reqwest::Client::new();
-    let sessdata = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; PVID=9; fingerprint=4e109b97323e7386f22aedddcb16f57f; buvid_fp=4e109b97323e7386f22aedddcb16f57f; home_feed_column=5; browser_resolution=1707-898; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1MzI5NjcsImlhdCI6MTczNDI3MzcwNywicGx0IjotMX0.COHHDjRvCRDWnzxGaGTU7Z3eyRD_SzdROrFrnjOfL9U; bili_ticket_expires=1734532907; SESSDATA=d4971bd8%2C1749830058%2C2f12d%2Ac2CjCbwRhqyUCMSKdWUs4oXkueydqizRRChjzONU97G5CSP2nz8kDKabMOyGeBmv1_OjISVlRNMUlMQmw5WlUzVUUzX3ZRQ19tWVlQOG5mVWROQlNlMy05OHpGaU9DRFBUZjBva3NGdGx5SmxqMUt6dFRyMlpOUVJaRDNOdEtrR1pxTDQwVWpGWHBRIIEC; bili_jct=d7658c11272074a1fd17066922f75c1a; b_lsid=C2BC7599_193CD6A9AE1; CURRENT_FNVAL=4048; sid=5a53swol; bp_t_offset_330838998=1011378130062934016";
-
+    let sessdata = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; PVID=9; fingerprint=4e109b97323e7386f22aedddcb16f57f; buvid_fp=4e109b97323e7386f22aedddcb16f57f; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUxMjI0OTYsImlhdCI6MTczNDg2MzIzNiwicGx0IjotMX0.ssQdM8SBRl4muUQbRpULPVXXSvLpZ9d6bNly9HNZ6JU; bili_ticket_expires=1735122436; SESSDATA=7c645275%2C1750434786%2C1e4d9%2Ac2CjAJzy4SsHllTXgKzIOHR3Nm-2z9iOPRXOildThMkhinbZAPZDuliLsT4oezVLEnwSwSVnFYSFlWTDF6Sm9VSEY5cE1PM3JMWWlzekliYVNVSEhGV3ZtZEszQ3BDeTducGY3ODFaczc3dWxHallkQ3BfMDMwNkJ1YXhWbzNNUmg0NTNUUW92ZzB3IIEC; bili_jct=35a7a50fad04b428eb20924088b68222; sid=679ioy3l; CURRENT_FNVAL=2000; bp_t_offset_330838998=1014739289864404992; bsource=search_bing; b_lsid=7C6FE9F10_193FC1A7B64; home_feed_column=4; browser_resolution=786-898";
     let response = client
         .get(url)
         .query(&[("fresh_type", "4"), ("ps", "12"), ("fresh_idx", "1")])
@@ -243,7 +241,7 @@ pub async fn fetch_videos() -> Result<Vec<VideoItem>, String> {
             .map(|item| VideoItem {
                 bvid: item["bvid"].as_str().unwrap_or("").to_string(),
                 title: item["title"].as_str().unwrap_or("").to_string(),
-                pic: item["pic_4_3"].as_str().unwrap_or("").to_string(),
+                pic: item["pic"].as_str().unwrap_or("").to_string(),
                 uri: item["uri"].as_str().unwrap_or("").to_string(),
                 owner: Owner {
                     name: item["owner"]["name"].as_str().unwrap_or("").to_string(),
@@ -258,5 +256,60 @@ pub async fn fetch_videos() -> Result<Vec<VideoItem>, String> {
             .as_str()
             .unwrap_or("Unknown error")
             .to_string())
+    }
+}
+
+#[derive(serde::Deserialize)]
+pub struct HttpRequest {
+    pub method: String,
+    pub url: String,
+    pub headers: Option<std::collections::HashMap<String, String>>,
+    pub body: Option<String>,
+}
+
+#[derive(serde::Serialize)]
+pub struct HttpResponse {
+    pub status: u16,
+    pub body: Value, // 将 body 改为 serde_json::Value 类型
+}
+
+#[tauri::command]
+pub async fn send_request(req: HttpRequest) -> Result<HttpResponse, String> {
+    let client = Client::new();
+
+    let mut request_builder = match req.method.as_str() {
+        "GET" => client.get(&req.url),
+        "POST" => client.post(&req.url),
+        "PUT" => client.put(&req.url),
+        "DELETE" => client.delete(&req.url),
+        _ => return Err("Unsupported HTTP method".to_string()),
+    };
+
+    if let Some(headers) = req.headers {
+        for (key, value) in headers {
+            request_builder = request_builder.header(key, value);
+        }
+    }
+
+    if let Some(body) = req.body {
+        request_builder = request_builder.body(body);
+    }
+
+    match request_builder.send().await {
+        Ok(resp) => {
+            let status = resp.status().as_u16();
+            let body = resp.text().await.unwrap_or_else(|_| "".to_string());
+
+            // 尝试解析 JSON
+            let json_body =
+                serde_json::from_str::<Value>(&body).unwrap_or_else(|_| json!({ "raw": body }));
+
+            // 返回一个包含整个 JSON 对象的 HttpResponse
+            Ok(HttpResponse {
+                status,
+                body: json_body, // 返回的是一个 JSON 对象
+            })
+        }
+        Err(e) => Err(e.to_string()),
     }
 }

@@ -1,12 +1,12 @@
 <template>
     <!-- RootLayout.vue -->
     <div class="parent-page">
-        <RouterView v-slot="{ Component }">
+        <!-- <RouterView v-slot="{ Component }">
             <keep-alive>
                 <component :is="Component" />
             </keep-alive>
-        </RouterView>
-        <!-- <RouterView></RouterView> -->
+        </RouterView> -->
+        <RouterView></RouterView>
     </div>
 </template>
 

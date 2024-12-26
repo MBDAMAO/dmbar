@@ -3,9 +3,8 @@
         <div id="controller-container" data-tauri-drag-region>
             <div id="controller-pages" data-tauri-drag-region>
                 <el-drawer :z-index="999" v-model="drawer" :with-header="false" size="80%" direction="ltr"
-                    custom-class="tailwind-drawer">
+                    append-to-body custom-class="tailwind-drawer">
                     <div class="h-full flex flex-col justify-between bg-gray-50 shadow-lg rounded-r-lg">
-                        <!-- 顶部区域 -->
                         <div class="p-4">
                             <h2 class="text-lg font-bold text-gray-700 border-b border-gray-200 pb-2 mb-4">
                                 菜单
@@ -21,7 +20,6 @@
                             </ul>
                         </div>
 
-                        <!-- 底部区域 -->
                         <div class="p-4 border-t border-gray-200">
                             <button
                                 class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"

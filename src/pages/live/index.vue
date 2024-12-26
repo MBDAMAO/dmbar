@@ -15,8 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { getLiveRoomInfo } from '../../apis/bilibili';
 
 // 模拟数据
 const liveBlocks = ref([
@@ -25,12 +26,15 @@ const liveBlocks = ref([
     },
     {
         name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "4775711"
-    }, {
+    },
+    {
         name: 'cs2', tags: ['Gamer', 'Streamer'], videoUrl: "27841685"
     }
 ]);
+onMounted(async () => {
+    getLiveRoomInfo("1773507853")
+})
 
-// 使用 Vue Router
 const router = useRouter();
 
 // 跳转到 /player 页面，并附带视频 URL
