@@ -1,7 +1,7 @@
 <template>
     <div class="p-4 font-sans flex flex-col h-full">
-        <div class="text-center mb-4">
-            <input type="text" class="w-full max-w-xl p-2 rounded-lg outline-none" placeholder="搜索视频..."
+        <div class="text-center mb-3">
+            <input type="text" class="w-full max-w-xl p-2 rounded-lg outline-none h-8 text-sm" placeholder="搜索视频..."
                 v-model="searchQuery" @keyup.enter="searchVideos" />
         </div>
 
@@ -18,7 +18,7 @@
                         :pub-time="item.pubdate" :duration="item.duration"></ContentBlock>
                 </li>
             </ul>
-            <div v-if="isFetching" class="text-lg text-gray-600 mt-5">
+            <div class="text-lg text-gray-600 mt-5">
                 <loading></loading>
             </div>
         </div>
@@ -40,7 +40,7 @@ import Loading from '../../dynamics/Loading.vue';
 
 const router = useRouter();
 const videos = ref<VideoItem[]>([]);
-// const loading = ref(true);
+const loading = ref(false);
 const error = ref<string | null>(null);
 const page = ref(1);
 const hasMore = ref(true);
@@ -94,7 +94,6 @@ async function fetchVideos() {
         error.value = (err as Error).message || '网络错误，请稍后重试';
     } finally {
         isFetching.value = false;
-        loading.value = false;
     }
 }
 
@@ -104,7 +103,7 @@ async function onVideoClick(item: VideoItem) {
 
 async function handleScroll(event: Event) {
     const target = event.target as HTMLElement;
-    if (target.scrollTop + target.clientHeight >= target.scrollHeight - 10) {
+    if (target.scrollTop + target.clientHeight >= target.scrollHeight - 60) {
         fetchVideos();
     }
 }

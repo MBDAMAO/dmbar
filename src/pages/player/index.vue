@@ -342,7 +342,7 @@ const resetHideTimeout = async () => {
     showTopBar.value = true;
     hideTimeout = setTimeout(() => {
         showTopBar.value = false;
-    }, 3000);
+    }, 1500);
 };
 
 onUnmounted(() => {

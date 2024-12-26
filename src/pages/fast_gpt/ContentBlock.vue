@@ -13,17 +13,27 @@
                 <div>{{ formattedDuration }}</div>
             </div>
             <div class="relative">
-                <img :src="cover" class="w-full object-contain" :alt="title" />
+                <!-- <div class="w-full">
+                    <Image16x9 v-show="isLoading"></Image16x9>
+                </div> -->
+
+                <div class="aspect-ratio-16x9">
+                    <Transition>
+                        <img :src="cover" v-show="!isLoading" class="w-full object-cover" :alt="title"
+                            @load="onImageLoad" />
+                    </Transition>
+                </div>
+
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-50">
                 </div>
             </div>
         </div>
         <div class="bg-white text-left">
             <div class="text-sm font-semibold text-black mt-1 line-clamp-2 leading-[1.3rem] pl-1"
-                style="min-height: 2.6rem;">
+                style="height: 2.6rem;">
                 {{ title }}
             </div>
-            <div class="text-[12px] text-gray-600 flex justify-between items-center">
+            <div class="text-[12px] text-gray-600 flex justify-between items-center h-5">
                 <div class="flex flex-row items-center">
                     <Up class="h-full p-1"></Up>
                     <div class="line-clamp-1">{{ owner }}</div>
@@ -36,10 +46,11 @@
 
 <script setup lang='ts'>
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import View from '../../icons/View.vue';
 import Up from '../../icons/Up.vue';
-const router = useRouter();
+import Image16x9 from '../../dynamics/Image16x9.vue';
+
+const isLoading = ref(true);
 const { cover, plays, title, owner, platform, duration, pubTime } = defineProps({
     cover: String,
     uri: String,
@@ -52,6 +63,11 @@ const { cover, plays, title, owner, platform, duration, pubTime } = defineProps(
     tags: String
 });
 
+// 图片加载完成时的回调函数
+const onImageLoad = () => {
+    isLoading.value = false; // 图片加载完成后，更新状态，移除占位图
+};
+
 // 格式化播放量
 const formattedPlays = computed(() => {
     if (typeof plays !== 'number' || isNaN(plays)) return "NaN";
@@ -60,6 +76,7 @@ const formattedPlays = computed(() => {
     }
     return plays.toString();
 });
+
 // 格式化持续时间
 const formattedDuration = computed(() => {
     if (typeof duration !== 'number' || isNaN(duration)) return "NaN";
@@ -70,20 +87,21 @@ const formattedDuration = computed(() => {
 });
 
 const formattedDateTime = computed(() => {
-    if (typeof pubTime !== 'number' || isNaN(pubTime)) return "NaN";
-    const now = new Date();
-    const pubDate = new Date(pubTime * 1000);
-    const diff = now - pubDate;
+    // 确保 pubTime 是数字类型
+    const pubTimestamp = typeof pubTime === 'number' && !isNaN(pubTime) ? pubTime : 0;
+    if (pubTimestamp === 0) return "NaN";
 
-    if (diff < 24 * 60 * 60 * 1000) {
+    const now = new Date();
+    const pubDate = new Date(pubTimestamp * 1000);  // 转换 pubTime 为 Date 对象
+    const diff = now.getTime() - pubDate.getTime();  // 使用 getTime() 获取时间戳
+
+    if (diff < 24 * 60 * 60 * 1000) {  // 小于 24 小时
         return Math.floor(diff / (60 * 60 * 1000)) + '小时前';
     } else {
         return pubDate.toLocaleDateString();
     }
 });
-function onVideoClick(uri: String) {
-    router.push({ name: 'player', query: { videoUrl: uri, type: "video", platform: platform } });
-}
+
 </script>
 
 <style scoped>
@@ -94,5 +112,34 @@ function onVideoClick(uri: String) {
     line-clamp: 2;
     -webkit-line-clamp: 2;
     text-overflow: ellipsis;
+}
+
+/* 保持 16:9 比例 */
+.aspect-ratio-16x9 {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    /* 9 ÷ 16 = 0.5625, 即 56.25% */
+    overflow: hidden;
+}
+
+.aspect-ratio-16x9 img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 保证图片不失真地覆盖整个容器 */
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.15s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
 }
 </style>

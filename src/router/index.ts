@@ -19,7 +19,7 @@ const router = createRouter({
         {
           path: "settings",
           name: "settings",
-          component: import("../pages/settings/index.vue"),
+          component: () => import("../pages/settings/index.vue"),
         },
         {
           path: "words",

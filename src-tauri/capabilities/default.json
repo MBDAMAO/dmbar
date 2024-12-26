@@ -2,7 +2,9 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     {
       "identifier": "http:default",
@@ -36,6 +38,7 @@
     "core:window:allow-get-all-windows",
     "core:webview:allow-set-webview-size",
     "http:default",
-    "os:default"
+    "os:default",
+    "fs:default"
   ]
 }

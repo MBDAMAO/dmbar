@@ -13,8 +13,8 @@
     "windows": [
       {
         "title": "dmbar",
-        "width": 300,
-        "height": 440,
+        "width": 354,
+        "height": 566,
         "resizable": true,
         "center": true,
         "decorations": false,

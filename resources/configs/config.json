@@ -1,0 +1,16 @@
+{
+  "video": {
+    "bilibili": {
+      "cookie": "",
+      "shadow_mode": true
+    },
+    "douyin": {
+      "cookie": "",
+      "shadow_mode": true
+    },
+    "youtube": {
+      "cookie": "",
+      "shadow_mode": true
+    }
+  }
+}

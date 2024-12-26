@@ -90,15 +90,15 @@ import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 import { ref } from "vue";
 const drawer = ref(false)
 const routes = [
-    { name: "crypto", path: "/root/crypto_coin", label: "Crypto Coin" },
+    { name: "crypto", path: "/root/crypto_coin", label: "加密货币" },
     // { name: "words", path: "/root/words", label: "Words" },
     // { name: "translation", path: "/root/translation", label: "Translation" },
-    { name: "videos", path: "/root/fast_gpt", label: "videos" },
+    { name: "videos", path: "/root/fast_gpt", label: "视频平台" },
     // { name: "vpn", path: "/root/vpn", label: "VPN" },
     // { name: "ssh", path: "/root/ssh_monitor", label: "SSH Monitor" },
     // { name: "rss", path: "/root/rss", label: "RSS" },
-    { name: "live", path: "/root/live", label: "Live" },
-    { name: "settings", path: "/root/settings", label: "settings" },
+    { name: "live", path: "/root/live", label: "直播" },
+    { name: "settings", path: "/root/settings", label: "设置" },
 ];
 
 const minsize = async () => {

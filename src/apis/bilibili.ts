@@ -69,3 +69,20 @@ export async function search(
     },
   });
 }
+import bilibili from "./live.ts";
+
+export async function getLiveUrl(roomId: string) {
+  let parser = bilibili("https://live.bilibili.com/" + roomId, cookie);
+  let result: ParsedResult | Error | null;
+  try {
+    result = await parser.parse();
+  } catch (e) {
+    result = Error("Error");
+  }
+  if (result instanceof Error || result === null) {
+    return Error("Error");
+  } else if (result) {
+    console.log(result.links);
+  }
+  return result.links;
+}
