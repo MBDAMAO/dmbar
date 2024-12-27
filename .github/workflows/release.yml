@@ -81,7 +81,7 @@ jobs:
           storePassword=${{ secrets.STORE_PASSWORD }}
           keyPassword=${{ secrets.KEY_PASSWORD }}
           keyAlias=${{ secrets.KEY_ALIAS }}
-          storeFile=upload-keystore.jks
+          storeFile=/home/runner/work/dmbar/dmbar/src-tauri/gen/android/upload-keystore.jks
           EOL
 
           cat src-tauri/gen/android/keystore.properties
