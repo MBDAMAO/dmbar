@@ -21,8 +21,7 @@ jobs:
         run: |
           rustup target add \
           aarch64-linux-android \
-          x86_64-linux-android \
-          i686-linux-android
+          x86_64-linux-android
 
       - name: Install cargo deps
         run: |
@@ -82,7 +81,7 @@ jobs:
 
       - name: Extract APK path
         run: |
-          APK_PATH=$(find src-tauri/gen/android/app/build/outputs/apk/release -name '*.apk')
+          APK_PATH=$(find src-tauri/gen/android/app/build/outputs/apk -name '*.apk')
           echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
 
       - name: Upload Artifact
