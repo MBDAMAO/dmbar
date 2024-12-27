@@ -51,13 +51,15 @@ jobs:
         run: |
           pnpm install --no-frozen-lockfile
 
-      - name: Set up NDK Environment
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1.5.0
+
+      - name: Init Tauri Android
         run: |
-          echo "NDK_HOME=$ANDROID_HOME/ndk-bundle" >> $GITHUB_ENV
+          pnpm tauri android init
 
       - name: Build Android Release APK with Tauri
         run: |
-          pnpm tauri android init
           pnpm tauri android build
 
       - name: Extract APK path
