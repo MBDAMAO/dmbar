@@ -49,7 +49,7 @@ jobs:
 
       - name: Install Node.js dependencies
         run: |
-          pnpm install
+          pnpm install --no-frozen-lockfile
 
       - name: Build Android Release APK with Tauri
         run: |
