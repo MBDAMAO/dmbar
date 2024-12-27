@@ -3,7 +3,6 @@ import re
 
 BUILD_GRADLE_PATH = "src-tauri/gen/android/app/build.gradle.kts"
 IMPORT_ = """
-import java.util.Properties
 import java.io.FileInputStream
 """
 SIGNING_CONFIG = """
