@@ -3,7 +3,7 @@ name: Build Tauri Android Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   build:
@@ -76,7 +76,7 @@ jobs:
       - name: Create App Key
         run: |
           echo "${{ secrets.APP_KEY }}" | base64 --decode > src-tauri/gen/android/upload-keystore.jks
-          
+
           cat <<EOL > src-tauri/gen/android/keystore.properties
           storePassword=${{ secrets.STORE_PASSWORD }}
           keyPassword=${{ secrets.KEY_PASSWORD }}
@@ -84,10 +84,12 @@ jobs:
           storeFile=upload-keystore.jks
           EOL
 
+          cat src-tauri/gen/android/keystore.properties
+
       - name: Configure Gradle for Signing
         run: |
-          chmod +x ./scripts/gradle-sign.sh
-          ./scripts/gradle-sign.sh
+          chmod +x ./scripts/gradle-sign.py
+          python ./scripts/gradle-sign.py
 
       - name: Build Android Release APK with Tauri
         run: |
