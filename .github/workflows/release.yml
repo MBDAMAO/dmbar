@@ -72,13 +72,13 @@ jobs:
         run: |
           pnpm tauri android init
         env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Build Android Release APK with Tauri
         run: |
           pnpm tauri android build
         env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Extract APK path
         run: |
