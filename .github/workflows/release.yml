@@ -53,6 +53,7 @@ jobs:
 
       - name: Build Android Release APK with Tauri
         run: |
+          pnpm tauri android init
           pnpm tauri android build
 
       - name: Extract APK path
