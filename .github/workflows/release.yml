@@ -1,0 +1,74 @@
+name: Build Tauri Android Release
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    name: Build Tauri Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          cache-all-crates: true
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Install Android dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libgtk-3-dev build-essential curl wget file unzip
+
+      - name: Install Android SDK and NDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Java Environment
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Install Node.js dependencies
+        run: |
+          pnpm install
+
+      - name: Build Android Release APK with Tauri
+        run: |
+          pnpm tauri android build
+
+      - name: Extract APK path
+        run: |
+          APK_PATH=$(find src-tauri/gen/android/app/build/outputs/apk/release -name '*.apk')
+          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Tauri-Android-APK
+          path: ${{ env.APK_PATH }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.APK_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
