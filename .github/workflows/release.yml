@@ -73,6 +73,22 @@ jobs:
         env:
           NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
+      - name: Create App Key
+        run: |
+          echo "${{ secrets.APP_KEY }}" | base64 --decode > src-tauri/gen/android/upload-keystore.jks
+          
+          cat <<EOL > src-tauri/gen/android/keystore.properties
+          storePassword=${{ secrets.STORE_PASSWORD }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          storeFile=upload-keystore.jks
+          EOL
+
+      - name: Configure Gradle for Signing
+        run: |
+          chmod +x ./scripts/gradle-sign.sh
+          ./scripts/gradle-sign.sh
+
       - name: Build Android Release APK with Tauri
         run: |
           pnpm tauri android build
