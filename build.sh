@@ -15,10 +15,6 @@ mkdir -p "$RELEASE_DIR"
 # 打印开始构建消息
 echo "🚀 开始构建 Android 版本的 Tauri 应用..."
 
-# 1. 确保依赖安装
-echo "📦 安装项目依赖..."
-pnpm install
-
 # 2. 检查项目类型
 if [ ! -d "$BUILD_DIR" ]; then
     echo "❌ 错误: Tauri 构建目录 $BUILD_DIR 不存在，请确认 Tauri 配置已完成！"

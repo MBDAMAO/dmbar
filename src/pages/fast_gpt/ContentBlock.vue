@@ -29,8 +29,8 @@
             </div>
         </div>
         <div class="bg-white text-left">
-            <div class="text-sm font-semibold text-black mt-1 line-clamp-2 leading-[1.3rem] pl-1"
-                style="height: 2.6rem;">
+            <div class="text-[13px] text-black mt-1 line-clamp-2 leading-[1.3rem] pl-1 pr-1"
+                style="height: 2.6rem; font-weight: normal;">
                 {{ title }}
             </div>
             <div class="text-[12px] text-gray-600 flex justify-between items-center h-5">

@@ -86,10 +86,10 @@ jobs:
 
           cat src-tauri/gen/android/keystore.properties
 
-      - name: Configure Gradle for Signing
+      - name: Before Build
         run: |
-          chmod +x ./scripts/gradle-sign.py
-          python ./scripts/gradle-sign.py
+          chmod +x ./scripts/build/pre_build_android.sh
+          ./scripts/build/pre_build_android.sh
 
       - name: Build Android Release APK with Tauri
         run: |

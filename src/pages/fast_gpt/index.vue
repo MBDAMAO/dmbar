@@ -5,7 +5,8 @@
                 v-model="searchQuery" @keyup.enter="searchVideos" />
         </div>
 
-        <div class="flex flex-col items-center overflow-y-auto h-screen" @scroll="handleScroll">
+        <div class="flex flex-col items-center overflow-y-auto h-screen" @scroll="handleScroll"
+            style="scroll-behavior: smooth;">
             <div v-if="loading" class="text-lg text-gray-600 mt-3">
                 <loading></loading>
             </div>
