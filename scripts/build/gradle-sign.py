@@ -1,7 +1,7 @@
 import os
 import re
 
-BUILD_GRADLE_PATH = "src-tauri/gen/android/app/build.gradle.kts"
+BUILD_GRADLE_PATH = "../../src-tauri/gen/android/app/build.gradle.kts"
 IMPORT_ = """
 import java.io.FileInputStream
 """

@@ -3,7 +3,7 @@ import shutil
 
 # 定义路径
 res_path = '../../src-tauri/gen/android/app/src/main/res'
-icons_path = '../../src-tauri/src-tauri/icons/android'
+icons_path = '../../src-tauri/icons/android'
 
 # 需要删除的目录列表
 mipmap_dirs = [
