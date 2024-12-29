@@ -1,0 +1,9 @@
+.font {
+  color: var(--text-color);
+}
+.dm-base-color {
+  color: var(--text-color);
+}
+.icon {
+  fill: var(--text-color);
+}

@@ -1,86 +1,136 @@
 <template>
-    <div class="ripple-effect" @click="handleClick">
-        长按或点击我
-    </div>
+    <Base @click="open()" :name="name" :sub="sub">
+    <template v-slot:left>
+        <slot></slot>
+    </template>
+    <template v-slot:right>
+        <div class="h-full flex items-center aspect-square p-3">
+            <More></More>
+        </div>
+    </template>
+    </Base>
+    <TransitionRoot appear :show="isOpen" as="template">
+        <Dialog as="div" @close="closeModal" class="relative z-[9999]">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+                leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                <div class="fixed inset-0 bg-black/25" />
+            </TransitionChild>
+
+            <div class="fixed inset-0 overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                    <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                        enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                        leave-to="opacity-0 scale-95">
+                        <DialogPanel
+                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                            <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                                {{ name }}
+                            </DialogTitle>
+                            <div class="w-full px-4 py-16">
+                                <div class="mx-auto w-full max-w-md">
+                                    <RadioGroup v-model="selected">
+                                        <RadioGroupLabel class="sr-only">Server size</RadioGroupLabel>
+                                        <div class="space-y-2">
+                                            <RadioGroupOption as="template" v-for="option in options" :key="option.name"
+                                                :value="option" v-slot="{ active, checked }"
+                                                @click="choose(option.value)">
+                                                <div :class="[
+                                                    active
+                                                        ? 'ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300'
+                                                        : '',
+                                                    checked ? 'bg-sky-900/75 text-white ' : 'bg-white ',
+                                                ]"
+                                                    class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none">
+                                                    <div class="flex w-full items-center justify-between">
+                                                        <div class="flex items-center">
+                                                            <div class="text-sm">
+                                                                <RadioGroupLabel as="p"
+                                                                    :class="checked ? 'text-white' : 'text-gray-900'"
+                                                                    class="font-medium">
+                                                                    {{ option.name }}
+                                                                </RadioGroupLabel>
+                                                                <RadioGroupDescription as="span"
+                                                                    :class="checked ? 'text-sky-100' : 'text-gray-500'"
+                                                                    class="inline">
+                                                                    <span> {{ option.sub }} </span>
+                                                                </RadioGroupDescription>
+                                                            </div>
+                                                        </div>
+                                                        <div v-show="checked" class="shrink-0 text-white">
+                                                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none">
+                                                                <circle cx="12" cy="12" r="12" fill="#fff"
+                                                                    fill-opacity="0.2" />
+                                                                <path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </RadioGroupOption>
+                                        </div>
+                                    </RadioGroup>
+                                </div>
+                            </div>
+                        </DialogPanel>
+                    </TransitionChild>
+                </div>
+            </div>
+        </Dialog>
+    </TransitionRoot>
 </template>
 
 <script setup lang='ts'>
+import Base from './Base.vue';
+import { ConfigPath, Option } from '../../../types/config';
+import { useConfig } from '../../../stores/config';
+const props = defineProps({
+    name: String,
+    sub: String,
+    options: Array<Option>,
+    configPath: Object as () => ConfigPath,
+    value: String,
+})
 import { ref } from 'vue';
+import More from '../../../icons/More.vue';
+import {
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+} from '@headlessui/vue'
+import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupDescription,
+    RadioGroupOption,
+} from '@headlessui/vue'
 
-const ripple = ref(null);
+let selected = ref()
+for (const option of props.options) {
 
-const handleClick = (event) => {
-    // 创建涟漪效果的元素
-    const span = document.createElement('span');
-    span.style.left = `${event.offsetX}px`;
-    span.style.top = `${event.offsetY}px`;
-    span.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-    span.style.width = '50px';
-    span.style.height = '50px';
-    span.style.borderRadius = '50%';
-    span.style.position = 'absolute';
-    span.style.transform = 'translate(-50%, -50%)';
-    span.style.opacity = '1';
-    span.style.transition = 'opacity 1s, transform 1s';
-
-    // 添加动画效果
-    const animation = document.createAttribute('style');
-    animation.value = `
-      @keyframes ripple {
-        from {
-          transform: translate(-50%, -50%) scale(0);
-          opacity: 1;
-        }
-        to {
-          transform: translate(-50%, -50%) scale(10);
-          opacity: 0;
-        }
-      }
-    `;
-    span.setAttributeNode(animation);
-
-    // 将涟漪效果添加到容器中
-    ripple.value.appendChild(span);
-
-    // 移除涟漪效果
-    setTimeout(() => {
-        span.remove();
-    }, 1000);
-};
+    if (option.value == props.value) {
+        console.log(props.value, option.value)
+        selected.value = option
+        break
+    }
+}
+async function choose(value: any) {
+    const config = useConfig().config;
+    if (config == undefined) return;
+    config.sections[props.configPath?.sectionIndex].components[props.configPath?.componentIndex].value = value;
+    await useConfig().saveConfig();
+}
+const isOpen = ref(false)
+function open() {
+    openModal()
+}
+function closeModal() {
+    isOpen.value = false
+}
+function openModal() {
+    isOpen.value = true
+}
 </script>
 
-<style scoped>
-.ripple-effect {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    height: 60px;
-    width: 100%;
-    background-color: #3c1818;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333;
-    font-size: 16px;
-}
-
-.ripple-effect span {
-    position: absolute;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.2);
-    pointer-events: none;
-}
-
-/* 涟漪动画 */
-@keyframes ripple {
-    from {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 1;
-    }
-
-    to {
-        transform: translate(-50%, -50%) scale(10);
-        opacity: 0;
-    }
-}
-</style>
+<style scoped></style>

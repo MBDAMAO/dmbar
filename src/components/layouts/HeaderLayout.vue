@@ -1,17 +1,17 @@
 <template>
     <!-- HeaderLayout.vue -->
     <div class="header-layout">
-        <header>
+        <div style="height: 25px; width: 100%;" class="relative">
             <ControllerBar></ControllerBar>
-        </header>
-        <main style="width: 100%; height: calc(100%); margin-top: 15px; overflow-y: hidden;">
+        </div>
+        <div style="width: 100%; height: calc(100%); overflow-y: hidden;">
             <!-- <RouterView v-slot="{ Component }">
                 <keep-alive>
                     <component :is="Component" />
                 </keep-alive>
             </RouterView> -->
             <RouterView></RouterView>
-        </main>
+        </div>
     </div>
 </template>
 

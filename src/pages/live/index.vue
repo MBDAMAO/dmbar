@@ -1,14 +1,16 @@
 <template>
-    <div class="live-container">
-        <!-- 多个 live-block -->
-        <div class="live-block" v-for="(item, index) in liveBlocks" :key="index" @click="goToPlayer(item)">
-            <!-- 左侧头像 -->
-            <div class="avatar"></div>
+    <div class="w-full h-full overflow-y-auto">
+        <div class="live-container">
+            <!-- 多个 live-block -->
+            <div class="live-block" v-for="(item, index) in liveBlocks" :key="index" @click="goToPlayer(item)">
+                <!-- 左侧头像 -->
+                <div class="avatar"></div>
 
-            <!-- 右侧信息 -->
-            <div class="info">
-                <div class="name">{{ item.name }}</div>
-                <div class="tags">{{ item.tags.join(', ') }}</div>
+                <!-- 右侧信息 -->
+                <div class="info">
+                    <div class="name">{{ item.name }}</div>
+                    <div class="tags">{{ item.tags.join(', ') }}</div>
+                </div>
             </div>
         </div>
     </div>

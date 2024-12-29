@@ -1,5 +1,5 @@
 <template>
-    <div class="relative h-full w-full flex flex-col">
+    <div v-ripple class="relative h-full w-full flex flex-col">
         <div class="relative w-full">
             <div class="absolute w-full bottom-0 z-10 text-white text-left text-sm pl-1 pr-1 flex justify-between"
                 style="height: 22px;">

@@ -1,76 +1,108 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>点击涟漪效果</title>
+    <title>硬币掉落动画</title>
     <style>
-        body,
-        html {
-            height: 100%;
+        body {
+            background-color: #f0f0f0;
             margin: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background-color: #f5f5f5;
+            align-items: center;
+            height: 100vh;
+            perspective: 1000px;
         }
 
-        .button {
-            position: relative;
-            overflow: hidden;
-            padding: 20px 40px;
-            font-size: 18px;
-            border: none;
-            background-color: #6200ea;
-            color: white;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .ripple {
+        .ground {
             position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
+            width: 100%;
+            height: 100px;
+            background-color: #888;
+            bottom: 0;
         }
 
-        @keyframes ripple-animation {
-            to {
-                transform: scale(4);
+        .coins-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .coin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #f2f2f2;
+            border: 1px solid #aaa;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            animation: fall 2s cubic-bezier(0.42, 0, 1, 1);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-200px) rotateY(0deg);
                 opacity: 0;
             }
+
+            80% {
+                transform: translateY(200px) rotateY(360deg);
+                opacity: 1;
+            }
+
+            90% {
+                transform: translateY(190px) rotateY(360deg);
+            }
+
+            100% {
+                transform: translateY(200px) rotateY(360deg);
+            }
+        }
+
+        .coin:nth-child(1) {
+            left: 20px;
+            top: -40px;
+            animation-delay: 0s;
+        }
+
+        .coin:nth-child(2) {
+            left: 50px;
+            top: -80px;
+            animation-delay: 0.2s;
+        }
+
+        .coin:nth-child(3) {
+            left: 80px;
+            top: -120px;
+            animation-delay: 0.4s;
+        }
+
+        .coin:nth-child(4) {
+            left: 110px;
+            top: -160px;
+            animation-delay: 0.6s;
+        }
+
+        .coin:nth-child(5) {
+            left: 140px;
+            top: -200px;
+            animation-delay: 0.8s;
         }
     </style>
 </head>
 
 <body>
-    <button class="button" onclick="createRipple(event)">点击我</button>
-
-    <script>
-        function createRipple(event) {
-            const button = event.currentTarget;
-
-            const ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-
-            const rect = button.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = event.clientX - rect.left - size / 2;
-            const y = event.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-
-            button.appendChild(ripple);
-
-            ripple.addEventListener('animationend', () => {
-                ripple.remove();
-            });
-        }
-    </script>
+    <div class="ground"></div>
+    <div class="coins-container">
+        <div class="coin"></div>
+        <div class="coin"></div>
+        <div class="coin"></div>
+        <div class="coin"></div>
+        <div class="coin"></div>
+    </div>
 </body>
 
 </html>

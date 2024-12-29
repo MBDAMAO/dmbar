@@ -1,0 +1,17 @@
+html[data-theme="transprant"] {
+  --text-color: #fff;
+  --bg1: transprant;
+  --bg2: transprant;
+}
+
+html[data-theme="dark"] {
+  --text-color: #fff;
+  --bg1: #111;
+  --bg2: #222;
+}
+
+:root {
+  --text-color: #000;
+  --bg1: #fff;
+  --bg2: #eee;
+}

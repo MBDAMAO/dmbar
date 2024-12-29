@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 font-sans flex flex-col h-full">
+    <div class="p-4 pt-1 font-sans flex flex-col h-full">
         <div class="text-center mb-3">
             <input type="text" class="w-full max-w-xl p-2 rounded-lg outline-none h-8 text-sm" placeholder="搜索视频..."
                 v-model="searchQuery" @keyup.enter="searchVideos" />
