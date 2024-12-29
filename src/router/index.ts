@@ -6,7 +6,23 @@ const router = createRouter({
   routes: [
     {
       path: "",
-      redirect: "/root",
+      redirect: "/start",
+    },
+    {
+      path: "/start",
+      name: "start",
+      component: () => import("@/components/layouts/SimpleLayout.vue"),
+      children: [
+        {
+          path: "",
+          redirect: "/start/start_page",
+        },
+        {
+          path: "start_page",
+          name: "start_page",
+          component: () => import("../pages/app_start/index.vue"),
+        },
+      ],
     },
     {
       path: "/root",

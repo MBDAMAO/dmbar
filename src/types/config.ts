@@ -28,95 +28,99 @@ export type ConfigPath = {
 };
 
 export const defaultConfig: Config = {
-  sections: [
+  "sections": [
     {
-      name: "account",
-      title: "Account Settings",
-      components: [
+      "name": "account",
+      "title": "Account Settings",
+      "components": [
         {
-          type: "selector",
-          name: "Account Settings",
-          sub: "Security, Cloud, and Subscription",
-          image:
-            "https://gravatar.com/avatar/f4fd76a3084fa1ad216c7906d14b0e64?size=256",
-          value: "Account",
-          options: [
+          "type": "selector",
+          "name": "Account Settings",
+          "sub": "Security, Cloud, and Subscription",
+          "image": "https://gravatar.com/avatar/f4fd76a3084fa1ad216c7906d14b0e64?size=256",
+          "value": "Account",
+          "options": [
             {
-              name: "Account",
-              sub: "Security, Cloud, and Subscription",
-              value: "Account",
+              "name": "Account",
+              "sub": "Security, Cloud, and Subscription",
+              "value": "Account"
             },
             {
-              name: "Account",
-              sub: "Security, Cloud, and Subscription",
-              value: "Account",
-            },
-          ],
-        },
-      ],
+              "name": "Account",
+              "sub": "Security, Cloud, and Subscription",
+              "value": "Account"
+            }
+          ]
+        }
+      ]
     },
     {
-      name: "general",
-      title: "General Settings",
-      components: [
+      "name": "general",
+      "title": "General Settings",
+      "components": [
         {
-          type: "switch",
-          name: "Enable Notifications",
-          sub: "Notification settings for your account",
-          value: false,
+          "type": "switch",
+          "name": "Enable Notifications",
+          "sub": "Notification settings for your account",
+          "value": false
         },
         {
-          type: "selector",
-          name: "Theme",
-          sub: "Dark or light theme",
-          value: "dark",
-          options: [
+          "type": "selector",
+          "name": "Theme",
+          "sub": "Dark or light theme",
+          "value": "dark",
+          "options": [
             {
-              name: "dark",
-              sub: "Security, Cloud, and Subscription",
-              value: "Account",
+              "name": "transprant",
+              "sub": "Security, Cloud, and Subscription",
+              "value": "transprant"
             },
             {
-              name: "light",
-              sub: "Security, Cloud, and Subscription",
-              value: "Account",
+              "name": "dark",
+              "sub": "Security, Cloud, and Subscription",
+              "value": "dark"
             },
             {
-              name: "system",
-              sub: "Security, Cloud, and Subscription",
-              value: "Account",
+              "name": "light",
+              "sub": "Security, Cloud, and Subscription",
+              "value": "light"
             },
-          ],
-        },
-      ],
+            {
+              "name": "system",
+              "sub": "Security, Cloud, and Subscription",
+              "value": "system"
+            }
+          ]
+        }
+      ]
     },
     {
-      name: "video",
-      title: "Video Settings",
-      components: [
+      "name": "video",
+      "title": "Video Settings",
+      "components": [
         {
-          type: "input",
-          placeholder: "Enter your preferred video quality...",
+          "type": "input",
+          "placeholder": "Enter your preferred video quality..."
         },
         {
-          type: "switch",
-          name: "Enable HD",
-          sub: "HD video quality settings",
-          value: true,
-        },
-      ],
+          "type": "switch",
+          "name": "Enable HD",
+          "sub": "HD video quality settings",
+          "value": true
+        }
+      ]
     },
     {
-      name: "about",
-      title: "About",
-      components: [
+      "name": "about",
+      "title": "About",
+      "components": [
         {
-          type: "switch",
-          name: "Enable HD",
-          sub: "HD video quality settings",
-          value: true,
-        },
-      ],
-    },
-  ],
-};
+          "type": "switch",
+          "name": "Enable HD",
+          "sub": "HD video quality settings",
+          "value": true
+        }
+      ]
+    }
+  ]
+}
