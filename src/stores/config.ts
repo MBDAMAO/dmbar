@@ -15,7 +15,7 @@ export const useConfig = defineStore("config", () => {
 
   watchEffect(() => {
     document.documentElement.dataset.theme =
-      config.value?.sections[1].components[0].value;
+      config.value?.sections[1].components[1].value;
   });
 
   return {
