@@ -2,16 +2,19 @@ html[data-theme="transprant"] {
   --text-color: #fff;
   --bg1: transprant;
   --bg2: transprant;
+  --ripple-color: rgba(255, 255, 255, 0.6);
 }
 
 html[data-theme="dark"] {
   --text-color: #fff;
   --bg1: #111;
   --bg2: #222;
+  --ripple-color: rgba(255, 255, 255, 0.6);
 }
 
 :root {
   --text-color: #000;
   --bg1: #fff;
   --bg2: #eee;
+  --ripple-color: rgba(83, 83, 83, 0.6);
 }

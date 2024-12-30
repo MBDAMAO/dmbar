@@ -13,6 +13,10 @@ export const useConfig = defineStore("config", () => {
     await writeFile("config.json", JSON.stringify(config.value));
   };
 
+  const useBilibiliCookie = () => {
+    return config.value?.sections[2].components[1].value;
+  };
+
   watchEffect(() => {
     document.documentElement.dataset.theme =
       config.value?.sections[1].components[1].value;
@@ -21,6 +25,7 @@ export const useConfig = defineStore("config", () => {
   return {
     config,
     loadConfig,
+    useBilibiliCookie,
     saveConfig,
   };
 });

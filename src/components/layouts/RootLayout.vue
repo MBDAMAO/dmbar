@@ -1,5 +1,6 @@
 <template>
     <!-- RootLayout.vue -->
+    <div style="background: var(--bg1);" class="absolute top-0 left-0 -z-10 h-full w-full"></div>
     <div class="parent-page">
         <!-- <RouterView v-slot="{ Component }">
             <keep-alive>

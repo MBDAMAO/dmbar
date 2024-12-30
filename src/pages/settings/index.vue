@@ -22,7 +22,10 @@
                         sectionIndex: Number(sectionIndex), componentIndex: index
                     }" />
 
-                <input v-if="component.type === 'input'" :placeholder="component.placeholder" />
+                <Input v-if="component.type === 'input'" :name="component.name" :sub="component.sub"
+                    :value="component.value" :config-path="{
+                        sectionIndex: Number(sectionIndex), componentIndex: index
+                    }" />
             </div>
 
             <Spliter />
@@ -37,6 +40,7 @@
 import Selector from './components/Selector.vue';
 import Spliter from './components/Spliter.vue';
 import Title from './components/Title.vue';
+import Input from './components/Input.vue';
 import { useConfig } from '../../stores/config';
 import Switch from './components/Switch.vue';
 import UpdateCheck from './components/UpdateCheck.vue';

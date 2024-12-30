@@ -2,9 +2,8 @@ import { useConfig } from "../stores/config.ts";
 import { useHttp } from "../utils/http";
 
 export async function fetchRelatedVideos() {}
-
+let cookie = useConfig().useBilibiliCookie();
 export async function fetchHomepageRecommendations() {
-  let cookie = useConfig().config?.sections[2].components[0].cookie;
   return await useHttp({
     url: "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd?ps=12&fresh_idx=1&fresh_type=4",
     method: "GET",
@@ -17,7 +16,6 @@ export async function fetchHomepageRecommendations() {
 export async function fetchShortVideoModeList() {}
 
 export async function getVideoDetails(bvid: string) {
-  let cookie = useConfig().config?.sections[2].components[0].cookie;
   let url = `https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`;
   return await useHttp({
     url,
@@ -29,7 +27,6 @@ export async function getVideoDetails(bvid: string) {
 }
 
 export async function getVideoUrl(bvid: string, cid: number, qn: number) {
-  let cookie = useConfig().config?.sections[2].components[0].cookie;
   let url = `https://api.bilibili.com/x/player/playurl?bvid=${bvid}&cid=${cid}&qn=${qn}&fnval=1&fnver=0&fourk=1&platform=html5&high_quality=1`;
   return await useHttp({
     url,
@@ -41,7 +38,6 @@ export async function getVideoUrl(bvid: string, cid: number, qn: number) {
 }
 
 export async function getLiveRoomInfo(room: string) {
-  let cookie = useConfig().config?.sections[2].components[0].cookie;
   let url = `https://api.live.bilibili.com/room/v1/Room/get_info?room_id=${room}`;
   return await useHttp({
     url,
@@ -60,7 +56,6 @@ export async function search(
   tids: string,
   page: string
 ) {
-  let cookie = useConfig().config?.sections[2].components[0].cookie;
   let url = `https://api.bilibili.com/x/web-interface/wbi/search/type?`;
   url += `search_type=${search_type}&keyword=${keyword}&order=${order}&duration=${duration}&tids=${tids}&page=${page}`;
   return await useHttp({
@@ -76,7 +71,6 @@ export async function search(
 import bilibili from "./live.ts";
 
 export async function getLiveUrl(roomId: string) {
-  let cookie = useConfig().config?.sections[2].components[0].cookie;
   let parser = bilibili("https://live.bilibili.com/" + roomId, cookie);
   let result: ParsedResult | Error | null;
   try {
