@@ -18,7 +18,7 @@ jq --arg v "$new_version" '.version = $v' src-tauri/tauri.conf.json >temp.json &
 # 设置 tag 名称
 tag="v$new_version"
 
-执行 Git 操作
+echo 执行 Git 操作
 git add .
 git commit -m "Bump version to $new_version"
 git checkout release

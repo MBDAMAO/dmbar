@@ -46,11 +46,6 @@ export const defaultConfig: Config = {
               sub: "Security, Cloud, and Subscription",
               value: "Account",
             },
-            {
-              name: "Account",
-              sub: "Security, Cloud, and Subscription",
-              value: "Account",
-            },
           ],
         },
       ],
@@ -71,26 +66,28 @@ export const defaultConfig: Config = {
           sub: "Dark or light theme",
           value: "dark",
           options: [
-            {
-              name: "transprant",
-              sub: "Security, Cloud, and Subscription",
-              value: "transprant",
-            },
-            {
-              name: "dark",
-              sub: "Security, Cloud, and Subscription",
-              value: "dark",
-            },
-            {
-              name: "light",
-              sub: "Security, Cloud, and Subscription",
-              value: "light",
-            },
+            { name: "dark", sub: "dark theme", value: "dark" },
+            { name: "light", sub: "light theme", value: "light" },
             {
               name: "system",
-              sub: "Security, Cloud, and Subscription",
+              sub: "follow your system theme",
               value: "system",
             },
+            {
+              name: "transprant",
+              sub: "transprant theme (full on windows)",
+              value: "transprant",
+            },
+          ],
+        },
+        {
+          type: "selector",
+          name: "Language",
+          sub: "Select your preferred language",
+          value: "zh-cn",
+          options: [
+            { name: "English", sub: "", value: "en-us" },
+            { name: "简体中文", sub: "", value: "zh-cn" },
           ],
         },
       ],
@@ -101,25 +98,15 @@ export const defaultConfig: Config = {
       components: [
         {
           type: "input",
-          placeholder: "Enter your preferred video quality...",
+          name: "Douyin Coolkie",
+          sub: "douyin",
+          value: "",
         },
         {
-          type: "switch",
-          name: "Enable HD",
-          sub: "HD video quality settings",
-          value: true,
-        },
-      ],
-    },
-    {
-      name: "about",
-      title: "About",
-      components: [
-        {
-          type: "switch",
-          name: "Enable HD",
-          sub: "HD video quality settings",
-          value: true,
+          type: "input",
+          name: "Bilibili Coolkie",
+          sub: "bilibili",
+          value: "",
         },
       ],
     },

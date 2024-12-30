@@ -70,7 +70,12 @@ const router = createRouter({
         {
           path: "fast_gpt",
           name: "fast_gpt",
-          component: () => import("../pages/fast_gpt/index.vue"),
+          component: () => import("../pages/videos/index.vue"),
+        },
+        {
+          path: "help",
+          name: "help",
+          component: () => import("../pages/help_feedback/index.vue"),
         },
       ],
     },

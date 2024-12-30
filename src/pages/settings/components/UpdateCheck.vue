@@ -55,6 +55,7 @@ function fetch() {
                 return;
             }
         }
+        fetchStatus.value = "isupdate";
         return;
     }).catch(() => {
         fetchStatus.value = "error";

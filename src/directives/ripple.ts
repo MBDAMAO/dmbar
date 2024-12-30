@@ -24,11 +24,11 @@ const rippleDirective: Directive = {
       ripple.style.top = `${y}px`;
 
       // 设置背景色
-      if (binding.value && binding.value.color) {
-        ripple.style.backgroundColor = binding.value.color;
-      } else {
-        ripple.style.backgroundColor = "rgba(255,255,255,0.6)";
-      }
+      // if (binding.value && binding.value.color) {
+      //   ripple.style.backgroundColor = binding.value.color;
+      // } else {
+      //   ripple.style.backgroundColor = "rgba(255,255,255,0.6)";
+      // }
 
       // 添加到元素中
       el.appendChild(ripple);

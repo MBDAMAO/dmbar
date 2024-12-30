@@ -2,40 +2,18 @@
     <div id="controller-handler" class="fixed w-full h-[25px]" data-tauri-drag-region>
         <div id="controller-container" data-tauri-drag-region>
             <div id="controller-pages" data-tauri-drag-region>
-                <el-drawer v-model="drawer" :with-header="false" size="80%" direction="ltr" append-to-body
-                    custom-class="tailwind-drawer">
-                    <div class="h-full flex flex-col justify-between bg-gray-50 shadow-lg rounded-r-lg">
-                        <div class="p-4">
-                            <h2 class="text-lg font-bold text-gray-700 border-b border-gray-200 pb-2 mb-4">
-                                菜单
-                            </h2>
-                            <ul class="space-y-2">
-                                <li v-for="item in routes" :key="item.name">
-                                    <RouterLink :to="item.path"
-                                        class="block px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition-colors"
-                                        @click="drawer = false">
-                                        {{ item.label }}
-                                    </RouterLink>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="p-4 border-t border-gray-200">
-                            <button
-                                class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
-                                @click="drawer = false">
-                                关闭菜单
-                            </button>
-                        </div>
-                    </div>
-                </el-drawer>
-                <div class="control-button p-1">
-                    <Drawer class="h-full icon" style="margin-left: 16px;" @click="drawer = true"></Drawer>
+                <SideMenu ref="side"></SideMenu>
+                <div class="control-button p-1 pl-3" @click="changeStatus">
+                    <Drawer class="h-full icon"></Drawer>
                 </div>
             </div>
             <div id="controller-buttons" data-tauri-drag-region v-if="currentDeviceType == 'desktop'">
-                <div class="control-button fix-window p-1.5" @click="resize">
-                    <Pin></Pin>
+                <div class="control-button minimize p-1.5" @click="reload()">
+                    <Refresh></Refresh>
+                </div>
+                <div class="control-button fix-window p-1.5" @click="fix">
+                    <Pin v-if="!alwaysOnTop"></Pin>
+                    <Unpin v-if="alwaysOnTop"></Unpin>
                 </div>
                 <div class="control-button minimize p-1" @click="minsize">
                     <Min />
@@ -57,28 +35,33 @@ import Pin from "@/icons/Pin.vue";
 import Min from "@/icons/Min.vue";
 import Max from "@/icons/Max.vue";
 import Drawer from "../../icons/Drawer.vue";
+import SideMenu from "./SideMenu.vue";
 import Close from "@/icons/Close.vue";
 import { useDeviceStore } from '../../stores/device.ts';
-
+import { useRouter } from "vue-router";
+import Unpin from "../../icons/Unpin.vue";
 const { currentDeviceType } = useDeviceStore();
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { ref } from "vue";
-const drawer = ref(false)
-const routes = [
-    { name: "crypto", path: "/root/crypto_coin", label: "加密货币" },
-    { name: "videos", path: "/root/fast_gpt", label: "视频平台" },
-    { name: "live", path: "/root/live", label: "直播" },
-    { name: "settings", path: "/root/settings", label: "设置" },
-];
-
+import Refresh from "../../icons/Refresh.vue";
+const router = useRouter();
+const side = ref(null);
+const reload = async () => {
+    router.push('/start/start_page')
+}
+function changeStatus() {
+    if (side.value == null) return;
+    side.value.changeStatus();
+}
 const minsize = async () => {
     const appWindow = Window.getCurrent();
     await appWindow.minimize();
 };
-
-const resize = async () => {
+let alwaysOnTop = ref(false);
+const fix = async () => {
     const window = getCurrentWindow();
-    await window.setSize(new LogicalSize(1024, 800));
+    await window.setAlwaysOnTop(!alwaysOnTop.value);
+    alwaysOnTop.value = !alwaysOnTop.value;
 };
 
 const toggleMaximize = async () => {
