@@ -1,8 +1,9 @@
 <template>
     <div class="p-4 pt-1 font-sans flex flex-col h-full">
         <div class="text-center mb-3">
-            <input type="text" class="w-full max-w-xl p-2 rounded-lg outline-none h-8 text-sm" placeholder="搜索视频..."
-                v-model="searchQuery" @keyup.enter="searchVideos" />
+            <input type="text"
+                class="w-full max-w-xl p-2 rounded-lg outline-none h-8 bg-[--bg2] text-sm text-[--text-color]"
+                placeholder="搜索视频..." v-model="searchQuery" @keyup.enter="searchVideos" />
         </div>
 
         <div class="flex flex-col items-center overflow-y-auto h-screen" @scroll="handleScroll"
@@ -15,7 +16,7 @@
                 <li v-for="item in videos" :key="item.bvid"
                     class="rounded-lg shadow-md overflow-hidden text-center hover:cursor-pointer"
                     @click="onVideoClick(item)">
-                    <ContentBlock :cover="item.pic" :owner="item.owner.name" :title="item.title" :plays="item.stat.view"
+                    <ContentBlock :cover="item.cover" :owner="item.owner" :title="item.title" :plays="item.play"
                         :pub-time="item.pubdate" :duration="item.duration"></ContentBlock>
                 </li>
             </ul>
@@ -35,37 +36,28 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ContentBlock from './ContentBlock.vue';
-import { fetchHomepageRecommendations, search } from '../../apis/bilibili';
+import { fetchHomepageRecommendations } from '../../apis/bilibili';
+import { getSearchResult, Video } from '../../services/videos';
 import Refresh from '../../icons/Refresh.vue';
 import Loading from '../../dynamics/Loading.vue';
 
 const router = useRouter();
-const videos = ref<VideoItem[]>([]);
+const videos = ref<Video[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
 const page = ref(1);
 const hasMore = ref(true);
 const isFetching = ref(false);
 
-interface Owner {
-    name: string;
-    face: string;
-    mid: number;
-}
+const pageType = ref("recommend")
 
-interface VideoItem {
-    bvid: string;
-    title: string;
-    pic: string;
-    uri: string;
-    owner: Owner;
-}
 const searchQuery = ref<string>('');
 async function searchVideos() {
-    if (!searchQuery.value) {
-        return;
-    }
-    search("video", searchQuery.value, "totalrank", "0", "0", "1");
+    pageType.value = "search";
+    videos.value.length = 0;
+    getSearchResult(searchQuery.value).then((res) => {
+        videos.value.push(...res.result)
+    })
 }
 async function refresh() {
     videos.value.length = 0;
@@ -85,7 +77,9 @@ async function fetchVideos() {
         } else {
             const updatedResponse = response.map(video => ({
                 ...video,
-                pic: video.pic.replace(/^http:/, 'https:') + "@672w_378h_1c_!web-home-common-cover.avif"
+                owner: video.owner.name,
+                play: video.stat.view,
+                cover: video.pic.replace(/^http:/, 'https:') + "@672w_378h_1c_!web-home-common-cover.avif"
             }));
 
             videos.value.push(...updatedResponse);
@@ -98,8 +92,8 @@ async function fetchVideos() {
     }
 }
 
-async function onVideoClick(item: VideoItem) {
-    router.push({ name: 'player', query: { videoUrl: item.uri, type: "video", platform: "bilibili" } });
+async function onVideoClick(item: Video) {
+    router.push({ name: 'player', query: { videoUrl: item.url, type: "video", platform: "bilibili" } });
 }
 
 async function handleScroll(event: Event) {
