@@ -8,7 +8,6 @@ import "element-plus/dist/index.css";
 import rippleDirective from "./directives/ripple";
 // tslint:disable-next-line: no-unused-expression
 import { VuePageStackPlugin } from "vue-page-stack";
-import { check } from "./services/checkInit";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -18,6 +17,4 @@ app.use(router);
 app.use(VuePageStackPlugin, { router });
 app.use(pinia);
 app.use(ElementPlus);
-
-await check();
 app.mount("#app");
