@@ -4,7 +4,7 @@ export type Video = {
   cover: string;
   owner: string;
   pubDate: string;
-  play: number;
+  play: string;
   duration: string;
   platform: string;
 };
@@ -47,14 +47,11 @@ export const getSearchResult = async (
   const numResults = data.numResults;
   const mappedVideoList = result.map((video) => ({
     ...video,
-    owner: {
-      name: video.author,
-    },
-    stat: {
-      view: video.play,
-    },
+    owner: video.author,
     play: formattedPlays(video.play),
     duration: video.duration,
+    url: video.bvid,
+    pubDate: formattedDateTime(video.pubdate),
     cover: "https:" + video.pic + "@672w_378h_1c_!web-home-common-cover.avif",
   }));
   return {
@@ -67,27 +64,28 @@ export const getSearchResult = async (
 };
 
 // 格式化播放量
-const formattedPlays = (plays: number) => {
+const formattedPlays = (plays: number): string => {
   if (typeof plays !== "number" || isNaN(plays)) return "NaN";
   if (plays >= 10000) {
     return (plays / 10000).toFixed(2) + "万";
   }
   return plays.toString();
-}
+};
 
-// 格式化持续时间
-const formattedDuration = (duration: number) => {
+const formattedDuration = (duration: number): string => {
   if (typeof duration !== "number" || isNaN(duration)) return "NaN";
-  const totalSeconds = duration;
+  const totalSeconds = Math.floor(duration);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
+
+  // 显示分钟和秒数，补零
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
     2,
     "0"
   )}`;
-}
+};
 
-const formattedDateTime = (pubTime: number) => {
+const formattedDateTime = (pubTime: number): string => {
   // 确保 pubTime 是数字类型
   const pubTimestamp =
     typeof pubTime === "number" && !isNaN(pubTime) ? pubTime : 0;
@@ -103,4 +101,4 @@ const formattedDateTime = (pubTime: number) => {
   } else {
     return pubDate.toLocaleDateString();
   }
-}
+};

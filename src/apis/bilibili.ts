@@ -71,3 +71,15 @@ export async function getLiveUrl(roomId: string) {
   }
   return result.links;
 }
+
+export async function defaultSearchContent() {
+  return await requestGetTemplate(
+    "https://api.bilibili.com/x/web-interface/search/default"
+  );
+}
+
+export async function hotSearchWords() {
+  return await requestGetTemplate(
+    "https://app.bilibili.com/x/v2/search/trending/ranking"
+  );
+}

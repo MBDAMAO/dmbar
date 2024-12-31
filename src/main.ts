@@ -7,14 +7,16 @@ import "./assets/styles/main.css";
 import "element-plus/dist/index.css";
 import rippleDirective from "./directives/ripple";
 // tslint:disable-next-line: no-unused-expression
-import { VuePageStackPlugin } from "vue-page-stack";
+// import { VuePageStackPlugin } from "vue-page-stack";
+import { setUpVant } from "./plugins/vant";
 
 const app = createApp(App);
 const pinia = createPinia();
 
 app.directive("ripple", rippleDirective);
 app.use(router);
-app.use(VuePageStackPlugin, { router });
+setUpVant(app);
+// app.use(VuePageStackPlugin, { router });
 app.use(pinia);
 app.use(ElementPlus);
 app.mount("#app");

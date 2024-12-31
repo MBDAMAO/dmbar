@@ -46,17 +46,17 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue';
-import View from '../../icons/View.vue';
-import Up from '../../icons/Up.vue';
-import Image16x9 from '../../dynamics/Image16x9.vue';
+import View from '@/icons/View.vue';
+import Up from '@/icons/Up.vue';
+import Image16x9 from '@/dynamics/Image16x9.vue';
 
 const isLoading = ref(true);
 const { cover, plays, title, owner, platform, duration, pubTime } = defineProps({
     cover: String,
     uri: String,
-    plays: Number,
-    pubTime: Number,
-    duration: Number,
+    plays: String,
+    pubTime: String,
+    duration: String,
     title: String,
     owner: String,
     platform: String,
