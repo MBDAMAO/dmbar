@@ -1,6 +1,6 @@
-import { fileExists, ceateFile, writeFile } from "../apis/fs";
-import { useConfig } from "../stores/config";
-import { defaultConfig, Config } from "../types/config";
+import { fileExists, ceateFile, writeFile } from "@/apis/fs";
+import { useConfig } from "@/stores/config";
+import { defaultConfig, Config } from "@/types/config";
 export const check = async () => {
   let isInitConfig = await fileExists("config.json");
   if (!isInitConfig) {

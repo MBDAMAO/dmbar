@@ -36,12 +36,19 @@ type SearchResult = {
   result: Array<Video>;
 };
 export const getSearchResult = async (
-  keyword: string
+  keyword: string,
+  page: number
 ): Promise<SearchResult> => {
-  const resp: any = await search("video", keyword, "totalrank", "0", "0", "1");
+  const resp: any = await search(
+    "video",
+    keyword,
+    "totalrank",
+    "0",
+    "0",
+    page.toString()
+  );
   const data = resp.body.data;
   const result: any = data.result;
-  const page = data.page;
   const pageSize = data.pageSize;
   const numPages = data.numPages;
   const numResults = data.numResults;
@@ -57,7 +64,7 @@ export const getSearchResult = async (
   return {
     totalPages: numPages,
     totalItems: numResults,
-    page: page,
+    page: data.page,
     pageSize: pageSize,
     result: mappedVideoList,
   };

@@ -28,7 +28,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ContentBlock from '../Components/ContentBlock.vue';
-import { getHomeRecommend, Video } from '@/services/videos';
+import { getHomeRecommend, getSearchResult, Video } from '@/services/videos';
 import Refresh from '@/icons/Refresh.vue';
 import Loading from '@/dynamics/Loading.vue';
 const isRefreshing = ref(false);
@@ -58,12 +58,12 @@ async function refresh() {
         isRefreshing.value = false;
     });
 }
-async function fetchVideos() {
+async function fetchVideos(keyword: string, pageNum: number) {
     if (!hasMore.value || isFetching.value) return;
 
     isFetching.value = true;
     try {
-        const response = (await getHomeRecommend()).result;
+        const response = (await getSearchResult(keyword, pageNum)).result;
         if (response == null) {
             return;
         }
@@ -83,16 +83,20 @@ async function fetchVideos() {
 async function pushToPlayer(item: Video) {
     router.push({ name: 'player', query: { videoUrl: item.url, type: "video", platform: "bilibili" } });
 }
-
+let keyword;
 async function handleScroll(event: Event) {
     const target = event.target as HTMLElement;
     if (target.scrollTop + target.clientHeight >= target.scrollHeight - 60) {
-        fetchVideos();
+        fetchVideos(keyword, page.value);
     }
 }
 
+import { useRoute } from 'vue-router';
+const route = useRoute();
+
 onMounted(async () => {
-    fetchVideos();
+    keyword = route.query.keyword;
+    fetchVideos(keyword, page.value);
 });
 </script>
 <style scoped>

@@ -41,7 +41,7 @@ import Selector from './components/Selector.vue';
 import Spliter from './components/Spliter.vue';
 import Title from './components/Title.vue';
 import Input from './components/Input.vue';
-import { useConfig } from '../../stores/config';
+import { useConfig } from '@/stores/config';
 import Switch from './components/Switch.vue';
 import UpdateCheck from './components/UpdateCheck.vue';
 

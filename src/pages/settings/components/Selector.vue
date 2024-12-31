@@ -81,8 +81,8 @@
 
 <script setup lang='ts'>
 import Base from './Base.vue';
-import { ConfigPath, Option } from '../../../types/config';
-import { useConfig } from '../../../stores/config';
+import { ConfigPath, Option } from '@/types/config';
+import { useConfig } from '@/stores/config';
 const props = defineProps({
     name: String,
     sub: String,
@@ -91,7 +91,7 @@ const props = defineProps({
     value: String,
 })
 import { ref } from 'vue';
-import More from '../../../icons/More.vue';
+import More from '@/icons/More.vue';
 import {
     TransitionRoot,
     TransitionChild,

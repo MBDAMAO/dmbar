@@ -15,8 +15,8 @@
 
 <script setup lang='ts'>
 import Base from './Base.vue';
-import { ConfigPath } from '../../../types/config';
-import { useConfig } from '../../../stores/config';
+import { ConfigPath } from '@/types/config';
+import { useConfig } from '@/stores/config';
 
 const props = defineProps({
     name: String,

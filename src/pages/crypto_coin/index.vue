@@ -16,7 +16,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { WebsocketClient } from 'binance'
 import { init, dispose, TooltipShowRule, Chart, Nullable, LineType } from 'klinecharts'
 const symbol = 'DOGEUSDT'
-import { getKline } from '../../apis/crypto';
+import { getKline } from '@/apis/crypto';
 let wsClient: WebsocketClient | null = null;
 const hideFunctionReigon = ref(true);
 // Update visibility based on window height

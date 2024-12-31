@@ -43,7 +43,7 @@
 </template>
 <script setup lang='ts'>
 import { ref } from 'vue';
-import { ConfigPath } from '../../../types/config';
+import { ConfigPath } from '@/types/config';
 import Base from './Base.vue';
 import {
     TransitionRoot,
@@ -52,7 +52,7 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue'
-import { useConfig } from '../../../stores/config';
+import { useConfig } from '@/stores/config';
 const props = defineProps({
     name: String,
     sub: String,

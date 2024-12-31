@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { getLiveRoomInfo } from '../../apis/bilibili';
+import { getLiveRoomInfo } from '@/apis/bilibili';
 
 // 模拟数据
 const liveBlocks = ref([

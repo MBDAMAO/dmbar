@@ -56,7 +56,7 @@
 </template>
 <script setup lang='ts'>
 import { onMounted, ref } from 'vue';
-import { AestheticFluidBg } from "../../assets/js/AestheticFluidBg.module.ts"
+import { AestheticFluidBg } from "@/assets/js/AestheticFluidBg.module.ts"
 import { invoke } from "@tauri-apps/api/core";
 import { LogicalSize, Window } from '@tauri-apps/api/window';
 

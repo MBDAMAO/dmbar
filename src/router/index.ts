@@ -20,13 +20,13 @@ const router = createRouter({
         {
           path: "start_page",
           name: "start_page",
-          component: () => import("../pages/app_start/index.vue"),
+          component: () => import("@/pages/app_start/index.vue"),
         },
       ],
     },
     {
       path: "/root",
-      component: () => import("../components/layouts/HeaderLayout.vue"),
+      component: () => import("@/components/layouts/HeaderLayout.vue"),
       children: [
         {
           path: "",
@@ -35,32 +35,32 @@ const router = createRouter({
         {
           path: "settings",
           name: "settings",
-          component: () => import("../pages/settings/index.vue"),
+          component: () => import("@/pages/settings/index.vue"),
         },
         {
           path: "words",
           name: "words",
-          component: () => import("../pages/enwords/index.vue"),
+          component: () => import("@/pages/enwords/index.vue"),
         },
         {
           path: "crypto_coin",
           name: "crypto_coin",
-          component: () => import("../pages/crypto_coin/index.vue"),
+          component: () => import("@/pages/crypto_coin/index.vue"),
         },
         {
           path: "translation",
           name: "translation",
-          component: () => import("../pages/translation/index.vue"),
+          component: () => import("@/pages/translation/index.vue"),
         },
         {
           path: "rss",
           name: "rss",
-          component: () => import("../pages/rss/index.vue"),
+          component: () => import("@/pages/rss/index.vue"),
         },
         {
           path: "vpn",
           name: "vpn",
-          component: () => import("../pages/vpn/index.vue"),
+          component: () => import("@/pages/vpn/index.vue"),
         },
         {
           path: "live",
@@ -70,37 +70,37 @@ const router = createRouter({
         {
           path: "videos",
           name: "videos",
-          component: () => import("../pages/videos/index.vue"),
+          component: () => import("@/pages/videos/index.vue"),
           redirect: "/root/videos/rcmd",
           children: [
             {
               path: "rcmd",
               name: "rcmd",
               component: () =>
-                import("../pages/videos/ContentContainer/index.vue"),
+                import("@/pages/videos/ContentContainer/index.vue"),
             },
             {
               path: "search",
               name: "search",
               component: () =>
-                import("../pages/videos/SearchContainer/index.vue"),
+                import("@/pages/videos/SearchContainer/index.vue"),
             },
             {
               path: "search_page",
               name: "search_page",
-              component: () => import("../pages/videos/SearchPage/index.vue"),
+              component: () => import("@/pages/videos/SearchPage/index.vue"),
             },
           ],
         },
         {
           path: "help",
           name: "help",
-          component: () => import("../pages/help_feedback/index.vue"),
+          component: () => import("@/pages/help_feedback/index.vue"),
         },
         {
           path: "test",
           name: "test",
-          component: () => import("../pages/test/index.vue"),
+          component: () => import("@/pages/test/index.vue"),
         },
       ],
     },
@@ -112,7 +112,7 @@ const router = createRouter({
         {
           path: "player",
           name: "player",
-          component: () => import("../pages/player/index.vue"),
+          component: () => import("@/pages/player/index.vue"),
         },
       ],
     },

@@ -105,10 +105,10 @@ import { ref, onMounted, reactive, onUnmounted } from 'vue';
 import Play from '@/icons/Play.vue';
 import Pause from '@/icons/Pause.vue';
 import Pause2 from '@/icons/Pause2.vue';
-import Refresh from '../../icons/Refresh.vue';
+import Refresh from '@/icons/Refresh.vue';
 import flvjs from 'flv.js';
-import Link from '../../icons/Link.vue';
-import Back from '../../icons/Back.vue';
+import Link from '@/icons/Link.vue';
+import Back from '@/icons/Back.vue';
 import {
     Listbox,
     ListboxButton,
@@ -130,7 +130,7 @@ const ratios = reactive([
 ])
 const ratioNow = ref(ratios[3])
 const selectedPerson = ref(urls[0])
-import bilibili from "../../apis/live.ts";
+import bilibili from "@/apis/live.ts";
 const playing = ref(true);
 const title = ref()
 const loading = ref(true)
@@ -142,7 +142,8 @@ const duration = ref("00:00");
 const canvas = ref<HTMLCanvasElement | null>(null);
 const rv = ref<HTMLVideoElement | null>(null);
 import { useRoute, useRouter } from 'vue-router';
-import { getVideoDetails, getVideoUrl } from '../../apis/bilibili.ts';
+import { getVideoDetails, getVideoUrl } from '@/apis/bilibili.ts';
+import { useConfig } from '@/stores/config';
 
 let player: any = null;
 const type = ref()
@@ -164,6 +165,7 @@ async function parseUrl(roomId: string, platform: string, params: string): Promi
     if (platform != "bilibili") {
         return Error("Error")
     }
+    let cookie = useConfig().useBilibiliCookie();
     let parser = bilibili("https://live.bilibili.com/" + roomId, cookie);
     let result: ParsedResult | Error | null;
     try {
@@ -221,11 +223,11 @@ function refresh() {
         play();
     }
 }
-let cookie = "buvid3=063B581A-C6F5-EE0B-C43F-830C290D5BB209485infoc; b_nut=1714128009; _uuid=261093CFF-7F96-69CC-99AD-C2D1F421B83B06421infoc; enable_web_push=DISABLE; FEED_LIVE_VERSION=V_WATCHLATER_PIP_WINDOW3; buvid4=AACD56BA-1BAC-AF79-AF92-2A6F4D17EA1C35455-022112711-s62au2mc03Xvrbf7mUgygA%3D%3D; rpdid=|(umR|Y|k~Ru0J'u~uRuk)u|l; buvid_fp_plain=undefined; DedeUserID=330838998; DedeUserID__ckMd5=881a8a520eb829f4; header_theme_version=CLOSE; hit-dyn-v2=1; LIVE_BUVID=AUTO1017155301152291; CURRENT_QUALITY=80; PVID=9; fingerprint=4e109b97323e7386f22aedddcb16f57f; buvid_fp=4e109b97323e7386f22aedddcb16f57f; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzUxMjI0OTYsImlhdCI6MTczNDg2MzIzNiwicGx0IjotMX0.ssQdM8SBRl4muUQbRpULPVXXSvLpZ9d6bNly9HNZ6JU; bili_ticket_expires=1735122436; SESSDATA=7c645275%2C1750434786%2C1e4d9%2Ac2CjAJzy4SsHllTXgKzIOHR3Nm-2z9iOPRXOildThMkhinbZAPZDuliLsT4oezVLEnwSwSVnFYSFlWTDF6Sm9VSEY5cE1PM3JMWWlzekliYVNVSEhGV3ZtZEszQ3BDeTducGY3ODFaczc3dWxHallkQ3BfMDMwNkJ1YXhWbzNNUmg0NTNUUW92ZzB3IIEC; bili_jct=35a7a50fad04b428eb20924088b68222; sid=679ioy3l; CURRENT_FNVAL=2000; bp_t_offset_330838998=1014739289864404992; bsource=search_bing; b_lsid=7C6FE9F10_193FC1A7B64; home_feed_column=4; browser_resolution=786-898";
 async function reload(newUrl?: string) {
     try {
         loading.value = true;
         if (!newUrl) {
+            let cookie = useConfig().useBilibiliCookie();
             let urlList = await parseUrl(route.query.videoUrl as string, "bilibili", cookie);
             if (urlList instanceof Error) {
                 return;
@@ -302,6 +304,7 @@ onMounted(async () => {
         console.log(res)
         urll = addr
     } else if (type.value == "live") {
+        let cookie = useConfig().useBilibiliCookie();
         let urlList: any = await parseUrl(uri as string, "bilibili", cookie);
         urll = urlList[2]
     }

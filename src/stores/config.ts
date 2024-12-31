@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { readFile, writeFile } from "../apis/fs";
+import { readFile, writeFile } from "@/apis/fs";
 import { ref, watchEffect } from "vue";
-import { Config } from "../types/config";
+import { Config } from "@/types/config";
 
 export const useConfig = defineStore("config", () => {
   const config = ref<Config>();

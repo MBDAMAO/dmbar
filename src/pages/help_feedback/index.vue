@@ -7,7 +7,7 @@
     </div>
 </template>
 <script setup lang='ts'>
-import Github from '../../icons/Github.vue';
+import Github from '@/icons/Github.vue';
 import { open } from '@tauri-apps/plugin-shell';
 async function openExternalBrowser(url: string) {
     try {

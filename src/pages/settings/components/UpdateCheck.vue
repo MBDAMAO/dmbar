@@ -16,7 +16,7 @@
 <script setup lang='ts'>
 import { onMounted, ref } from 'vue';
 import Base from './Base.vue';
-import { fetchUpdate, getVersion } from '../../../apis/other';
+import { fetchUpdate, getVersion } from '@/apis/other';
 import { open } from '@tauri-apps/plugin-shell';
 let downLoadUrl: string;
 const appVersion = ref("")
