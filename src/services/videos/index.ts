@@ -17,11 +17,13 @@ export const getHomeRecommend = async (): Promise<HomeRcmdResp> => {
   const updatedResponse = response.map((video) => ({
     ...video,
     owner: video.owner.name,
-    play: video.stat.view,
-    pubDate: video.pubdate,
+    play: formattedPlays(video.stat.view),
+    pubDate: formattedDateTime(video.pubdate),
+    url: video.bvid,
     cover:
       video.pic.replace(/^http:/, "https:") +
       "@672w_378h_1c_!web-home-common-cover.avif",
+    duration: formattedDuration(video.duration),
   }));
   return { result: updatedResponse };
 };
@@ -51,8 +53,9 @@ export const getSearchResult = async (
     stat: {
       view: video.play,
     },
+    play: formattedPlays(video.play),
     duration: video.duration,
-    pic: "https:" + video.pic + "@672w_378h_1c_!web-home-common-cover.avif",
+    cover: "https:" + video.pic + "@672w_378h_1c_!web-home-common-cover.avif",
   }));
   return {
     totalPages: numPages,
@@ -64,16 +67,16 @@ export const getSearchResult = async (
 };
 
 // 格式化播放量
-const formattedPlays = computed(() => {
+const formattedPlays = (plays: number) => {
   if (typeof plays !== "number" || isNaN(plays)) return "NaN";
   if (plays >= 10000) {
     return (plays / 10000).toFixed(2) + "万";
   }
   return plays.toString();
-});
+}
 
 // 格式化持续时间
-const formattedDuration = computed(() => {
+const formattedDuration = (duration: number) => {
   if (typeof duration !== "number" || isNaN(duration)) return "NaN";
   const totalSeconds = duration;
   const minutes = Math.floor(totalSeconds / 60);
@@ -82,9 +85,9 @@ const formattedDuration = computed(() => {
     2,
     "0"
   )}`;
-});
+}
 
-const formattedDateTime = computed(() => {
+const formattedDateTime = (pubTime: number) => {
   // 确保 pubTime 是数字类型
   const pubTimestamp =
     typeof pubTime === "number" && !isNaN(pubTime) ? pubTime : 0;
@@ -100,4 +103,4 @@ const formattedDateTime = computed(() => {
   } else {
     return pubDate.toLocaleDateString();
   }
-});
+}

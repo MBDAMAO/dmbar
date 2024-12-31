@@ -36,8 +36,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import ContentBlock from './ContentBlock.vue';
-import { fetchHomepageRecommendations } from '../../apis/bilibili';
-import { getSearchResult, Video } from '../../services/videos';
+import { getHomeRecommend, getSearchResult, Video } from '../../services/videos';
 import Refresh from '../../icons/Refresh.vue';
 import Loading from '../../dynamics/Loading.vue';
 
@@ -68,21 +67,14 @@ async function fetchVideos() {
 
     isFetching.value = true;
     try {
-        const response = (await fetchHomepageRecommendations()).body.data.item;
+        const response = (await getHomeRecommend()).result;
         if (response == null) {
             return;
         }
         if (response.length === 0) {
             hasMore.value = false;
         } else {
-            const updatedResponse = response.map(video => ({
-                ...video,
-                owner: video.owner.name,
-                play: video.stat.view,
-                cover: video.pic.replace(/^http:/, 'https:') + "@672w_378h_1c_!web-home-common-cover.avif"
-            }));
-
-            videos.value.push(...updatedResponse);
+            videos.value.push(...response);
             page.value++;
         }
     } catch (err) {
