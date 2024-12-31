@@ -2,9 +2,11 @@
     <Teleport to="body">
         <transition name="drawer-slide">
             <div v-if="drawer" class="fixed inset-0 z-50 flex">
-                <div class="bg-[--bg1] w-4/5 max-w-md shadow-lg h-full flex flex-col justify-between rounded-r-lg">
+                <div class="bg-[--bg1] w-4/5 max-w-md shadow-lg h-full flex flex-col justify-between rounded-r-lg"
+                    data-tauri-drag-region>
                     <div class="p-4">
-                        <h2 class="text-lg font-bold text-[--text-color] border-b border-gray-200 pb-2 mb-4">
+                        <h2 class="text-lg font-bold text-[--text-color] border-b border-gray-200 pb-2 mb-4"
+                            data-tauri-drag-region>
                             菜单
                         </h2>
                         <ul class="space-y-2">
@@ -42,8 +44,9 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 const drawer = ref(false)
 const routes = [
     { name: "crypto", path: "/root/crypto_coin", label: "加密货币" },
-    { name: "videos", path: "/root/fast_gpt", label: "视频平台" },
+    { name: "videos", path: "/root/videos", label: "视频平台" },
     { name: "live", path: "/root/live", label: "直播" },
+    { name: "test", path: "/root/test", label: "开发测试" }
 ];
 const routes2 = [
     { name: "settings", path: "/root/settings", label: "设置" },

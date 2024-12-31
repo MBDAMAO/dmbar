@@ -6,11 +6,11 @@
                 <div class="flex flex-row items-center">
                     <View class="h-full p-0.5"></View>
                     <div>
-                        {{ formattedPlays }}
+                        {{ plays }}
                     </div>
                 </div>
 
-                <div>{{ formattedDuration }}</div>
+                <div>{{ duration }}</div>
             </div>
             <div class="relative">
                 <!-- <div class="w-full">
@@ -38,25 +38,25 @@
                     <Up class="h-full p-1"></Up>
                     <div class="line-clamp-1">{{ owner }}</div>
                 </div>
-                <div class="line-clamp-1 pr-1"> {{ formattedDateTime }}</div>
+                <div class="line-clamp-1 pr-1"> {{ pubTime }}</div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang='ts'>
-import { ref, computed } from 'vue';
-import View from '../../icons/View.vue';
-import Up from '../../icons/Up.vue';
-import Image16x9 from '../../dynamics/Image16x9.vue';
+import { ref } from 'vue';
+import View from '@/icons/View.vue';
+import Up from '@/icons/Up.vue';
+import Image16x9 from '@/dynamics/Image16x9.vue';
 
 const isLoading = ref(true);
 const { cover, plays, title, owner, platform, duration, pubTime } = defineProps({
     cover: String,
     uri: String,
-    plays: Number,
-    pubTime: Number,
-    duration: Number,
+    plays: String,
+    pubTime: String,
+    duration: String,
     title: String,
     owner: String,
     platform: String,
@@ -68,39 +68,7 @@ const onImageLoad = () => {
     isLoading.value = false; // 图片加载完成后，更新状态，移除占位图
 };
 
-// 格式化播放量
-const formattedPlays = computed(() => {
-    if (typeof plays !== 'number' || isNaN(plays)) return "NaN";
-    if (plays >= 10000) {
-        return (plays / 10000).toFixed(2) + '万';
-    }
-    return plays.toString();
-});
 
-// 格式化持续时间
-const formattedDuration = computed(() => {
-    if (typeof duration !== 'number' || isNaN(duration)) return "NaN";
-    const totalSeconds = duration;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-});
-
-const formattedDateTime = computed(() => {
-    // 确保 pubTime 是数字类型
-    const pubTimestamp = typeof pubTime === 'number' && !isNaN(pubTime) ? pubTime : 0;
-    if (pubTimestamp === 0) return "NaN";
-
-    const now = new Date();
-    const pubDate = new Date(pubTimestamp * 1000);  // 转换 pubTime 为 Date 对象
-    const diff = now.getTime() - pubDate.getTime();  // 使用 getTime() 获取时间戳
-
-    if (diff < 24 * 60 * 60 * 1000) {  // 小于 24 小时
-        return Math.floor(diff / (60 * 60 * 1000)) + '小时前';
-    } else {
-        return pubDate.toLocaleDateString();
-    }
-});
 
 </script>
 

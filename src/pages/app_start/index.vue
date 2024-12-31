@@ -10,8 +10,8 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 onMounted(async () => {
-    const result = await check();
-    router.push('/root/fast_gpt');
+    await check();
+    router.push('/root/videos');
 });
 </script>
 

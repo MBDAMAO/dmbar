@@ -30,7 +30,7 @@ const router = createRouter({
       children: [
         {
           path: "",
-          redirect: "/root/fast_gpt",
+          redirect: "/root/videos",
         },
         {
           path: "settings",
@@ -68,14 +68,39 @@ const router = createRouter({
           component: () => import("../pages/live/index.vue"),
         },
         {
-          path: "fast_gpt",
-          name: "fast_gpt",
+          path: "videos",
+          name: "videos",
           component: () => import("../pages/videos/index.vue"),
+          redirect: "/root/videos/rcmd",
+          children: [
+            {
+              path: "rcmd",
+              name: "rcmd",
+              component: () =>
+                import("../pages/videos/ContentContainer/index.vue"),
+            },
+            {
+              path: "search",
+              name: "search",
+              component: () =>
+                import("../pages/videos/SearchContainer/index.vue"),
+            },
+            {
+              path: "search_page",
+              name: "search_page",
+              component: () => import("../pages/videos/SearchPage/index.vue"),
+            },
+          ],
         },
         {
           path: "help",
           name: "help",
           component: () => import("../pages/help_feedback/index.vue"),
+        },
+        {
+          path: "test",
+          name: "test",
+          component: () => import("../pages/test/index.vue"),
         },
       ],
     },
