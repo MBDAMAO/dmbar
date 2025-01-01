@@ -46,6 +46,11 @@
     },
     "fs:allow-write-file",
     "fs:allow-app-write",
-    "fs:allow-app-meta"
+    "fs:allow-app-meta",
+    "sql:default",
+    "sql:allow-execute",
+    "sql:allow-select",
+    "sql:allow-close",
+    "sql:allow-load"
   ]
 }

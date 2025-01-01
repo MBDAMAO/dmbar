@@ -8,25 +8,26 @@ edition = "2021"
 [lib]
 name = "dmbar_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
-# [target.aarch64-linux-android.dependencies.openssl-sys]
-# version = "0.9.104"
-# features = ["vendored"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-# openssl-sys = { version = "0.9", features = ["vendored"] }
 tauri = { version = "2", features = ["tray-icon"] }
+# tauri plugins
+tauri-plugin-shell = "2"
+tauri-plugin-window-state = "2.0.2"
+tauri-plugin-devtools = "2.0.0"
+tauri-plugin-http = { version = "2", features = ["unsafe-headers"] }
+tauri-plugin-os = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-
 tokio = { version = "1.41", features = ["full"] }
 tokio-tungstenite = "0.24"
-
-sqlite = "0.36"
 futures-util = { version = "0.3" }
-
 tracing = { version = "0", features = ["log", "release_max_level_info"] }
 tracing-subscriber = { version = "0", features = [
     'time',
@@ -34,19 +35,12 @@ tracing-subscriber = { version = "0", features = [
     'json',
 ] }
 dirs = "5"
-
-tauri-plugin-shell = "2"
-tauri-plugin-window-state = "2.0.2"
 reqwest = { version = "0", default-features = false, features = [
     "rustls-tls",
     "json",
     "gzip",
     "multipart",
-    # "http2",
-    # "charset",
-    # "macos-system-configuration",
 ] }
-# open apis
 binance_spot_connector_rust = { path = "./libs/binance-spot-connector-rust", features = [
     "enable-hyper",
 ] }
@@ -55,26 +49,28 @@ binance_future_connector = { path = "./libs/binance_future_connector_rust", feat
     "enable-hyper",
 ] }
 window-vibrancy = "0.5.2"
-tauri-plugin-devtools = "2.0.0"
 rand = { version = "0.8.5", default-features = false, features = [
     "std",
     "std_rng",
 ] }
-
 regex = { version = "1", default-features = false }
 toml = "0"
-
-
 thiserror = "1"
 base64 = "0"
 md-5 = "0"
 bytes = "1"
 url = "2"
-tauri-plugin-http = { version = "2", features = ["unsafe-headers"] }
-tauri-plugin-os = "2"
-tauri-plugin-fs = "2"
+
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"
+
+[profile.dev]
+incremental = true # Compile your binary in smaller steps.
+
 [profile.release]
-lto = true
+codegen-units = 1 # Allows LLVM to perform better optimization.
+lto = true        # Enables link-time-optimizations.
+opt-level = "s"   # Prioritizes small binary size. Use `3` if you prefer speed.
+panic = "abort"   # Higher performance by disabling panic handlers.
+strip = true      # Ensures debug symbols are removed.

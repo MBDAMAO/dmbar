@@ -1,6 +1,7 @@
 import { fileExists, ceateFile, writeFile } from "@/apis/fs";
 import { useConfig } from "@/stores/config";
 import { defaultConfig, Config } from "@/types/config";
+import { initSettings } from "./settings";
 export const check = async () => {
   let isInitConfig = await fileExists("config.json");
   if (!isInitConfig) {
@@ -11,4 +12,6 @@ export const check = async () => {
 
   const config = useConfig();
   await config.loadConfig();
+
+  initSettings();
 };

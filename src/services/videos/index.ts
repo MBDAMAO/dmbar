@@ -11,7 +11,7 @@ export type Video = {
 type HomeRcmdResp = {
   result: Array<Video>;
 };
-import { fetchHomepageRecommendations, search } from "../../apis/bilibili";
+import { fetchHomepageRecommendations, search } from "@/apis/bilibili";
 export const getHomeRecommend = async (): Promise<HomeRcmdResp> => {
   const response = (await fetchHomepageRecommendations()).body.data.item;
   const updatedResponse = response.map((video) => ({
