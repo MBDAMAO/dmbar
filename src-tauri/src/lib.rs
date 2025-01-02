@@ -59,6 +59,7 @@ pub fn run() {
             cmds::fetch_video_url,
             cmds::video_detail,
             cmds::send_request,
+            cmds::open_devtools,
             parse_bilibili
         ]);
     #[cfg(debug_assertions)]

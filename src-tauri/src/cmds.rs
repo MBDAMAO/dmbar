@@ -7,6 +7,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::error::Error;
+use tauri::Manager;
 #[derive(Deserialize, Debug)]
 struct PlayurlResponse {
     code: i32,
@@ -311,5 +312,16 @@ pub async fn send_request(req: HttpRequest) -> Result<HttpResponse, String> {
             })
         }
         Err(e) => Err(e.to_string()),
+    }
+}
+
+#[tauri::command]
+pub fn open_devtools(app_handle: tauri::AppHandle) {
+    if let Some(window) = app_handle.get_webview_window("main") {
+        if !window.is_devtools_open() {
+            window.open_devtools();
+        } else {
+            window.close_devtools();
+        }
     }
 }
