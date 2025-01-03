@@ -21,7 +21,7 @@
                 <Pause />
             </div>
 
-            <div class="absolute bottom-12 w-full h-16 px-4 flex flex-col z-10">
+            <div class="absolute bottom-12 w-full h-16 px-4 flex flex-col z-10" v-if="!simpleMode">
                 <div class="flex items-center w-full ">
                     <div class="text-white text-lg px-4 one-line">{{ owner }}</div>
                     <div class="text-white text-sm one-line">{{ date }}</div>
@@ -33,13 +33,14 @@
             </div>
 
             <div class="flex flex-col h-full w-full items-center justify-center">
-                <video class="h-[calc(100%-46px)] w-full" ref="rv" @click="change(); resetHideTimeout()"
-                    v-loading="loading" @timeupdate="update()"
+                <video class="w-full" ref="rv" @click="change(); resetHideTimeout()"
+                    :style="{ height: simpleMode ? '100%' : 'calc(100% - 46px)' }" v-loading="loading"
+                    @timeupdate="update()"
                     poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                     @mousemove="resetHideTimeout" data-tauri-drag-region>
                 </video>
 
-                <div class="flex flex-col w-full h-[46px]">
+                <div class="flex flex-col w-full h-[46px]" v-if="!simpleMode">
                     <div @click="tapProgressBar" ref="progressBar"
                         class="cursor-pointer w-full pb-0.5 opacity-50 hover:opacity-90 transition-opacity">
                         <div class="h-0.5 bg-gray-500">
@@ -58,6 +59,9 @@
                                 <Refresh />
                             </div>
                             <div class="ml-5 h-5 w-5" @click="reload()" v-if="type === 'live'">
+                                <Link />
+                            </div>
+                            <div class="ml-5 h-5 w-5" @click="simpleMode = !simpleMode">
                                 <Link />
                             </div>
                         </div>
@@ -118,7 +122,7 @@ import {
 const urls = reactive([
     { id: 1, name: 'Durward Reynolds', unavailable: false },
 ])
-
+const simpleMode = ref(false)
 const ratios = reactive([
     { id: 1, ratio: 0.125, name: '0.125x' },
     { id: 2, ratio: 0.25, name: '0.25x' },
